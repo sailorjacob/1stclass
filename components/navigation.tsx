@@ -20,7 +20,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
   const menuItems = [
     { href: "/", label: "HOME" },
     { href: "/studios", label: "STUDIOS" },
-    { href: "/equipment", label: "GALLERY" },
+    { href: "/gallery", label: "GALLERY" },
     { href: "/booking", label: "BOOK NOW" },
     { href: "/contact", label: "CONTACT" },
   ]
