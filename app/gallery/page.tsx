@@ -92,7 +92,13 @@ export default function GalleryPage() {
     "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_fc352d582ebd4c288f573dac0e642f62~mv2-WEIWN4rVU2euU8BnOYzzpy0OP0i5cF.avif",
   ]
 
-  const galleryGroups = [terminalAImages, terminalBImages, terminalCImages, [...terminalAImages, ...terminalBImages, ...terminalCImages]]
+  // Combine all images into one gallery
+  const allGalleryImages = [
+    ...terminalAImages,
+    ...terminalBImages, 
+    ...terminalCImages,
+    "/images/studio-4.avif" // Add the original studio-4 image
+  ].filter(Boolean) // Remove any undefined/null values
 
   return (
     <div className="min-h-screen bg-black">
@@ -140,21 +146,16 @@ export default function GalleryPage() {
 
       {/* Photo Gallery Section */}
       <section className="relative py-20 px-8">
-        <div className="container mx-auto">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {galleryGroups.map((images, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="overflow-hidden rounded-lg group aspect-[3/2] relative"
-              >
-                <ImageSlider images={images} />
-              </motion.div>
-            ))}
-          </div>
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="overflow-hidden rounded-lg group aspect-[16/9] relative"
+          >
+            <ImageSlider images={allGalleryImages} />
+          </motion.div>
         </div>
       </section>
 

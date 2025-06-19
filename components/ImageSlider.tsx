@@ -16,11 +16,15 @@ export function ImageSlider({ images, className }: ImageSliderProps) {
     return null
   }
 
-  const goPrev = () => {
+  const goPrev = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setCurrent((prev) => (prev - 1 + images.length) % images.length)
   }
 
-  const goNext = () => {
+  const goNext = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setCurrent((prev) => (prev + 1) % images.length)
   }
 
@@ -41,7 +45,8 @@ export function ImageSlider({ images, className }: ImageSliderProps) {
           <button
             type="button"
             onClick={goPrev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 p-1 bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60"
+            className="absolute left-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-10"
+            aria-label="Previous image"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -49,7 +54,8 @@ export function ImageSlider({ images, className }: ImageSliderProps) {
           <button
             type="button"
             onClick={goNext}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/60"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-10"
+            aria-label="Next image"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
