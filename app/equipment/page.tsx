@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Mic, Volume2, Monitor, Laptop } from "lucide-react"
+import { Mic, Volume2, Monitor, Laptop, Plane } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import Image from "next/image"
@@ -74,6 +74,16 @@ export default function EquipmentPage() {
     <div className="min-h-screen bg-black">
       {/* Navigation */}
       <Navigation />
+
+      {/* Flying Plane Transition */}
+      <motion.div
+        initial={{ x: -200, y: -50, rotate: -20, opacity: 0 }}
+        animate={{ x: [ -200, 300, 800, 1200 ], y: [ -50, -20, 20, 0 ], rotate: 15, opacity: [0, 1, 1, 0] }}
+        transition={{ duration: 2.5, ease: "easeInOut" }}
+        className="fixed top-24 left-0 z-50 pointer-events-none"
+      >
+        <Plane className="w-14 h-14 text-orange-500 drop-shadow-lg" />
+      </motion.div>
 
       {/* Simplified Hero Section */}
       <section className="relative pt-32 pb-12 px-8">
