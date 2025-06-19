@@ -82,12 +82,16 @@ export default function GalleryPage() {
 
       {/* Flying Plane Transition */}
       <motion.div
-        initial={{ x: -200, y: -50, rotate: -20, opacity: 0 }}
-        animate={{ x: [-200, 300, 800, 1200], y: [-50, -20, 20, 0], rotate: 15, opacity: [0, 1, 1, 0] }}
-        transition={{ duration: 2.5, ease: "easeInOut" }}
-        className="fixed top-24 left-0 z-50 pointer-events-none"
+        initial={{ x: "-10vw", y: "0vh", rotate: -10, opacity: 0 }}
+        animate={{
+          x: ["-10vw", "30vw", "60vw", "110vw"],
+          y: ["0vh", "-5vh", "-8vh", "-10vh"],
+          opacity: [0, 1, 1, 0],
+        }}
+        transition={{ duration: 1.6, ease: "easeInOut" }}
+        className="fixed top-1/3 left-0 z-50 pointer-events-none"
       >
-        <Plane className="w-14 h-14 text-orange-500 drop-shadow-lg" />
+        <Plane className="w-16 h-16 text-orange-400 drop-shadow-[0_0_6px_rgba(255,125,0,0.8)]" />
       </motion.div>
 
       {/* Hero Section */}
