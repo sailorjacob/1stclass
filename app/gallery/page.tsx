@@ -6,6 +6,7 @@ import { Mic, Volume2, Monitor, Laptop, Plane } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { ImageSlider } from "@/components/ImageSlider"
+import React from "react"
 
 export default function GalleryPage() {
   const equipmentCategories = [
@@ -118,51 +119,27 @@ export default function GalleryPage() {
         <Plane className="w-16 h-16 text-orange-400 drop-shadow-[0_0_6px_rgba(255,125,0,0.8)]" />
       </motion.div>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-12 px-8">
-        <div className="container mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <Badge
-              variant="outline"
-              className="border-white/30 text-white/80 bg-white/10 backdrop-blur-sm px-6 py-2 text-sm tracking-widest"
-            >
-              PROFESSIONAL EQUIPMENT
-            </Badge>
-
-            <h1 className="text-4xl md:text-5xl font-light text-white tracking-wider">GALLERY</h1>
-
-            <p className="text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
-              Explore our studio spaces below, followed by a comprehensive list of the professional equipment available
-              in each terminal.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Removed hero section for a cleaner gallery */}
 
       {/* Photo Gallery Section */}
-      <section className="relative py-20 px-8">
-        <div className="max-w-4xl mx-auto">
+      <section className="relative py-16 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-lg group aspect-[16/9] relative"
+            className="overflow-hidden rounded-lg group aspect-[21/9] relative"
           >
-            <ImageSlider images={allGalleryImages} />
+            <ImageSlider images={allGalleryImages} previewSides />
           </motion.div>
         </div>
       </section>
 
       {/* Equipment Grid */}
-      <section className="relative py-20 px-8">
+      <section className="relative py-12 px-4 md:px-8">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16">
+          <div className="grid lg:grid-cols-2 gap-10">
             {equipmentCategories.map((category, index) => (
               <motion.div
                 key={category.title}
@@ -174,17 +151,17 @@ export default function GalleryPage() {
               >
                 <Card className="bg-transparent border-none">
                   <CardContent className="p-0 text-center">
-                    <div className="flex justify-center mb-8">
-                      <div className="text-neutral-400 group-hover:text-orange-400 group-hover:scale-110 transition-all duration-300 border-2 border-neutral-400 group-hover:border-orange-400 rounded-lg p-6">
-                        {category.icon}
+                    <div className="flex justify-center mb-6">
+                      <div className="text-neutral-400 group-hover:text-orange-400 group-hover:scale-105 transition-all duration-300 border border-neutral-400 group-hover:border-orange-400 rounded-lg p-4">
+                        {React.cloneElement(category.icon as any, { className: "w-8 h-8" })}
                       </div>
                     </div>
 
-                    <h3 className="text-3xl font-light text-white mb-2 tracking-[0.3em]">{category.title}</h3>
+                    <h3 className="text-2xl font-light text-white mb-1 tracking-[0.25em]">{category.title}</h3>
 
-                    <div className="w-32 h-0.5 bg-orange-400 mx-auto mb-12"></div>
+                    <div className="w-24 h-0.5 bg-orange-400 mx-auto mb-6"></div>
 
-                    <div className="space-y-3 text-left max-w-md mx-auto">
+                    <div className="space-y-2 text-left max-w-md mx-auto">
                       {category.items.map((item, itemIndex) => (
                         <motion.div
                           key={item}
@@ -195,7 +172,7 @@ export default function GalleryPage() {
                           className="flex items-center space-x-3 group/item"
                         >
                           <div className="w-1 h-1 rounded-full bg-orange-400 flex-shrink-0" />
-                          <span className="text-white font-light tracking-wider text-sm group-hover/item:text-orange-400 transition-colors duration-300 uppercase">
+                          <span className="text-white font-light tracking-wider text-xs group-hover/item:text-orange-400 transition-colors duration-300 uppercase">
                             {item}
                           </span>
                         </motion.div>
