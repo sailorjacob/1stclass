@@ -20,8 +20,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
   const menuItems = [
     { href: "/", label: "HOME" },
     { href: "/studios", label: "STUDIOS" },
-    { href: "/equipment", label: "EQUIPMENT" },
-    { href: "/pricing", label: "PRICING" },
+    { href: "/equipment", label: "GALLERY" },
     { href: "/booking", label: "BOOK NOW" },
     { href: "/contact", label: "CONTACT" },
   ]
@@ -50,7 +49,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
             <div className="flex items-center space-x-8">
               <Link href="/" className="flex items-center">
                 <div className="relative w-12 h-12">
-                  <Image src="/images/logo.png" alt="1ST CLASS STUDIOS" fill className="object-contain filter invert" />
+                  <Image src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png" alt="1ST CLASS STUDIOS" fill className="object-contain filter invert" />
                 </div>
               </Link>
 
@@ -66,7 +65,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
 
               {/* Desktop Navigation Tabs */}
               <div className="hidden lg:flex items-center space-x-1">
-                {menuItems.slice(0, 4).map((item) => (
+                {menuItems.slice(0, 3).map((item) => (
                   <Button
                     key={item.href}
                     asChild
@@ -142,7 +141,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                   <div className="flex items-center">
                     <div className="relative w-12 h-12">
                       <Image
-                        src="/images/logo.png"
+                        src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png"
                         alt="1ST CLASS STUDIOS"
                         fill
                         className="object-contain filter invert"

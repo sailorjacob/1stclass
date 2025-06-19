@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Mic, Volume2, Monitor, Laptop } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
+import Image from "next/image"
 
 export default function EquipmentPage() {
   const equipmentCategories = [
@@ -61,6 +62,14 @@ export default function EquipmentPage() {
     },
   ]
 
+  // Simple gallery image sources (local images)
+  const galleryImages = [
+    "/images/studio-1.avif",
+    "/images/studio-2.avif",
+    "/images/studio-3.avif",
+    "/images/studio-4.avif",
+  ]
+
   return (
     <div className="min-h-screen bg-black">
       {/* Navigation */}
@@ -77,17 +86,44 @@ export default function EquipmentPage() {
           >
             <Badge
               variant="outline"
-              className="border-orange-500/50 text-orange-400 bg-orange-500/10 backdrop-blur-sm px-6 py-2 text-sm tracking-widest"
+              className="border-white/30 text-white/80 bg-white/10 backdrop-blur-sm px-6 py-2 text-sm tracking-widest"
             >
               PROFESSIONAL EQUIPMENT
             </Badge>
 
-            <h1 className="text-4xl md:text-5xl font-light text-white tracking-wider">EQUIPMENT</h1>
+            <h1 className="text-4xl md:text-5xl font-light text-white tracking-wider">GALLERY</h1>
 
             <p className="text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
-              Industry-standard equipment to ensure professional recording quality across all our terminals.
+              Explore our studio spaces below, followed by a comprehensive list of the professional equipment available
+              in each terminal.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Photo Gallery Section */}
+      <section className="relative py-20 px-8">
+        <div className="container mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {galleryImages.map((src) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="overflow-hidden rounded-lg group"
+              >
+                <Image
+                  src={src}
+                  alt="Studio gallery image"
+                  width={600}
+                  height={400}
+                  className="object-cover w-full h-64 group-hover:scale-105 transition-transform duration-500"
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -333,7 +333,7 @@ export default function HomePage() {
                   className="relative w-full h-full z-10"
                 >
                   <Image
-                    src="/images/logo.png"
+                    src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png"
                     alt="1ST CLASS STUDIOS"
                     fill
                     className="object-contain filter invert transition-all duration-300"
