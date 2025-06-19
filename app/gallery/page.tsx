@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Mic, Volume2, Monitor, Laptop, Plane } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
-import Image from "next/image"
+import { ImageSlider } from "@/components/ImageSlider"
 
 export default function GalleryPage() {
   const equipmentCategories = [
@@ -69,12 +69,30 @@ export default function GalleryPage() {
     },
   ]
 
-  const galleryImages = [
+  const terminalAImages = [
     "/images/studio-1.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_a84e4ebf1f4f4cd38b5b7bf0c3f5abd5~mv2%20(2)-C1XwjTdE6vnuySIfd9roqmt07c7Hva.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_837d4acf0eb44559974ce22de1077578~mv2%20(1)-lMYchfkrInY3IW0WCJ9Wiw9Us5uORi.avif",
+  ]
+
+  const terminalBImages = [
     "/images/studio-2.avif",
     "/images/studio-3.avif",
-    "/images/studio-4.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/TERMINALB-DoKqrOW8t2hmLEbZ5t5eXHBLLcORlb.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_b728d8c510f4412eb418c5df251e5c2a~mv2-Bc9tI9WNhHUaZNUEMz72SdVmWWUeBH.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_fe7b75b926074efdb78a7816436d8fdd~mv2-OnfGcQlOHP264u08kzpFifpvElD4sM.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_edabe64836b3455d830a8f85ffcd070b~mv2-AtnS0F6va0KHKvjB5qweitJ9ieeu3G.avif",
   ]
+
+  const terminalCImages = [
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_1aafe4dcf25f414e82392ae2a3134990~mv2-FBy7QcAIflKUsePBbJ8LAeVBbSTVEe.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_3dbffcf3789644418b7d8aa8ab26d171~mv2-UQGH4qed93eOI7E71LhKtrzMCuTX79.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_baa8c423d38a4d16a94102bd8adade15~mv2-8YGIp8DPCA57R9bGUwVfZming3oBEP.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_5f69f571bddf41c391a7f05c795e0bc0~mv2-HvZeHwe9cmpgUVQXvTGkQ24xI2Hf6N.avif",
+    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_fc352d582ebd4c288f573dac0e642f62~mv2-WEIWN4rVU2euU8BnOYzzpy0OP0i5cF.avif",
+  ]
+
+  const galleryGroups = [terminalAImages, terminalBImages, terminalCImages, [...terminalAImages, ...terminalBImages, ...terminalCImages]]
 
   return (
     <div className="min-h-screen bg-black">
@@ -124,22 +142,16 @@ export default function GalleryPage() {
       <section className="relative py-20 px-8">
         <div className="container mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {galleryImages.map((src) => (
+            {galleryGroups.map((images, idx) => (
               <motion.div
-                key={src}
+                key={idx}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="overflow-hidden rounded-lg group"
+                className="overflow-hidden rounded-lg group aspect-[3/2] relative"
               >
-                <Image
-                  src={src}
-                  alt="Studio gallery image"
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-64 group-hover:scale-105 transition-transform duration-500"
-                />
+                <ImageSlider images={images} />
               </motion.div>
             ))}
           </div>
