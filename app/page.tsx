@@ -336,7 +336,7 @@ export default function HomePage() {
                     src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png"
                     alt="1ST CLASS STUDIOS"
                     fill
-                    className="object-contain filter invert transition-all duration-300"
+                    className="object-contain transition-all duration-300"
                   />
                 </motion.div>
 
