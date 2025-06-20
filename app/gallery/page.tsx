@@ -109,16 +109,22 @@ export default function GalleryPage() {
 
       {/* Photo Gallery Section */}
       <section className="relative pt-28 pb-12 px-4 md:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="overflow-hidden rounded-lg group aspect-[21/9] relative"
+        <div className="max-w-7xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+            className="rounded-lg group aspect-[21/9] relative overflow-visible"
           >
-            <ImageSlider images={allGalleryImages} previewSides />
-          </motion.div>
+            <ImageSlider
+              images={allGalleryImages}
+              previewSides
+              transitionDurationMs={2000}
+              outerArrows
+              draggable
+            />
+              </motion.div>
         </div>
       </section>
 
@@ -176,33 +182,33 @@ export default function GalleryPage() {
       <section className="relative py-8 px-4 md:px-8 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "PREMIUM PREAMPS",
-                description: "Neve, API, and Heritage Audio preamps for professional sound",
-              },
-              {
-                title: "MULTIPLE MONITORING",
-                description: "Various monitor speakers to suit different mixing preferences",
-              },
-              {
-                title: "COMPLETE PLUGIN SUITE",
-                description: "Industry-standard plugins for mixing and mastering",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className="p-8 bg-orange-500/5 border border-orange-500/20 rounded-lg backdrop-blur-sm hover:bg-orange-500/10 transition-all duration-300"
-              >
-                <h4 className="text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
-                <p className="text-white/60 font-light leading-relaxed">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
+              {[
+                {
+                  title: "PREMIUM PREAMPS",
+                  description: "Neve, API, and Heritage Audio preamps for professional sound",
+                },
+                {
+                  title: "MULTIPLE MONITORING",
+                  description: "Various monitor speakers to suit different mixing preferences",
+                },
+                {
+                  title: "COMPLETE PLUGIN SUITE",
+                  description: "Industry-standard plugins for mixing and mastering",
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="p-8 bg-orange-500/5 border border-orange-500/20 rounded-lg backdrop-blur-sm hover:bg-orange-500/10 transition-all duration-300"
+                >
+                  <h4 className="text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
+                  <p className="text-white/60 font-light leading-relaxed">{item.description}</p>
+                </motion.div>
+              ))}
+            </div>
         </div>
       </section>
     </div>

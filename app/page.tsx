@@ -390,60 +390,63 @@ export default function HomePage() {
                 whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
-                <Card className="bg-neutral-800/50 border-white/10 overflow-hidden hover:border-white/30 transition-all duration-500 backdrop-blur-sm hover:shadow-2xl hover:shadow-white/10">
-                  <CardContent className="p-0">
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                      <Image
-                        src={image.src || "/placeholder.svg"}
-                        alt={image.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 via-neutral-900/20 to-transparent" />
+                <Link href={`/studios#${image.title.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="block">
+                  <Card className="bg-neutral-800/50 border-white/10 overflow-hidden hover:border-white/30 transition-all duration-500 backdrop-blur-sm hover:shadow-2xl hover:shadow-white/10">
+                    <CardContent className="p-0">
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        <Image
+                          src={image.src || "/placeholder.svg"}
+                          alt={image.title}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 via-neutral-900/20 to-transparent" />
 
-                      {/* Enhanced Audio Visualization Overlay */}
-                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="flex space-x-1 bg-neutral-900/50 rounded-lg p-2 backdrop-blur-sm">
-                          {[...Array(8)].map((_, i) => (
-                            <motion.div
-                              key={i}
-                              className="w-1 bg-white/60 rounded-full"
-                              style={{ height: `${Math.random() * 20 + 10}px` }}
-                              animate={{
-                                height: [
-                                  `${Math.random() * 20 + 10}px`,
-                                  `${Math.random() * 30 + 15}px`,
-                                  `${Math.random() * 20 + 10}px`,
-                                ],
-                                opacity: [0.6, 1, 0.6],
-                              }}
-                              transition={{
-                                duration: 1.5 + Math.random(),
-                                repeat: Number.POSITIVE_INFINITY,
-                                delay: i * 0.1,
-                              }}
-                            />
-                          ))}
+                        {/* Enhanced Audio Visualization Overlay */}
+                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="flex space-x-1 bg-neutral-900/50 rounded-lg p-2 backdrop-blur-sm">
+                            {[...Array(8)].map((_, i) => (
+                              <motion.div
+                                key={i}
+                                className="w-1 bg-white/60 rounded-full"
+                                style={{ height: `${Math.random() * 20 + 10}px` }}
+                                animate={{
+                                  height: [
+                                    `${Math.random() * 20 + 10}px`,
+                                    `${Math.random() * 30 + 15}px`,
+                                    `${Math.random() * 20 + 10}px`,
+                                  ],
+                                  opacity: [0.6, 1, 0.6],
+                                }}
+                                transition={{
+                                  duration: 1.5 + Math.random(),
+                                  repeat: Number.POSITIVE_INFINITY,
+                                  delay: i * 0.1,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Hover Glow Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                          <Badge className="bg-neutral-900/60 text-white/80 border-white/20 backdrop-blur-sm mb-3 text-xs tracking-wider">
+                            {image.subtitle}
+                          </Badge>
+                          <h3 className="text-2xl font-light text-white mb-2 tracking-wider group-hover:text-white/90 transition-colors duration-300">
+                            {image.title}
+                          </h3>
+                          <p className="text-white/60 text-sm font-light leading-relaxed group-hover:text-white/70 transition-colors duration-300">
+                            {image.description}
+                          </p>
                         </div>
                       </div>
-
-                      {/* Hover Glow Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <Badge className="bg-neutral-900/60 text-white/80 border-white/20 backdrop-blur-sm mb-3 text-xs tracking-wider">
-                          {image.subtitle}
-                        </Badge>
-                        <h3 className="text-2xl font-light text-white mb-2 tracking-wider group-hover:text-white/90 transition-colors duration-300">
-                          {image.title}
-                        </h3>
-                        <p className="text-white/60 text-sm font-light leading-relaxed group-hover:text-white/70 transition-colors duration-300">
-                          {image.description}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </motion.div>

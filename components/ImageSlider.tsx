@@ -2,16 +2,44 @@
 
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 
 interface ImageSliderProps {
   images: string[]
   className?: string
   previewSides?: boolean
+  transitionDurationMs?: number
+  outerArrows?: boolean
+  draggable?: boolean
 }
 
-export function ImageSlider({ images, className, previewSides = false }: ImageSliderProps) {
+export function ImageSlider({
+  images,
+  className,
+  previewSides = false,
+  transitionDurationMs = 700,
+  outerArrows = false,
+  draggable = false,
+}: ImageSliderProps) {
   const [current, setCurrent] = useState(0)
+
+  // Drag handling
+  const [dragStartX, setDragStartX] = useState<number | null>(null)
+
+  const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = "touches" in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX
+    setDragStartX(clientX)
+  }
+
+  const handleDragEnd = (e: React.TouchEvent | React.MouseEvent) => {
+    if (dragStartX === null) return
+    const clientX = "changedTouches" in e ? e.changedTouches[0].clientX : (e as React.MouseEvent).clientX
+    const delta = clientX - dragStartX
+    if (Math.abs(delta) > 50) {
+      delta < 0 ? setCurrent((prev) => (prev + 1) % images.length) : setCurrent((prev) => (prev - 1 + images.length) % images.length)
+    }
+    setDragStartX(null)
+  }
 
   if (!images || images.length === 0) {
     return null
@@ -33,7 +61,13 @@ export function ImageSlider({ images, className, previewSides = false }: ImageSl
   const nextIdx = (current + 1) % images.length
 
   return (
-    <div className={`relative w-full h-full group ${className || ""}`}>
+    <div
+      className={`relative w-full h-full group ${className || ""}`}
+      onMouseDown={draggable ? handleDragStart : undefined}
+      onMouseUp={draggable ? handleDragEnd : undefined}
+      onTouchStart={draggable ? handleDragStart : undefined}
+      onTouchEnd={draggable ? handleDragEnd : undefined}
+    >
       {previewSides && images.length > 1 && (
         <>
           {/* Previous preview */}
@@ -53,7 +87,8 @@ export function ImageSlider({ images, className, previewSides = false }: ImageSl
         src={images[current]}
         alt="Studio image"
         fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        className="object-cover transition-transform group-hover:scale-105"
+        style={{ transitionDuration: `${transitionDurationMs}ms` }}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
 
@@ -63,7 +98,7 @@ export function ImageSlider({ images, className, previewSides = false }: ImageSl
           <button
             type="button"
             onClick={goPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-20"
+            className={`${outerArrows ? "-left-12" : "left-4"} absolute top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-20`}
             aria-label="Previous image"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -72,7 +107,7 @@ export function ImageSlider({ images, className, previewSides = false }: ImageSl
           <button
             type="button"
             onClick={goNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-20"
+            className={`${outerArrows ? "-right-12" : "right-4"} absolute top-1/2 -translate-y-1/2 p-2 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/80 hover:scale-110 z-20`}
             aria-label="Next image"
           >
             <ChevronRight className="w-6 h-6" />
