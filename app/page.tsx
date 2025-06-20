@@ -151,12 +151,14 @@ export default function HomePage() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
-              className="flex justify-center mb-8 relative"
-              onMouseEnter={() => setLogoHovered(true)}
-              onMouseLeave={() => setLogoHovered(false)}
+              className="flex justify-center mb-8 relative pointer-events-none"
               onClick={() => setLogoClicked(!logoClicked)}
             >
-              <div className="relative w-48 h-48 md:w-64 md:h-64 cursor-pointer">
+              <div
+                className="relative w-48 h-48 md:w-64 md:h-64 cursor-pointer pointer-events-auto"
+                onMouseEnter={() => setLogoHovered(true)}
+                onMouseLeave={() => setLogoHovered(false)}
+              >
                 {/* Enhanced Orbital Circle Lines */}
                 <div className="absolute inset-0 pointer-events-none">
                   {/* Primary Orbit Ring */}
@@ -170,7 +172,7 @@ export default function HomePage() {
                       borderColor: logoHovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)",
                     }}
                     transition={{
-                      duration: 8,
+                      duration: 6,
                       repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
                       ease: "linear",
                       borderColor: { duration: 0.3 },
@@ -188,7 +190,7 @@ export default function HomePage() {
                       borderColor: logoHovered ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.15)",
                     }}
                     transition={{
-                      duration: 12,
+                      duration: 10,
                       repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
                       ease: "linear",
                       borderColor: { duration: 0.3 },
@@ -206,7 +208,7 @@ export default function HomePage() {
                       borderColor: logoHovered ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)",
                     }}
                     transition={{
-                      duration: 15,
+                      duration: 12,
                       repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
                       ease: "linear",
                       borderColor: { duration: 0.3 },
