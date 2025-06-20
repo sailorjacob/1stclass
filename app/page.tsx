@@ -672,6 +672,20 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Full-width Audio Wave */}
+      <section className="relative h-32 overflow-hidden">
+        <div className="absolute inset-0 flex items-end justify-center space-x-1 pointer-events-none select-none">
+          {Array.from({ length: 120 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="w-0.5 bg-white/30 rounded-full"
+              animate={{ height: ["20%", "80%", "20%"], opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.05 }}
+            />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
