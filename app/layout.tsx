@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AudioWaveFooter } from '@/components/AudioWaveFooter'
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +36,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <AudioWaveFooter />
+      </body>
     </html>
   )
 }
