@@ -328,17 +328,6 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            <motion.div
-              animate={{
-                opacity: logoHovered ? 0.8 : 0.6,
-                scale: logoHovered ? 1.05 : 1,
-              }}
-              transition={{ duration: 0.3 }}
-              className="text-3xl md:text-4xl font-thin tracking-[0.3em] text-white/60 mb-8"
-            >
-              STUDIOS
-            </motion.div>
-
             <Badge
               variant="outline"
               className="border-white/20 text-white/60 bg-neutral-800/50 backdrop-blur-sm px-6 py-2 text-xs tracking-[0.2em] mb-8"
