@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Mic, Clock, ArrowRight, Calendar } from "lucide-react"
+import { Mic, Clock, ArrowRight, Calendar, Users } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
@@ -132,6 +132,10 @@ export default function StudiosPage() {
                       <div className="flex items-center space-x-4">
                         <Clock className="w-6 h-6 text-white/80" />
                         <span className="text-white/80 font-light tracking-wider">2 HOUR MINIMUM BOOKING</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <Users className="w-6 h-6 text-white/80" />
+                        <span className="text-white/80 font-light tracking-wider">{studio.capacity}</span>
                       </div>
                     </div>
 

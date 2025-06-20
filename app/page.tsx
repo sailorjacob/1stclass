@@ -36,13 +36,13 @@ export default function HomePage() {
       description: "Premium acoustics and full production capabilities",
     },
     {
-      src: "/images/studio-2.avif",
+      src: "/images/studio-3.avif",
       title: "TERMINAL B",
       subtitle: "CREATIVE SPACE",
       description: "Perfect for small bands and solo artists",
     },
     {
-      src: "/images/studio-3.avif",
+      src: "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_1aafe4dcf25f414e82392ae2a3134990~mv2-FBy7QcAIflKUsePBbJ8LAeVBbSTVEe.avif",
       title: "TERMINAL C",
       subtitle: "INTIMATE SETTING",
       description: "Ideal for vocals and overdub sessions",

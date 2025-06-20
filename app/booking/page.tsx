@@ -382,15 +382,15 @@ export default function BookingPage() {
               <CardContent className="space-y-4 text-sm">
                 <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
                   <div className="font-light text-white tracking-wider">TERMINAL A</div>
-                  <div className="text-white/60">$80/$40 per hour</div>
+                  <div className="text-white/60">10 people • $80/$40 per hour</div>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
                   <div className="font-light text-white tracking-wider">TERMINAL B</div>
-                  <div className="text-white/60">$60/$30 per hour</div>
+                  <div className="text-white/60">5 people • $60/$30 per hour</div>
                 </div>
                 <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
                   <div className="font-light text-white tracking-wider">TERMINAL C</div>
-                  <div className="text-white/60">$50/$25 per hour</div>
+                  <div className="text-white/60">3 people • $50/$25 per hour</div>
                 </div>
               </CardContent>
             </Card>
