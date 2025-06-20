@@ -242,28 +242,28 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                       <h3 className="text-sm font-light tracking-[0.3em] text-white/50 mb-8">SOCIAL MEDIA</h3>
                       <div className="flex space-x-6">
                         <Link
-                          href="#"
+                          href="https://www.instagram.com/1stclassstudios/"
                           className="text-white/60 hover:text-white transition-colors duration-300"
                           aria-label="Instagram"
                         >
                           <Instagram className="w-6 h-6" />
                         </Link>
                         <Link
-                          href="#"
+                          href="https://www.youtube.com/@1stClassStudiosEnt/videos"
                           className="text-white/60 hover:text-white transition-colors duration-300"
                           aria-label="YouTube"
                         >
                           <Youtube className="w-6 h-6" />
                         </Link>
                         <Link
-                          href="#"
+                          href="https://www.facebook.com/people/1st-Class-Studios/61557622828080/"
                           className="text-white/60 hover:text-white transition-colors duration-300"
                           aria-label="Facebook"
                         >
                           <Facebook className="w-6 h-6" />
                         </Link>
                         <Link
-                          href="#"
+                          href="https://www.tiktok.com/@1stclassstudios"
                           className="text-white/60 hover:text-white transition-colors duration-300"
                           aria-label="TikTok"
                         >

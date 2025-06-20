@@ -15,6 +15,9 @@ export default function HomePage() {
   const [logoClicked, setLogoClicked] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
+  // TEMP: Disable logo orbit animation
+  const showLogoAnimation = false
+
   // Track mouse position for parallax effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -160,140 +163,142 @@ export default function HomePage() {
                 onMouseLeave={() => setLogoHovered(false)}
               >
                 {/* Enhanced Orbital Circle Lines */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {/* Primary Orbit Ring */}
-                  <motion.div
-                    className="absolute inset-0 border border-white/10 rounded-full"
-                    style={{ transform: "scale(1.3)" }}
-                    animate={{
-                      rotate: logoHovered ? 360 : 0,
-                      scale: logoHovered ? 1.4 : 1.3,
-                      opacity: logoHovered ? 0.4 : 0.1,
-                      borderColor: logoHovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)",
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
-                      ease: "linear",
-                      borderColor: { duration: 0.3 },
-                    }}
-                  />
+                {showLogoAnimation && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    {/* Primary Orbit Ring */}
+                    <motion.div
+                      className="absolute inset-0 border border-white/10 rounded-full"
+                      style={{ transform: "scale(1.3)" }}
+                      animate={{
+                        rotate: logoHovered ? 360 : 0,
+                        scale: logoHovered ? 1.4 : 1.3,
+                        opacity: logoHovered ? 0.4 : 0.1,
+                        borderColor: logoHovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.1)",
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
+                        ease: "linear",
+                        borderColor: { duration: 0.3 },
+                      }}
+                    />
 
-                  {/* Secondary Orbit Ring */}
-                  <motion.div
-                    className="absolute inset-0 border border-white/15 rounded-full"
-                    style={{ transform: "scale(1.6)" }}
-                    animate={{
-                      rotate: logoHovered ? -360 : 0,
-                      scale: logoHovered ? 1.7 : 1.6,
-                      opacity: logoHovered ? 0.5 : 0.1,
-                      borderColor: logoHovered ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.15)",
-                    }}
-                    transition={{
-                      duration: 10,
-                      repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
-                      ease: "linear",
-                      borderColor: { duration: 0.3 },
-                    }}
-                  />
+                    {/* Secondary Orbit Ring */}
+                    <motion.div
+                      className="absolute inset-0 border border-white/15 rounded-full"
+                      style={{ transform: "scale(1.6)" }}
+                      animate={{
+                        rotate: logoHovered ? -360 : 0,
+                        scale: logoHovered ? 1.7 : 1.6,
+                        opacity: logoHovered ? 0.5 : 0.1,
+                        borderColor: logoHovered ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.15)",
+                      }}
+                      transition={{
+                        duration: 10,
+                        repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
+                        ease: "linear",
+                        borderColor: { duration: 0.3 },
+                      }}
+                    />
 
-                  {/* Tertiary Orbit Ring */}
-                  <motion.div
-                    className="absolute inset-0 border border-white/20 rounded-full"
-                    style={{ transform: "scale(1.9)" }}
-                    animate={{
-                      rotate: logoHovered ? 360 : 0,
-                      scale: logoHovered ? 2.0 : 1.9,
-                      opacity: logoHovered ? 0.6 : 0.1,
-                      borderColor: logoHovered ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)",
-                    }}
-                    transition={{
-                      duration: 12,
-                      repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
-                      ease: "linear",
-                      borderColor: { duration: 0.3 },
-                    }}
-                  />
+                    {/* Tertiary Orbit Ring */}
+                    <motion.div
+                      className="absolute inset-0 border border-white/20 rounded-full"
+                      style={{ transform: "scale(1.9)" }}
+                      animate={{
+                        rotate: logoHovered ? 360 : 0,
+                        scale: logoHovered ? 2.0 : 1.9,
+                        opacity: logoHovered ? 0.6 : 0.1,
+                        borderColor: logoHovered ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)",
+                      }}
+                      transition={{
+                        duration: 12,
+                        repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
+                        ease: "linear",
+                        borderColor: { duration: 0.3 },
+                      }}
+                    />
 
-                  {/* Enhanced Orbital Elements with Trails */}
-                  {[...Array(8)].map((_, i) => (
-                    <div key={i}>
-                      {/* Orbital Dot */}
-                      <motion.div
-                        className="absolute w-2 h-2 bg-white/50 rounded-full shadow-lg"
-                        style={{
-                          top: "50%",
-                          left: "50%",
-                          transformOrigin: `${70 + i * 15}px 0px`,
-                        }}
-                        animate={{
-                          rotate: logoHovered ? 360 : 0,
-                          scale: logoHovered ? 1.3 : 0.8,
-                          opacity: logoHovered ? 0.9 : 0.2,
-                          boxShadow: logoHovered ? "0 0 10px rgba(255,255,255,0.5)" : "0 0 0px rgba(255,255,255,0)",
-                        }}
-                        transition={{
-                          duration: 5 + i * 1.5,
-                          repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
-                          ease: "linear",
-                          delay: i * 0.3,
-                          boxShadow: { duration: 0.3 },
-                        }}
-                      />
-                    </div>
-                  ))}
-
-                  {/* Enhanced Pulsing Rings */}
-                  {logoHovered && (
-                    <>
-                      <motion.div
-                        className="absolute inset-0 border-2 border-white/40 rounded-full"
-                        initial={{ scale: 1, opacity: 0.8 }}
-                        animate={{ scale: 2.8, opacity: 0 }}
-                        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }}
-                      />
-                      <motion.div
-                        className="absolute inset-0 border border-white/30 rounded-full"
-                        initial={{ scale: 1, opacity: 0.6 }}
-                        animate={{ scale: 3.2, opacity: 0 }}
-                        transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: 0.5 }}
-                      />
-                      <motion.div
-                        className="absolute inset-0 border border-white/20 rounded-full"
-                        initial={{ scale: 1, opacity: 0.4 }}
-                        animate={{ scale: 3.6, opacity: 0 }}
-                        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: 1 }}
-                      />
-                    </>
-                  )}
-
-                  {/* Sparkle Effects */}
-                  {logoHovered &&
-                    [...Array(6)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute"
-                        style={{
-                          top: `${20 + Math.random() * 60}%`,
-                          left: `${20 + Math.random() * 60}%`,
-                        }}
-                        initial={{ scale: 0, rotate: 0 }}
-                        animate={{
-                          scale: [0, 1, 0],
-                          rotate: 360,
-                          opacity: [0, 1, 0],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Number.POSITIVE_INFINITY,
-                          delay: i * 0.3,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <Sparkles className="w-3 h-3 text-white/60" />
-                      </motion.div>
+                    {/* Enhanced Orbital Elements with Trails */}
+                    {[...Array(8)].map((_, i) => (
+                      <div key={i}>
+                        {/* Orbital Dot */}
+                        <motion.div
+                          className="absolute w-2 h-2 bg-white/50 rounded-full shadow-lg"
+                          style={{
+                            top: "50%",
+                            left: "50%",
+                            transformOrigin: `${70 + i * 15}px 0px`,
+                          }}
+                          animate={{
+                            rotate: logoHovered ? 360 : 0,
+                            scale: logoHovered ? 1.3 : 0.8,
+                            opacity: logoHovered ? 0.9 : 0.2,
+                            boxShadow: logoHovered ? "0 0 10px rgba(255,255,255,0.5)" : "0 0 0px rgba(255,255,255,0)",
+                          }}
+                          transition={{
+                            duration: 5 + i * 1.5,
+                            repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
+                            ease: "linear",
+                            delay: i * 0.3,
+                            boxShadow: { duration: 0.3 },
+                          }}
+                        />
+                      </div>
                     ))}
-                </div>
+
+                    {/* Enhanced Pulsing Rings */}
+                    {logoHovered && (
+                      <>
+                        <motion.div
+                          className="absolute inset-0 border-2 border-white/40 rounded-full"
+                          initial={{ scale: 1, opacity: 0.8 }}
+                          animate={{ scale: 2.8, opacity: 0 }}
+                          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }}
+                        />
+                        <motion.div
+                          className="absolute inset-0 border border-white/30 rounded-full"
+                          initial={{ scale: 1, opacity: 0.6 }}
+                          animate={{ scale: 3.2, opacity: 0 }}
+                          transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: 0.5 }}
+                        />
+                        <motion.div
+                          className="absolute inset-0 border border-white/20 rounded-full"
+                          initial={{ scale: 1, opacity: 0.4 }}
+                          animate={{ scale: 3.6, opacity: 0 }}
+                          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: 1 }}
+                        />
+                      </>
+                    )}
+
+                    {/* Sparkle Effects */}
+                    {logoHovered &&
+                      [...Array(6)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="absolute"
+                          style={{
+                            top: `${20 + Math.random() * 60}%`,
+                            left: `${20 + Math.random() * 60}%`,
+                          }}
+                          initial={{ scale: 0, rotate: 0 }}
+                          animate={{
+                            scale: [0, 1, 0],
+                            rotate: 360,
+                            opacity: [0, 1, 0],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Number.POSITIVE_INFINITY,
+                            delay: i * 0.3,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <Sparkles className="w-3 h-3 text-white/60" />
+                        </motion.div>
+                      ))}
+                  </div>
+                )}
 
                 {/* Enhanced Logo Image */}
                 <motion.div
