@@ -102,14 +102,6 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
               >
                 <Link href="/booking">BOOK NOW</Link>
               </Button>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="text-white/70 hover:text-white hover:bg-white/5 font-light tracking-wider transition-all duration-300 px-3 py-2"
-              >
-                <Link href="/booking">CONTACT</Link>
-              </Button>
             </div>
 
             {/* Mobile Menu Button */}
