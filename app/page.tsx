@@ -8,12 +8,15 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Navigation } from "@/components/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 export default function HomePage() {
   const [logoHovered, setLogoHovered] = useState(false)
   const [logoClicked, setLogoClicked] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  // Track if user is near bottom to reveal audio wave
+  const [showWave, setShowWave] = useState(false)
 
   // Track mouse position for parallax effects
   useEffect(() => {
@@ -26,6 +29,17 @@ export default function HomePage() {
 
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+      setShowWave(scrollTop + clientHeight >= scrollHeight - 120)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   const galleryImages = [
@@ -674,18 +688,27 @@ export default function HomePage() {
       </section>
 
       {/* Full-width Audio Wave */}
-      <section className="relative h-32 overflow-hidden">
-        <div className="absolute inset-0 flex items-end justify-center space-x-1 pointer-events-none select-none">
-          {Array.from({ length: 120 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-0.5 bg-white/30 rounded-full"
-              animate={{ height: ["20%", "80%", "20%"], opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.05 }}
-            />
-          ))}
+      <motion.section
+        className="relative h-16 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showWave ? 1 : 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="absolute inset-0 flex items-end justify-between pointer-events-none select-none">
+          {Array.from({ length: 200 }).map((_, i) => {
+            const min = Math.random() * 15 + 10 // 10% - 25%
+            const max = min + Math.random() * 50 + 20 // up to ~95%
+            return (
+              <motion.div
+                key={i}
+                className="w-px bg-white/30 rounded-full"
+                animate={{ height: [`${min}%`, `${max}%`, `${min}%`], opacity: [0.2, 0.9, 0.2] }}
+                transition={{ duration: 2 + Math.random(), repeat: Infinity, delay: i * 0.02 }}
+              />
+            )
+          })}
         </div>
-      </section>
+      </motion.section>
     </div>
   )
 }
