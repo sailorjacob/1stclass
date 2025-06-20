@@ -218,27 +218,6 @@ export default function HomePage() {
                   {/* Enhanced Orbital Elements with Trails */}
                   {[...Array(8)].map((_, i) => (
                     <div key={i}>
-                      {/* Orbital Trail */}
-                      <motion.div
-                        className="absolute w-8 h-0.5 bg-gradient-to-r from-white/30 to-transparent rounded-full"
-                        style={{
-                          top: "50%",
-                          left: "50%",
-                          transformOrigin: `${70 + i * 15}px 0px`,
-                          transform: "translateY(-50%)",
-                        }}
-                        animate={{
-                          rotate: logoHovered ? 360 : 0,
-                          opacity: logoHovered ? 0.6 : 0,
-                        }}
-                        transition={{
-                          duration: 5 + i * 1.5,
-                          repeat: logoHovered ? Number.POSITIVE_INFINITY : 0,
-                          ease: "linear",
-                          delay: i * 0.3,
-                        }}
-                      />
-
                       {/* Orbital Dot */}
                       <motion.div
                         className="absolute w-2 h-2 bg-white/50 rounded-full shadow-lg"
