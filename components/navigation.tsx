@@ -169,7 +169,10 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                 <div className="grid md:grid-cols-2 gap-16">
                   <div className="space-y-8">
                     <h3 className="text-sm font-light tracking-[0.3em] text-white/50 mb-8">NAVIGATION</h3>
-                    {menuItems.map((item, index) => (
+                    {[
+                      ...menuItems.filter((m) => m.label === 'HOME' || m.label === 'STUDIOS' || m.label === 'GALLERY' || m.label === 'BOOK NOW'),
+                      ...menuItems.filter((m) => m.label === 'CONTACT'),
+                    ].map((item, index) => (
                       <motion.div
                         key={item.href}
                         initial={{ opacity: 0, x: -20 }}
