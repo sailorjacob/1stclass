@@ -60,8 +60,8 @@ export default function StudiosPage() {
       <Navigation />
 
       {/* Studios Grid */}
-      <section className="relative py-20 px-8">
-        <div className="container mx-auto">
+      <section className="relative pt-24 pb-20 px-8">
+        <div className="max-w-6xl mx-auto">
           <div className="space-y-24">
             {studios.map((studio, index) => (
               <motion.div
@@ -159,7 +159,7 @@ export default function StudiosPage() {
 
       {/* Simple Requirements Section */}
       <section className="relative py-20 px-8">
-        <div className="container mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

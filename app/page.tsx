@@ -379,7 +379,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
           >
             {galleryImages.map((image, index) => (
               <motion.div
@@ -451,7 +451,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="relative py-20 px-8 bg-gradient-to-b from-transparent via-white/2 to-transparent">
+      <section className="relative py-12 px-8 bg-gradient-to-b from-transparent via-white/2 to-transparent">
         <div className="max-w-6xl mx-auto px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -510,8 +510,8 @@ export default function HomePage() {
       </section>
 
       {/* Studio Information Section */}
-      <section className="relative py-32 px-8">
-        <div className="container mx-auto">
+      <section className="relative py-16 px-8">
+        <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
