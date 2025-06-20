@@ -60,8 +60,8 @@ export default function StudiosPage() {
       <Navigation />
 
       {/* Studios Grid */}
-      <section className="relative pt-24 pb-20 px-8">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative pt-32 pb-20 px-8">
+        <div className="container mx-auto">
           <div className="space-y-24">
             {studios.map((studio, index) => (
               <motion.div
