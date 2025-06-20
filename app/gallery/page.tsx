@@ -122,7 +122,7 @@ export default function GalleryPage() {
       {/* Removed hero section for a cleaner gallery */}
 
       {/* Photo Gallery Section */}
-      <section className="relative py-16 px-4 md:px-8">
+      <section className="relative pt-28 pb-12 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -137,9 +137,9 @@ export default function GalleryPage() {
       </section>
 
       {/* Equipment Grid */}
-      <section className="relative py-12 px-4 md:px-8">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-10">
+      <section className="relative py-10 px-4 md:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 justify-items-center">
             {equipmentCategories.map((category, index) => (
               <motion.div
                 key={category.title}
