@@ -9,10 +9,6 @@ import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { ImageSlider } from "@/components/ImageSlider"
 
-export const metadata = {
-  title: 'Studios | 1st Class',
-}
-
 export default function StudiosPage() {
   const studios = [
     {
