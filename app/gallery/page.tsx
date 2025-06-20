@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Mic, Volume2, Monitor, Laptop, Plane } from "lucide-react"
+import { Mic, Volume2, Monitor, Laptop } from "lucide-react"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { ImageSlider } from "@/components/ImageSlider"
@@ -104,20 +104,6 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-neutral-900">
       <Navigation />
-
-      {/* Flying Plane Transition */}
-      <motion.div
-        initial={{ x: "-10vw", y: "0vh", rotate: -10, opacity: 0 }}
-        animate={{
-          x: ["-10vw", "30vw", "60vw", "110vw"],
-          y: ["0vh", "-5vh", "-8vh", "-10vh"],
-          opacity: [0, 1, 1, 0],
-        }}
-        transition={{ duration: 1.6, ease: "easeInOut" }}
-        className="fixed top-1/3 left-0 z-50 pointer-events-none"
-      >
-        <Plane className="w-16 h-16 text-orange-400 drop-shadow-[0_0_6px_rgba(255,125,0,0.8)]" />
-      </motion.div>
 
       {/* Removed hero section for a cleaner gallery */}
 
