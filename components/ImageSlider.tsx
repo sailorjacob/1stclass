@@ -3,7 +3,6 @@
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import React, { useState } from "react"
-import { motion } from "framer-motion"
 
 interface ImageSliderProps {
   images: string[]
@@ -24,15 +23,22 @@ export function ImageSlider({
 }: ImageSliderProps) {
   const [current, setCurrent] = useState(0)
 
-  // framer-motion drag handling
-  const handleDragEnd = (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
-    if (Math.abs(info.offset.x) > 50 || Math.abs(info.velocity.x) > 500) {
-      if (info.offset.x < 0) {
-        setCurrent((prev) => (prev + 1) % images.length)
-      } else {
-        setCurrent((prev) => (prev - 1 + images.length) % images.length)
-      }
+  // Manual drag handling to support desktop and touch devices
+  const [dragStartX, setDragStartX] = useState<number | null>(null)
+
+  const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = "touches" in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX
+    setDragStartX(clientX)
+  }
+
+  const handleDragEnd = (e: React.TouchEvent | React.MouseEvent) => {
+    if (dragStartX === null) return
+    const clientX = "changedTouches" in e ? e.changedTouches[0].clientX : (e as React.MouseEvent).clientX
+    const delta = clientX - dragStartX
+    if (Math.abs(delta) > 50) {
+      delta < 0 ? setCurrent((prev) => (prev + 1) % images.length) : setCurrent((prev) => (prev - 1 + images.length) % images.length)
     }
+    setDragStartX(null)
   }
 
   if (!images || images.length === 0) {
@@ -55,7 +61,13 @@ export function ImageSlider({
   const nextIdx = (current + 1) % images.length
 
   return (
-    <div className={`relative w-full h-full group overflow-hidden ${className || ""}`}>
+    <div
+      className={`relative w-full h-full group ${className || ""}`}
+      onMouseDown={draggable ? handleDragStart : undefined}
+      onMouseUp={draggable ? handleDragEnd : undefined}
+      onTouchStart={draggable ? handleDragStart : undefined}
+      onTouchEnd={draggable ? handleDragEnd : undefined}
+    >
       {previewSides && images.length > 1 && (
         <>
           {/* Previous preview */}
@@ -70,23 +82,15 @@ export function ImageSlider({
         </>
       )}
 
-      {/* Slides container */}
-      <div className="relative w-full h-full overflow-hidden">
-        <motion.div
-          className="flex h-full w-full"
-          drag={draggable ? "x" : false}
-          dragElastic={0.2}
-          onDragEnd={draggable ? handleDragEnd : undefined}
-          animate={{ x: `-${current * 100}%` }}
-          transition={{ duration: transitionDurationMs / 1000, ease: "easeInOut" }}
-        >
-          {images.map((img, idx) => (
-            <div key={idx} className="relative flex-shrink-0 w-full h-full">
-              <Image src={img} alt="slide" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-            </div>
-          ))}
-        </motion.div>
-      </div>
+      {/* Current slide */}
+      <Image
+        src={images[current]}
+        alt="Studio image"
+        fill
+        className="object-cover transition-transform group-hover:scale-105"
+        style={{ transitionDuration: `${transitionDurationMs}ms` }}
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
 
       {/* Navigation Arrows */}
       {images.length > 1 && (
