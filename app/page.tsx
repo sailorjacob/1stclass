@@ -452,7 +452,7 @@ export default function HomePage() {
 
       {/* Features Section */}
       <section className="relative py-20 px-8 bg-gradient-to-b from-transparent via-white/2 to-transparent">
-        <div className="container mx-auto">
+        <div className="max-w-6xl mx-auto px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
