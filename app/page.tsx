@@ -158,7 +158,7 @@ export default function HomePage() {
               onClick={() => setLogoClicked(!logoClicked)}
             >
               <div
-                className="relative w-48 h-48 md:w-64 md:h-64 cursor-pointer pointer-events-auto"
+                className="relative w-56 h-56 md:w-80 md:h-80 cursor-pointer pointer-events-auto"
                 onMouseEnter={() => setLogoHovered(true)}
                 onMouseLeave={() => setLogoHovered(false)}
               >
@@ -303,7 +303,7 @@ export default function HomePage() {
                 {/* Enhanced Logo Image */}
                 <motion.div
                   animate={{
-                    scale: logoHovered ? 1.1 : 1,
+                    scale: logoHovered ? 1.32 : 1.2,
                     rotate: logoHovered ? 5 : 0,
                     filter: logoHovered
                       ? "brightness(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.3))"
