@@ -73,15 +73,6 @@ export default function BookingPage() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <Badge
-              variant="outline"
-              className="border-white/30 text-white/80 bg-white/5 backdrop-blur-sm px-6 py-2 text-sm tracking-widest"
-            >
-              BOOK YOUR SESSION
-            </Badge>
-
-            <h1 className="text-4xl md:text-5xl font-light text-white tracking-wider">BOOKING</h1>
-
             <p className="text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
               Fill out the form below to request a booking, or contact us directly to schedule your session.
             </p>

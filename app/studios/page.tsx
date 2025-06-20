@@ -68,15 +68,6 @@ export default function StudiosPage() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <Badge
-              variant="outline"
-              className="border-white/30 text-white/80 bg-white/5 backdrop-blur-sm px-6 py-2 text-sm tracking-widest"
-            >
-              THREE RECORDING TERMINALS
-            </Badge>
-
-            <h1 className="text-4xl md:text-5xl font-light text-white tracking-wider">STUDIOS</h1>
-
             <p className="text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
               Three distinct recording environments designed for different project needs, from intimate vocal sessions
               to full band productions.
