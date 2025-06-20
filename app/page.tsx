@@ -365,7 +365,7 @@ export default function HomePage() {
               PROFESSIONAL RECORDING STUDIO • STAMFORD, CT
             </Badge>
 
-            <p className="text-lg md:text-xl font-light text-orange-400 max-w-3xl mx-auto leading-relaxed mb-12 tracking-widest">
+            <p className="text-lg md:text-xl font-light text-neutral-400 max-w-3xl mx-auto leading-relaxed mb-12 tracking-widest">
               ~ 45 MINS FROM NYC ~
             </p>
 

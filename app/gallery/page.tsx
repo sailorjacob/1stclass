@@ -102,7 +102,7 @@ export default function GalleryPage() {
   ].filter(Boolean) // Remove any undefined/null values
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-neutral-900">
       <Navigation />
 
       {/* Flying Plane Transition */}
