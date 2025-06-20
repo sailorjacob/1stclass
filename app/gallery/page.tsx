@@ -179,36 +179,57 @@ export default function GalleryPage() {
       </section>
 
       {/* Highlight Cards */}
-      <section className="relative py-8 px-4 md:px-8 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
+      <section className="relative py-8 px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "PREMIUM PREAMPS",
-                  description: "Neve, API, and Heritage Audio preamps for professional sound",
-                },
-                {
-                  title: "MULTIPLE MONITORING",
-                  description: "Various monitor speakers to suit different mixing preferences",
-                },
-                {
-                  title: "COMPLETE PLUGIN SUITE",
-                  description: "Industry-standard plugins for mixing and mastering",
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className="p-8 bg-orange-500/5 border border-orange-500/20 rounded-lg backdrop-blur-sm hover:bg-orange-500/10 transition-all duration-300"
-                >
-                  <h4 className="text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
-                  <p className="text-white/60 font-light leading-relaxed">{item.description}</p>
-                </motion.div>
-              ))}
-            </div>
+            {[
+              {
+                title: "PREMIUM PREAMPS",
+                description: "Neve, API, and Heritage Audio preamps for professional sound",
+              },
+              {
+                title: "MULTIPLE MONITORING",
+                description: "Various monitor speakers to suit different mixing preferences",
+              },
+              {
+                title: "COMPLETE PLUGIN SUITE",
+                description: "Industry-standard plugins for mixing and mastering",
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="relative p-8 bg-neutral-800/40 border border-white/15 rounded-lg backdrop-blur-sm hover:bg-neutral-800/50 transition-all duration-300 overflow-hidden group"
+              >
+                {/* Audio Wave Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="flex space-x-1">
+                    {Array.from({ length: 40 }).map((_, barIndex) => (
+                      <motion.div
+                        key={barIndex}
+                        className="w-0.5 bg-white/40 rounded-full"
+                        animate={{
+                          height: ["8px", "32px", "8px"],
+                          opacity: [0.3, 0.8, 0.3],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          delay: barIndex * 0.05,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <h4 className="relative text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
+                <p className="relative text-white/60 font-light leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
