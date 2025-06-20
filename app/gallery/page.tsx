@@ -186,53 +186,37 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Equipment Information */}
-      <section className="relative py-32 px-8 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
-        <div className="container mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto space-y-16"
-          >
-            <div className="space-y-8">
-              <h3 className="text-4xl md:text-5xl font-light text-white tracking-wider">PROFESSIONAL QUALITY</h3>
-              <p className="text-lg text-white/70 font-light leading-relaxed max-w-3xl mx-auto">
-                All equipment is regularly maintained and calibrated to ensure optimal performance. Our signal chain is
-                designed to capture recordings with clarity and precision.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "PREMIUM PREAMPS",
-                  description: "Neve, API, and Heritage Audio preamps for professional sound",
-                },
-                {
-                  title: "MULTIPLE MONITORING",
-                  description: "Various monitor speakers to suit different mixing preferences",
-                },
-                {
-                  title: "COMPLETE PLUGIN SUITE",
-                  description: "Industry-standard plugins for mixing and mastering",
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className="p-8 bg-orange-500/5 border border-orange-500/20 rounded-lg backdrop-blur-sm hover:bg-orange-500/10 transition-all duration-300"
-                >
-                  <h4 className="text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
-                  <p className="text-white/60 font-light leading-relaxed">{item.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+      {/* Highlight Cards */}
+      <section className="relative py-8 px-4 md:px-8 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "PREMIUM PREAMPS",
+                description: "Neve, API, and Heritage Audio preamps for professional sound",
+              },
+              {
+                title: "MULTIPLE MONITORING",
+                description: "Various monitor speakers to suit different mixing preferences",
+              },
+              {
+                title: "COMPLETE PLUGIN SUITE",
+                description: "Industry-standard plugins for mixing and mastering",
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="p-8 bg-orange-500/5 border border-orange-500/20 rounded-lg backdrop-blur-sm hover:bg-orange-500/10 transition-all duration-300"
+              >
+                <h4 className="text-xl font-light text-white mb-4 tracking-wider">{item.title}</h4>
+                <p className="text-white/60 font-light leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

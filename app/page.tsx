@@ -58,7 +58,7 @@ export default function HomePage() {
   const features = [
     {
       icon: <Mic className="w-8 h-8" />,
-      title: "PROFESSIONAL EQUIPMENT",
+      title: "PREMIUM EQUIPMENT",
       description: "Industry-standard microphones, preamps, and monitoring systems",
       metric: "50+",
       unit: "PREMIUM MICS",
@@ -475,19 +475,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Fixed Features Section - Back to Original */}
-      <section className="relative py-32 px-8 bg-gradient-to-b from-transparent via-white/2 to-transparent">
+      {/* Features Section */}
+      <section className="relative py-20 px-8 bg-gradient-to-b from-transparent via-white/2 to-transparent">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-24"
+            className="text-center mb-12"
           >
-            <h2 className="text-6xl md:text-7xl font-extralight text-white mb-8 tracking-[-0.02em]">FACILITIES</h2>
-            <div className="text-3xl md:text-4xl font-thin text-white/40 tracking-[0.3em] mb-12">& SERVICES</div>
-            <div className="w-32 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto" />
+            {/* Header removed for tighter layout */}
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
