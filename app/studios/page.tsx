@@ -59,23 +59,6 @@ export default function StudiosPage() {
       {/* Navigation */}
       <Navigation />
 
-      {/* Simplified Hero Section */}
-      <section className="relative pt-32 pb-12 px-8">
-        <div className="container mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <p className="text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
-              Three distinct recording environments designed for different project needs, from intimate vocal sessions
-              to full band productions.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Studios Grid */}
       <section className="relative py-20 px-8">
         <div className="container mx-auto">
