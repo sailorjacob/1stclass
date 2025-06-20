@@ -21,6 +21,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
     { href: "/", label: "HOME" },
     { href: "/studios", label: "STUDIOS" },
     { href: "/gallery", label: "GALLERY" },
+    { href: "/booking", label: "BOOK NOW" },
     { href: "/booking", label: "CONTACT" },
   ]
 
@@ -98,6 +99,14 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                 variant="outline"
                 size="sm"
                 className="border-white/30 text-white bg-neutral-800/50 hover:bg-white/5 hover:border-white/50 font-light tracking-wider transition-all duration-300 px-4 py-2"
+              >
+                <Link href="/booking">BOOK NOW</Link>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="text-white/70 hover:text-white hover:bg-white/5 font-light tracking-wider transition-all duration-300 px-3 py-2"
               >
                 <Link href="/booking">CONTACT</Link>
               </Button>
