@@ -313,7 +313,7 @@ export default function HomePage() {
                   className="relative w-full h-full z-10"
                 >
                   <Image
-                    src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png"
+                    src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass//1stclassfull.png"
                     alt="1ST CLASS STUDIOS"
                     fill
                     className="object-contain transition-all duration-300"

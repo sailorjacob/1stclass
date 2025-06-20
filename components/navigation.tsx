@@ -49,7 +49,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
             <div className="flex items-center space-x-8">
               <Link href="/" className="flex items-center">
                 <div className="relative w-12 h-12">
-                  <Image src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png" alt="1ST CLASS STUDIOS" fill className="object-contain" />
+                  <Image src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass//1stclassfull.png" alt="1ST CLASS STUDIOS" fill className="object-contain" />
                 </div>
               </Link>
 
@@ -141,7 +141,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                   <div className="flex items-center">
                     <div className="relative w-12 h-12">
                       <Image
-                        src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/havensvgs//1stclass.png"
+                        src="https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass//1stclassfull.png"
                         alt="1ST CLASS STUDIOS"
                         fill
                         className="object-contain"
