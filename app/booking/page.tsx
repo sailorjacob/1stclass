@@ -89,7 +89,7 @@ export default function BookingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="lg:col-span-2"
           >
-            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+            <Card className="bg-white/5 border-white/10 backdrop-blur-sm w-full max-w-md mx-auto lg:max-w-none">
               <CardHeader className="pb-8">
                 <CardTitle className="text-3xl text-white font-light tracking-wider">BOOKING REQUEST FORM</CardTitle>
                 <p className="text-white/60 font-light">
