@@ -21,8 +21,8 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
     { href: "/", label: "HOME" },
     { href: "/studios", label: "STUDIOS" },
     { href: "/gallery", label: "GALLERY" },
-    { href: "/booking", label: "BOOK NOW" },
     { href: "/booking", label: "CONTACT" },
+    { href: "/booking", label: "BOOK NOW" },
   ]
 
   // Close menu when logo click state changes
@@ -65,7 +65,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
 
               {/* Desktop Navigation Tabs */}
               <div className="hidden lg:flex items-center space-x-1">
-                {menuItems.slice(0, 3).map((item) => (
+                {menuItems.slice(0, 4).map((item) => (
                   <Button
                     key={item.href}
                     asChild
