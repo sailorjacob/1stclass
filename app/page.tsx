@@ -427,15 +427,9 @@ export default function HomePage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                         <div className="absolute bottom-0 left-0 right-0 p-6">
-                          <Badge className="bg-neutral-900/60 text-white/80 border-white/20 backdrop-blur-sm mb-3 text-xs tracking-wider">
-                            {image.subtitle}
-                          </Badge>
                           <h3 className="text-2xl font-light text-white mb-2 tracking-wider group-hover:text-white/90 transition-colors duration-300">
                             {image.title}
                           </h3>
-                          <p className="text-white/60 text-sm font-light leading-relaxed group-hover:text-white/70 transition-colors duration-300">
-                            {image.description}
-                          </p>
                         </div>
                       </div>
                     </CardContent>
