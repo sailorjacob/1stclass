@@ -1,0 +1,192 @@
+/* React Big Calendar Custom Styles for Dark Theme */
+
+.booking-calendar {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.booking-calendar .rbc-calendar {
+  background-color: transparent;
+  color: white;
+}
+
+/* Header */
+.booking-calendar .rbc-header {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 0;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.booking-calendar .rbc-header + .rbc-header {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Time slots */
+.booking-calendar .rbc-time-content {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-time-slot {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.booking-calendar .rbc-timeslot-group {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-time-gutter {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.booking-calendar .rbc-time-view {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-allday-cell {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.booking-calendar .rbc-day-slot .rbc-time-slot {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Available slots - already handled by slotStyleGetter */
+.booking-calendar .rbc-available-slot {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.booking-calendar .rbc-available-slot:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Booked slots */
+.booking-calendar .rbc-booked-slot {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Unavailable slots */
+.booking-calendar .rbc-unavailable-slot {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Events */
+.booking-calendar .rbc-event {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.booking-calendar .rbc-event-label {
+  font-size: 0.75rem;
+}
+
+.booking-calendar .rbc-event-content {
+  font-size: 0.875rem;
+  white-space: normal;
+}
+
+/* Selected slot */
+.booking-calendar .rbc-slot-selecting {
+  background-color: rgba(59, 130, 246, 0.3);
+  border: 2px solid #3B82F6;
+}
+
+/* Today column */
+.booking-calendar .rbc-today {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Now indicator */
+.booking-calendar .rbc-current-time-indicator {
+  background-color: #ef4444;
+  height: 2px;
+}
+
+/* Agenda view */
+.booking-calendar .rbc-agenda-view {
+  color: white;
+}
+
+.booking-calendar .rbc-agenda-view table {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-agenda-view table tbody > tr > td {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-agenda-date-cell,
+.booking-calendar .rbc-agenda-time-cell {
+  white-space: nowrap;
+}
+
+.booking-calendar .rbc-agenda-event-cell {
+  width: 100%;
+}
+
+/* Custom toolbar styles */
+.booking-calendar .rbc-toolbar button {
+  color: white;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  transition: all 0.2s;
+}
+
+.booking-calendar .rbc-toolbar button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.booking-calendar .rbc-toolbar button.rbc-active {
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+.booking-calendar .rbc-toolbar button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Month view */
+.booking-calendar .rbc-month-view {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-month-row + .rbc-month-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-calendar .rbc-date-cell {
+  padding: 0.25rem;
+}
+
+.booking-calendar .rbc-off-range {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .booking-calendar .rbc-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .booking-calendar .rbc-toolbar-label {
+    margin: 0.5rem 0;
+  }
+} 
