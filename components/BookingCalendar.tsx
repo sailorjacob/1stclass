@@ -333,26 +333,23 @@ const CustomToolbar = ({ date, onNavigate, view, onView, label }: any) => {
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Button
-            variant="outline"
             size="sm"
             onClick={() => onNavigate('PREV')}
-            className="text-white border-white/20 hover:bg-white/10"
+            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
           >
             Previous
           </Button>
           <Button
-            variant="outline"
             size="sm"
             onClick={() => onNavigate('TODAY')}
-            className="text-white border-white/20 hover:bg-white/10"
+            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
           >
             Today
           </Button>
           <Button
-            variant="outline"
             size="sm"
             onClick={() => onNavigate('NEXT')}
-            className="text-white border-white/20 hover:bg-white/10"
+            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
           >
             Next
           </Button>
@@ -362,18 +359,16 @@ const CustomToolbar = ({ date, onNavigate, view, onView, label }: any) => {
 
         <div className="flex space-x-2">
           <Button
-            variant={view === Views.WEEK ? 'default' : 'outline'}
             size="sm"
             onClick={() => onView(Views.WEEK)}
-            className={view === Views.WEEK ? 'bg-white text-black' : 'text-white border-white/20 hover:bg-white/10'}
+            className={view === Views.WEEK ? 'bg-white/20 text-white border-white/50 border' : 'text-white border-white/20 hover:bg-white/10 border bg-transparent'}
           >
             Week
           </Button>
           <Button
-            variant={view === Views.DAY ? 'default' : 'outline'}
             size="sm"
             onClick={() => onView(Views.DAY)}
-            className={view === Views.DAY ? 'bg-white text-black' : 'text-white border-white/20 hover:bg-white/10'}
+            className={view === Views.DAY ? 'bg-white/20 text-white border-white/50 border' : 'text-white border-white/20 hover:bg-white/10 border bg-transparent'}
           >
             Day
           </Button>

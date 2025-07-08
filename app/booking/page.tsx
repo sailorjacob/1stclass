@@ -256,8 +256,7 @@ export default function BookingPage() {
                            </Button>
                            <Button
                              onClick={() => handleStudioSelect(studioId, 'no', false)}
-                             variant="outline"
-                             className="w-full border-2 text-white hover:bg-white/10 py-6 font-medium"
+                             className="w-full border-2 bg-transparent text-white hover:bg-white/10 py-6 font-medium"
                              style={{ 
                                borderColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS],
                                color: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS]
@@ -298,11 +297,10 @@ export default function BookingPage() {
                     {['2', '3', '4', '6'].map(hours => (
                       <Button
                         key={hours}
-                        variant={formData.duration === hours ? 'default' : 'outline'}
                         onClick={() => handleInputChange('duration', hours)}
                         className={formData.duration === hours 
-                          ? 'bg-white/20 text-white border-white/50' 
-                          : 'border-white/30 text-white hover:bg-white/10'}
+                          ? 'bg-white/20 text-white border-white/50 border' 
+                          : 'border-white/30 text-white hover:bg-white/10 border bg-transparent'}
                       >
                         {hours} Hours
                         <span className="ml-2 text-sm opacity-70">
@@ -329,9 +327,8 @@ export default function BookingPage() {
 
               <div className="mt-8 text-center">
                 <Button
-                  variant="outline"
                   onClick={() => setCurrentStep('studio-selection')}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-white/30 text-white hover:bg-white/10 border bg-transparent"
                 >
                   Back to Studio Selection
                 </Button>
@@ -477,9 +474,8 @@ export default function BookingPage() {
                     <div className="flex space-x-4">
                       <Button
                         type="button"
-                        variant="outline"
                         onClick={() => setCurrentStep('calendar')}
-                        className="flex-1 border-white/30 text-white hover:bg-white/10"
+                        className="flex-1 border-white/30 text-white hover:bg-white/10 border bg-transparent"
                       >
                         Back
                       </Button>
