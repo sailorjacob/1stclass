@@ -14,7 +14,13 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { CheckCircle, CreditCard, Loader2 } from 'lucide-react'
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+// Debug: Log the publishable key availability
+console.log('Stripe publishable key available:', !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+console.log('Stripe key starts with pk_:', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_'))
+
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : Promise.reject(new Error('Stripe publishable key not found'))
 
 interface BookingDetails {
   studio: string
@@ -271,6 +277,19 @@ const CheckoutForm: React.FC<{
   )
 }
 
+// Debug component to show Stripe status
+const StripeDebugInfo = () => {
+  const hasKey = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  return (
+    <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg text-xs">
+      <p className="text-blue-400">
+        🔧 Debug: Stripe Key Available: {hasKey ? '✅ Yes' : '❌ No'} 
+        {hasKey && ` (${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.substring(0, 10)}...)`}
+      </p>
+    </div>
+  )
+}
+
 export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
   bookingData,
   onSuccess,
@@ -278,6 +297,7 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
 }) => {
   return (
     <Elements stripe={stripePromise}>
+      <StripeDebugInfo />
       <CheckoutForm
         bookingData={bookingData}
         onSuccess={onSuccess}

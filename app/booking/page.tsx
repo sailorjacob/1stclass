@@ -301,7 +301,7 @@ export default function BookingPage() {
                         variant={formData.duration === hours ? 'default' : 'outline'}
                         onClick={() => handleInputChange('duration', hours)}
                         className={formData.duration === hours 
-                          ? 'bg-white text-black' 
+                          ? 'bg-white/20 text-white border-white/50' 
                           : 'border-white/30 text-white hover:bg-white/10'}
                       >
                         {hours} Hours
