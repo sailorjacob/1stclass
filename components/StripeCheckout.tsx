@@ -297,7 +297,6 @@ export const StripeCheckout: React.FC<StripeCheckoutProps> = ({
 }) => {
   return (
     <Elements stripe={stripePromise}>
-      <StripeDebugInfo />
       <CheckoutForm
         bookingData={bookingData}
         onSuccess={onSuccess}
