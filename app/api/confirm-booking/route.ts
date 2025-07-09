@@ -11,8 +11,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { paymentIntentId } = confirmBookingSchema.parse(body)
     
+    // Check for test mode from referer URL
+    const referer = request.headers.get('referer') || ''
+    const isTestMode = referer.includes('test=true') || referer.includes('testmode=1') || body.testMode === true
+    
+    console.log('Confirm Booking - Test Mode:', isTestMode)
+    
     // Retrieve the payment intent to get booking details
-    const stripe = getServerStripe()
+    const stripe = getServerStripe(isTestMode)
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
     
     if (paymentIntent.status !== 'succeeded') {

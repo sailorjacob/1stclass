@@ -20,6 +20,12 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
+    // Check for test mode from referer URL or request body
+    const referer = request.headers.get('referer') || ''
+    const isTestMode = referer.includes('test=true') || referer.includes('testmode=1') || body.testMode === true
+    
+    console.log('Payment Intent - Test Mode:', isTestMode)
+    
     // Validate the request data
     const validatedData = bookingSchema.parse(body)
     
@@ -51,7 +57,7 @@ export async function POST(request: NextRequest) {
       : { defaultEngineer: 'No Engineer', engineerId: 'none' }
     
     // Create the payment intent for the deposit amount
-    const stripe = getServerStripe()
+    const stripe = getServerStripe(isTestMode)
     const paymentIntent = await stripe.paymentIntents.create({
       amount: depositAmount * 100, // Stripe expects amounts in cents
       currency: 'usd',

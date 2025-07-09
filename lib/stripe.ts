@@ -1,20 +1,32 @@
 import Stripe from 'stripe'
 import { loadStripe } from '@stripe/stripe-js'
 
-// Server-side Stripe instance (only create when needed)
+// Server-side Stripe instances (only create when needed)
 let stripeInstance: Stripe | null = null
+let testStripeInstance: Stripe | null = null
 
-export const getServerStripe = (): Stripe => {
-  if (!stripeInstance) {
-    if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error('STRIPE_SECRET_KEY is not set')
+export const getServerStripe = (isTestMode: boolean = false): Stripe => {
+  if (isTestMode) {
+    if (!testStripeInstance) {
+      const testKey = process.env.STRIPE_TEST_SECRET_KEY || 'sk_test_51QbA1tIALNE03ojQQdGQGg...' // fallback test key
+      testStripeInstance = new Stripe(testKey, {
+        apiVersion: '2025-05-28.basil',
+        typescript: true,
+      })
     }
-    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2025-05-28.basil',
-      typescript: true,
-    })
+    return testStripeInstance
+  } else {
+    if (!stripeInstance) {
+      if (!process.env.STRIPE_SECRET_KEY) {
+        throw new Error('STRIPE_SECRET_KEY is not set')
+      }
+      stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
+        apiVersion: '2025-05-28.basil',
+        typescript: true,
+      })
+    }
+    return stripeInstance
   }
-  return stripeInstance
 }
 
 // Client-side Stripe promise

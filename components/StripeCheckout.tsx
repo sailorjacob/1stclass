@@ -18,9 +18,33 @@ import { CheckCircle, CreditCard, Loader2 } from 'lucide-react'
 console.log('Stripe publishable key available:', !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 console.log('Stripe key starts with pk_:', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_'))
 
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
-  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+// Check for test mode via URL parameter
+const isTestMode = typeof window !== 'undefined' && 
+  (window.location.search.includes('test=true') || window.location.search.includes('testmode=1'))
+
+// Use test keys if in test mode, otherwise use live keys
+const stripeKey = isTestMode 
+  ? process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY || 'pk_test_51QbA1tIALNE03ojQ9QYzVyYd4FKPKrAY0VJzv2XwBOjHlv9o2YZ9TKoOQRgJ2WrX4qUvXxO8Z9q3v2F0jT8kIgG100g2g2g2g2'
+  : process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+
+const stripePromise = stripeKey 
+  ? loadStripe(stripeKey)
   : Promise.reject(new Error('Stripe publishable key not found'))
+
+// Test mode indicator component
+const TestModeIndicator = () => {
+  if (!isTestMode) return null
+  
+  return (
+    <div className="mb-4 p-3 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+      <p className="text-yellow-400 text-sm font-medium">
+        🧪 TEST MODE ACTIVE - No real charges will be made
+        <br />
+        <span className="text-xs">Use test card: 4242 4242 4242 4242</span>
+      </p>
+    </div>
+  )
+}
 
 interface BookingDetails {
   studio: string
@@ -149,6 +173,7 @@ const CheckoutForm: React.FC<{
 
   return (
     <div className="space-y-6">
+      <TestModeIndicator />
       {/* Booking Summary */}
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
