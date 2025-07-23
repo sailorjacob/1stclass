@@ -33,19 +33,19 @@ export default function HomePage() {
 
   const galleryImages = [
     {
-      src: "/images/studio-1.avif",
+      src: "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20A%20WEBSITE%20PICS/_DFP2684.JPG",
       title: "TERMINAL A",
       subtitle: "FLAGSHIP STUDIO",
       description: "Premium acoustics and full production capabilities",
     },
     {
-      src: "/images/studio-3.avif",
+      src: "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2789.JPG",
       title: "TERMINAL B",
       subtitle: "CREATIVE SPACE",
       description: "Perfect for small bands and solo artists",
     },
     {
-      src: "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_1aafe4dcf25f414e82392ae2a3134990~mv2-FBy7QcAIflKUsePBbJ8LAeVBbSTVEe.avif",
+      src: "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20C%20WEBSITE%20PICS/_DFP2819.JPG",
       title: "TERMINAL C",
       subtitle: "INTIMATE SETTING",
       description: "Ideal for vocals and overdub sessions",

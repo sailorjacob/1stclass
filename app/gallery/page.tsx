@@ -71,26 +71,29 @@ export default function GalleryPage() {
   ]
 
   const terminalAImages = [
-    "/images/studio-1.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_a84e4ebf1f4f4cd38b5b7bf0c3f5abd5~mv2%20(2)-C1XwjTdE6vnuySIfd9roqmt07c7Hva.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_837d4acf0eb44559974ce22de1077578~mv2%20(1)-lMYchfkrInY3IW0WCJ9Wiw9Us5uORi.avif",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20A%20WEBSITE%20PICS/_DFP2684.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20A%20WEBSITE%20PICS/_DFP2687.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20A%20WEBSITE%20PICS/_DFP2708.JPG",
   ]
 
   const terminalBImages = [
-    "/images/studio-2.avif",
-    "/images/studio-3.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/TERMINALB-DoKqrOW8t2hmLEbZ5t5eXHBLLcORlb.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/cf7511_b728d8c510f4412eb418c5df251e5c2a~mv2-Bc9tI9WNhHUaZNUEMz72SdVmWWUeBH.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_fe7b75b926074efdb78a7816436d8fdd~mv2-OnfGcQlOHP264u08kzpFifpvElD4sM.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/b3a17f_edabe64836b3455d830a8f85ffcd070b~mv2-AtnS0F6va0KHKvjB5qweitJ9ieeu3G.avif",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2789.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2768.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2753.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2759.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2783.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20B%20WEBSITE%20PICS/_DFP2771.JPG",
   ]
 
   const terminalCImages = [
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_1aafe4dcf25f414e82392ae2a3134990~mv2-FBy7QcAIflKUsePBbJ8LAeVBbSTVEe.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/b3a17f_3dbffcf3789644418b7d8aa8ab26d171~mv2-UQGH4qed93eOI7E71LhKtrzMCuTX79.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_baa8c423d38a4d16a94102bd8adade15~mv2-8YGIp8DPCA57R9bGUwVfZming3oBEP.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_5f69f571bddf41c391a7f05c795e0bc0~mv2-HvZeHwe9cmpgUVQXvTGkQ24xI2Hf6N.avif",
-    "https://kglfdycu0s7oxsz8.public.blob.vercel-storage.com/studios/b3a17f_fc352d582ebd4c288f573dac0e642f62~mv2-WEIWN4rVU2euU8BnOYzzpy0OP0i5cF.avif",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20C%20WEBSITE%20PICS/_DFP2819.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20C%20WEBSITE%20PICS/_DFP2906.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/TERMINAL%20C%20WEBSITE%20PICS/_DFP2921.JPG",
+  ]
+
+  const loungeEventSpaceImages = [
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/LOUNGE:EVENTSPACE%20WEBSITE%20PICS/_DFP2840.JPG",
+    "https://twejikjgxkzmphocbvpt.supabase.co/storage/v1/object/public/1stclass/LOUNGE:EVENTSPACE%20WEBSITE%20PICS/_DFP2846.JPG",
   ]
 
   // Combine all images into one gallery
@@ -98,6 +101,7 @@ export default function GalleryPage() {
     ...terminalAImages,
     ...terminalBImages, 
     ...terminalCImages,
+    ...loungeEventSpaceImages,
     "/images/studio-4.avif" // Add the original studio-4 image
   ].filter(Boolean) // Remove any undefined/null values
 
