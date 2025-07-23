@@ -227,7 +227,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
                   style={{ backgroundColor: ROOM_COLORS[selectedStudio as keyof typeof ROOM_COLORS] }}
                 >
                   {STUDIO_PRICING[selectedStudio as keyof typeof STUDIO_PRICING].name}
-                  {withEngineer && ` - ${ROOM_ENGINEERS[selectedStudio as keyof typeof ROOM_ENGINEERS].defaultEngineer}`}
+                  {withEngineer && ` - Book with Engineer`}
                 </Badge>
               ) : (
                 <p className="text-white/40 text-sm">No studio selected</p>

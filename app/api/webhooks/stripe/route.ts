@@ -6,7 +6,8 @@ const stripe = getServerStripe()
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
-  const signature = headers().get('Stripe-Signature')
+  const headersList = await headers()
+  const signature = headersList.get('Stripe-Signature')
 
   if (!signature) {
     return NextResponse.json({ error: 'No signature provided' }, { status: 400 })
@@ -62,13 +63,30 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify(bookingData),
         })
 
-        // Send to GoHighLevel
-        if (process.env.GOHIGHLEVEL_API_KEY) {
-          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/integrations/gohighlevel`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bookingData),
-          })
+        // Send to GoHighLevel via webhook
+        if (process.env.GOHIGHLEVEL_WEBHOOK_URL) {
+          try {
+            const webhookData = {
+              full_name: metadata.customerName,
+              email: metadata.customerEmail,
+              phone: metadata.customerPhone,
+              room_booked: metadata.studio,
+              engineer: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
+              booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              stripe_payment_id: paymentIntent.id,
+              total_paid: metadata.depositAmount,
+            }
+            
+            await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(webhookData),
+            })
+            
+            console.log('✅ Data sent to GoHighLevel webhook')
+          } catch (error) {
+            console.error('❌ Failed to send to GoHighLevel webhook:', error)
+          }
         }
 
         console.log('📅 Booking created successfully via webhook')

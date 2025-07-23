@@ -54,10 +54,8 @@
 STRIPE_SECRET_KEY=sk_test_your_secret_key_here
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
 
-# GoHighLevel Integration (optional but recommended)
-GOHIGHLEVEL_API_KEY=your_gohighlevel_api_key
-GOHIGHLEVEL_LOCATION_ID=your_location_id
-GOHIGHLEVEL_BOOKING_WORKFLOW_ID=your_workflow_id
+# GoHighLevel Integration (configured and ready)
+GOHIGHLEVEL_WEBHOOK_URL=https://services.leadconnectorhq.com/hooks/9z3OZIZFEngLUF9ijv5z/webhook-trigger/81bfe9a0-cb0b-4559-a80b-42877a977bf2
 
 # Google Sheets Webhook (optional for backup)
 GOOGLE_SHEETS_WEBHOOK_URL=your_webhook_url_here

@@ -230,7 +230,7 @@ export default function BookingPage() {
                         </div>
                         <div className="flex items-center space-x-2 text-white/60">
                           <Music className="w-4 h-4" />
-                          <span>Default Engineer: {roomConfig.defaultEngineer}</span>
+                          <span>Professional Engineer Included</span>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-6">
@@ -251,7 +251,7 @@ export default function BookingPage() {
                              className="w-full py-6 text-white font-medium"
                              style={{ backgroundColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS] }}
                            >
-                             Book with {roomConfig.defaultEngineer}
+                             Book with Engineer
                              <ArrowRight className="w-4 h-4 ml-2" />
                            </Button>
                            <Button

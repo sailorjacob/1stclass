@@ -63,7 +63,7 @@ export default function HomePage() {
     {
       icon: <Users className="w-8 h-8" />,
       title: "EXPERT ENGINEERS",
-      description: "Experienced audio professionals dedicated to your vision",
+      description: "Experienced audio professionals dedicated to your experience across multiple genres",
       metric: "15+",
       unit: "YEARS EXPERIENCE",
     },

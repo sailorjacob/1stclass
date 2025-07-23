@@ -21,8 +21,8 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
     { href: "/", label: "HOME" },
     { href: "/studios", label: "STUDIOS" },
     { href: "/gallery", label: "GALLERY" },
-    { href: "/booking", label: "CONTACT" },
-    { href: "/booking", label: "BOOK NOW" },
+    { href: "/booking", label: "BOOKING" },
+    { href: "/booking", label: "BOOKING" },
   ]
 
   // Close menu when logo click state changes
@@ -81,7 +81,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
               </div>
             </div>
 
-            {/* Right side - Contact */}
+            {/* Right side - Booking */}
             <div className="hidden md:flex items-center space-x-4">
               <Button
                 asChild
@@ -100,7 +100,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                 size="sm"
                 className="border-white/30 text-white bg-neutral-800/50 hover:bg-white/5 hover:border-white/50 font-light tracking-wider transition-all duration-300 px-4 py-2"
               >
-                <Link href="/booking">BOOK NOW</Link>
+                <Link href="/booking">BOOKING</Link>
               </Button>
             </div>
 
@@ -162,8 +162,7 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
                   <div className="space-y-8">
                     <h3 className="text-sm font-light tracking-[0.3em] text-white/50 mb-8">NAVIGATION</h3>
                     {[
-                      ...menuItems.filter((m) => m.label === 'HOME' || m.label === 'STUDIOS' || m.label === 'GALLERY' || m.label === 'BOOK NOW'),
-                      ...menuItems.filter((m) => m.label === 'CONTACT'),
+                      ...menuItems.filter((m) => m.label === 'HOME' || m.label === 'STUDIOS' || m.label === 'GALLERY' || m.label === 'BOOKING'),
                     ].map((item, index) => (
                       <motion.div
                         key={item.href}
