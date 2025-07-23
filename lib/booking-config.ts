@@ -29,9 +29,9 @@ export const MIN_BOOKING_HOURS = 2
 
 // Colors for calendar display
 export const ROOM_COLORS = {
-  'terminal-a': '#8B5CF6', // Purple
-  'terminal-b': '#3B82F6', // Blue
-  'terminal-c': '#10B981', // Green
+  'terminal-a': '#F97316', // Orange
+  'terminal-b': '#6B7280', // Grey
+  'terminal-c': '#F97316', // Orange
 }
 
 // Booking status types

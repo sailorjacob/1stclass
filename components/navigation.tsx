@@ -22,7 +22,6 @@ export function Navigation({ logoClicked, setLogoClicked }: NavigationProps) {
     { href: "/studios", label: "STUDIOS" },
     { href: "/gallery", label: "GALLERY" },
     { href: "/booking", label: "BOOKING" },
-    { href: "/booking", label: "BOOKING" },
   ]
 
   // Close menu when logo click state changes

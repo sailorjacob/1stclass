@@ -57,7 +57,7 @@ export default function HomePage() {
       icon: <Mic className="w-8 h-8" />,
       title: "PREMIUM EQUIPMENT",
       description: "Industry-standard microphones, preamps, and monitoring systems",
-      metric: "50+",
+      metric: "5+",
       unit: "PREMIUM MICS",
     },
     {

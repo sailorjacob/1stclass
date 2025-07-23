@@ -175,7 +175,7 @@ export default function BookingPage() {
                 <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all ${
                   currentStep === step ? 'bg-white text-black' : 
                   index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
-                    ? 'bg-green-500 text-white' : 'bg-white/20 text-white/60'
+                    ? 'bg-orange-500 text-white' : 'bg-white/20 text-white/60'
                 }`}>
                   {index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
                     ? <CheckCircle className="w-4 h-4" /> : index + 1}
@@ -183,7 +183,7 @@ export default function BookingPage() {
                 {index < 4 && (
                   <div className={`w-16 h-0.5 transition-all ${
                     index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
-                      ? 'bg-green-500' : 'bg-white/20'
+                      ? 'bg-orange-500' : 'bg-white/20'
                   }`} />
                 )}
               </React.Fragment>
