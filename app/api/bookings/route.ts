@@ -88,6 +88,9 @@ export async function POST(request: NextRequest) {
       const firstName = nameParts[0]
       const lastName = nameParts.slice(1).join(' ')
 
+      const depositAmount = Math.floor(validatedData.totalPrice * 0.5) // 50% deposit
+      const remainingBalance = validatedData.totalPrice - depositAmount
+
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/integrations/gohighlevel`, {
         method: 'POST',
         headers: {
@@ -104,6 +107,11 @@ export async function POST(request: NextRequest) {
           bookingTime: validatedData.startTime.toLocaleTimeString(),
           totalPrice: validatedData.totalPrice,
           paymentConfirmationId: validatedData.stripePaymentIntentId,
+          duration: validatedData.duration,
+          depositAmount,
+          remainingBalance,
+          projectType: validatedData.projectType || 'Not specified',
+          message: validatedData.message || 'No message',
         }),
       })
     } catch (error) {

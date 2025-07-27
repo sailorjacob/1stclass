@@ -66,6 +66,11 @@ export async function POST(request: NextRequest) {
         // Send to GoHighLevel via webhook
         if (process.env.GOHIGHLEVEL_WEBHOOK_URL) {
           try {
+            const depositDate = new Date().toISOString().split('T')[0] // Today's date for deposit
+            const totalAmount = parseInt(metadata.totalAmount)
+            const depositAmount = parseInt(metadata.depositAmount)
+            const remainingBalance = totalAmount - depositAmount
+            
             const webhookData = {
               full_name: metadata.customerName,
               email: metadata.customerEmail,
@@ -73,8 +78,21 @@ export async function POST(request: NextRequest) {
               room_booked: metadata.studio,
               engineer: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
               booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              session_duration_hours: metadata.durationHours,
+              booking_date: metadata.bookingDate,
+              booking_time: metadata.bookingTime,
+              session_start_time: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              session_end_time: new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
+              total_session_cost: totalAmount,
+              deposit_amount: depositAmount,
+              remaining_balance: remainingBalance,
+              deposit_date: depositDate,
               stripe_payment_id: paymentIntent.id,
-              total_paid: metadata.depositAmount,
+              project_type: metadata.projectType || 'Not specified',
+              customer_message: metadata.message || 'No message',
+              booking_status: 'confirmed',
+              with_engineer: metadata.withEngineer === 'yes',
+              studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
             }
             
             await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
@@ -83,7 +101,7 @@ export async function POST(request: NextRequest) {
               body: JSON.stringify(webhookData),
             })
             
-            console.log('✅ Data sent to GoHighLevel webhook')
+            console.log('✅ Enhanced data sent to GoHighLevel webhook')
           } catch (error) {
             console.error('❌ Failed to send to GoHighLevel webhook:', error)
           }

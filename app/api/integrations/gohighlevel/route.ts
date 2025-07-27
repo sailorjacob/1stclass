@@ -15,6 +15,12 @@ const goHighLevelSchema = z.object({
   bookingTime: z.string(),
   totalPrice: z.number(),
   paymentConfirmationId: z.string(),
+  // Enhanced booking details
+  duration: z.number().optional(),
+  depositAmount: z.number().optional(),
+  remainingBalance: z.number().optional(),
+  projectType: z.string().optional(),
+  message: z.string().optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -40,14 +46,31 @@ export async function POST(request: NextRequest) {
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
-      tags: ['studio-booking', 'deposit-paid', validatedData.roomBooked],
+      tags: [
+        'studio-booking', 
+        'deposit-paid', 
+        validatedData.roomBooked,
+        `${validatedData.roomBooked}-session`,
+        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
+      ],
       customFields: {
         room_booked: validatedData.roomBooked,
         engineer_assigned: validatedData.engineerAssigned,
         booking_date: validatedData.bookingDate,
         booking_time: validatedData.bookingTime,
-        total_price: validatedData.totalPrice,
+        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
+        total_session_cost: validatedData.totalPrice,
+        deposit_paid: validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5),
+        remaining_balance: validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5),
+        deposit_date: new Date().toISOString().split('T')[0],
         payment_confirmation_id: validatedData.paymentConfirmationId,
+        booking_status: 'confirmed',
+        with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No',
+        studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
+        session_start_time: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
+        booking_source: 'Studio Website',
+        project_type: validatedData.projectType || 'Not specified',
+        customer_message: validatedData.message || 'No message provided',
       },
     }
 

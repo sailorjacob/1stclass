@@ -71,7 +71,20 @@ export interface GoHighLevelContact {
     engineer_assigned: string
     booking_date: string
     booking_time: string
-    total_price: number
+    total_price?: number
     payment_confirmation_id: string
+    // Enhanced booking details
+    session_duration?: string
+    total_session_cost?: number
+    deposit_paid?: number
+    remaining_balance?: number
+    deposit_date?: string
+    booking_status?: string
+    with_engineer?: string
+    studio_display_name?: string
+    session_start_time?: string
+    booking_source?: string
+    project_type?: string
+    customer_message?: string
   }
 } 
