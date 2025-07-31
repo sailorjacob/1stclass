@@ -66,6 +66,9 @@ export async function POST(request: NextRequest) {
         // Send to GoHighLevel via webhook
         if (process.env.GOHIGHLEVEL_WEBHOOK_URL) {
           try {
+            console.log('📋 Available metadata fields:', Object.keys(metadata))
+            console.log('📋 Full metadata:', metadata)
+            
             const depositDate = new Date().toISOString().split('T')[0] // Today's date for deposit
             const totalAmount = parseInt(metadata.totalAmount)
             const depositAmount = parseInt(metadata.depositAmount)
@@ -96,16 +99,25 @@ export async function POST(request: NextRequest) {
               studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
             }
             
-            await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
+            console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))
+            console.log('🔗 Webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
+            
+            const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(webhookData),
             })
             
-            console.log('✅ Enhanced data sent to GoHighLevel webhook')
+            if (response.ok) {
+              console.log('✅ Successfully sent data to GoHighLevel webhook')
+            } else {
+              console.error('❌ GHL webhook response error:', response.status, await response.text())
+            }
           } catch (error) {
             console.error('❌ Failed to send to GoHighLevel webhook:', error)
           }
+        } else {
+          console.log('⚠️ GOHIGHLEVEL_WEBHOOK_URL not configured')
         }
 
         console.log('📅 Booking created successfully via webhook')
