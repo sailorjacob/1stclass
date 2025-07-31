@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { getServerStripe } from '@/lib/stripe'
 
-const stripe = getServerStripe()
-
 export async function POST(request: NextRequest) {
   const body = await request.text()
   const headersList = await headers()
@@ -15,6 +13,9 @@ export async function POST(request: NextRequest) {
 
   let event
 
+  // Use live mode Stripe for webhook signature verification
+  const stripe = getServerStripe(false)
+  
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -25,6 +26,8 @@ export async function POST(request: NextRequest) {
     console.error('Webhook signature verification failed:', err)
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
+
+  console.log('📨 Webhook received:', event.type)
 
   // Handle the event
   switch (event.type) {
