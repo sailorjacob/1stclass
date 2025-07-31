@@ -116,6 +116,25 @@ export async function POST(request: NextRequest) {
             
             if (response.ok) {
               console.log('✅ Successfully sent data to GoHighLevel webhook')
+              
+              // Also send to workflow webhook if configured
+              if (process.env.GOHIGHLEVEL_WORKFLOW_WEBHOOK_URL) {
+                try {
+                  const workflowResponse = await fetch(process.env.GOHIGHLEVEL_WORKFLOW_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(webhookData),
+                  })
+                  
+                  if (workflowResponse.ok) {
+                    console.log('✅ Successfully triggered GHL workflow')
+                  } else {
+                    console.error('❌ GHL workflow webhook error:', workflowResponse.status)
+                  }
+                } catch (workflowError) {
+                  console.error('❌ Failed to trigger GHL workflow:', workflowError)
+                }
+              }
             } else {
               console.error('❌ GHL webhook response error:', response.status, await response.text())
             }
