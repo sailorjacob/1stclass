@@ -97,7 +97,10 @@ const CheckoutForm: React.FC<{
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(bookingData),
+          body: JSON.stringify({
+            ...bookingData,
+            testMode: isTestMode
+          }),
         })
 
         if (!response.ok) {

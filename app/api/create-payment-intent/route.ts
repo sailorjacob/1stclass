@@ -14,15 +14,16 @@ const bookingSchema = z.object({
   engineer: z.enum(['yes', 'no']),
   projectType: z.string().optional(),
   message: z.string().optional(),
+  testMode: z.boolean().optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-    // Check for test mode from referer URL or request body
+    // Check for test mode from request body first, then referer URL
     const referer = request.headers.get('referer') || ''
-    const isTestMode = referer.includes('test=true') || referer.includes('testmode=1') || body.testMode === true
+    const isTestMode = body.testMode === true || referer.includes('test=true') || referer.includes('testmode=1')
     
     console.log('Payment Intent - Test Mode:', isTestMode)
     
