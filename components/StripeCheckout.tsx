@@ -92,6 +92,9 @@ const CheckoutForm: React.FC<{
     // Create payment intent when component mounts
     const createPaymentIntent = async () => {
       try {
+        console.log('🧪 Creating payment intent with test mode:', isTestMode)
+        console.log('📋 Booking data:', bookingData)
+        
         const response = await fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -103,11 +106,16 @@ const CheckoutForm: React.FC<{
           }),
         })
 
+        console.log('📡 Payment intent response status:', response.status)
+        
         if (!response.ok) {
+          const errorText = await response.text()
+          console.error('❌ Payment intent error:', errorText)
           throw new Error('Failed to create payment intent')
         }
 
         const data = await response.json()
+        console.log('✅ Payment intent created:', data.clientSecret?.substring(0, 20) + '...')
         setClientSecret(data.clientSecret)
         setBookingDetails(data.bookingDetails)
       } catch (err) {
@@ -150,8 +158,11 @@ const CheckoutForm: React.FC<{
       })
 
       if (error) {
+        console.error('❌ Payment error:', error)
         setError(error.message || 'Payment failed')
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('✅ Payment succeeded:', paymentIntent.id)
+        console.log('🔄 Calling onSuccess callback...')
         onSuccess(paymentIntent.id)
       }
     } catch (err) {
