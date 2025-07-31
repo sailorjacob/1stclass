@@ -116,10 +116,16 @@ export default function BookingPage() {
 
   const handlePaymentSuccess = async (paymentIntentId: string) => {
     try {
+      // Check if we're in test mode
+      const isTestMode = window.location.search.includes('test=true') || window.location.search.includes('testmode=1')
+      
       const response = await fetch('/api/confirm-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentIntentId }),
+        body: JSON.stringify({ 
+          paymentIntentId,
+          testMode: isTestMode
+        }),
       })
 
       if (response.ok) {

@@ -4,16 +4,17 @@ import { z } from 'zod'
 
 const confirmBookingSchema = z.object({
   paymentIntentId: z.string(),
+  testMode: z.boolean().optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { paymentIntentId } = confirmBookingSchema.parse(body)
+    const { paymentIntentId, testMode } = confirmBookingSchema.parse(body)
     
-    // Check for test mode from referer URL
+    // Check for test mode from request body first, then referer URL
     const referer = request.headers.get('referer') || ''
-    const isTestMode = referer.includes('test=true') || referer.includes('testmode=1') || body.testMode === true
+    const isTestMode = testMode === true || referer.includes('test=true') || referer.includes('testmode=1')
     
     console.log('Confirm Booking - Test Mode:', isTestMode)
     
