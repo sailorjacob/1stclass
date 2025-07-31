@@ -8,9 +8,13 @@ let testStripeInstance: Stripe | null = null
 export const getServerStripe = (isTestMode: boolean = false): Stripe => {
   if (isTestMode) {
     if (!testStripeInstance) {
-      const testKey = process.env.STRIPE_TEST_SECRET_KEY || 'sk_test_51QbA1tIALNE03ojQQdGQGg...' // fallback test key
+      // For test mode, we can use the live key in test mode or require test key
+      const testKey = process.env.STRIPE_TEST_SECRET_KEY || process.env.STRIPE_SECRET_KEY
+      if (!testKey) {
+        throw new Error('No Stripe key available for test mode')
+      }
       testStripeInstance = new Stripe(testKey, {
-        apiVersion: '2025-05-28.basil',
+        apiVersion: '2023-10-16',
         typescript: true,
       })
     }
@@ -21,7 +25,7 @@ export const getServerStripe = (isTestMode: boolean = false): Stripe => {
         throw new Error('STRIPE_SECRET_KEY is not set')
       }
       stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
-        apiVersion: '2025-05-28.basil',
+        apiVersion: '2023-10-16',
         typescript: true,
       })
     }

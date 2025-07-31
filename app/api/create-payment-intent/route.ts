@@ -52,8 +52,9 @@ export async function POST(request: NextRequest) {
     const studioInfo = STUDIO_PRICING[studio as StudioId]
     
     // Get engineer info
+    const { ROOM_ENGINEERS } = await import('@/lib/booking-config')
     const engineerInfo = engineer === 'yes' 
-      ? require('@/lib/booking-config').ROOM_ENGINEERS[studio as StudioId]
+      ? ROOM_ENGINEERS[studio as StudioId]
       : { defaultEngineer: 'No Engineer', engineerId: 'none' }
     
     // Create the payment intent for the deposit amount
