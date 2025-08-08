@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useMemo } from 'react'
-import { Calendar, momentLocalizer, Views, SlotInfo } from 'react-big-calendar'
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import { format, startOfWeek, addHours, isSameDay, isAfter, addDays, setHours, setMinutes } from 'date-fns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -39,7 +39,6 @@ interface CalendarEvent {
   end: Date
   resource: {
     studio: string
-    clientName: string
     engineerName: string
     isBlocked: boolean
   }
@@ -66,12 +65,12 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
       .filter(booking => booking.status !== 'cancelled')
       .map(booking => ({
         id: booking.id,
-        title: `${booking.clientName} - ${booking.engineerName}`,
+        // Privacy: do not show client name on the calendar
+        title: 'Booked',
         start: new Date(booking.startTime),
         end: new Date(booking.endTime),
         resource: {
           studio: booking.studio,
-          clientName: booking.clientName,
           engineerName: booking.engineerName,
           isBlocked: true,
         },
@@ -155,7 +154,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   }
 
   // Handle slot selection
-  const handleSelectSlot = (slotInfo: SlotInfo) => {
+  const handleSelectSlot = (slotInfo: any) => {
     if (!selectedStudio) {
       alert('Please select a studio first')
       return
@@ -288,7 +287,8 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
               views={[Views.WEEK, Views.DAY]}
               formats={{
                 timeGutterFormat: 'h:mm A',
-                eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
+                // Cast to any to avoid type issues from react-big-calendar typings in this project setup
+                eventTimeRangeFormat: ({ start, end }: any, culture: any, localizer: any) =>
                   `${localizer?.format(start, 'h:mm A', culture)} - ${localizer?.format(end, 'h:mm A', culture)}`,
               }}
               components={{
