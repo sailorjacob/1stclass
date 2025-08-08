@@ -57,6 +57,7 @@ export interface Booking {
   createdAt: Date
   projectType?: string
   message?: string
+  smsConsent?: boolean
 }
 
 // GoHighLevel contact data format

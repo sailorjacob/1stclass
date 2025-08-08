@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
       stripePaymentIntentId: paymentIntent.id,
       projectType: metadata.projectType || undefined,
       message: metadata.message || undefined,
+      smsConsent: metadata.smsConsent === 'yes',
     }
 
     // Create booking record

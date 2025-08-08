@@ -14,6 +14,7 @@ const bookingSchema = z.object({
   engineer: z.enum(['yes', 'no']),
   projectType: z.string().optional(),
   message: z.string().optional(),
+  smsConsent: z.boolean().optional(),
   testMode: z.boolean().optional(),
 })
 
@@ -71,6 +72,7 @@ export async function POST(request: NextRequest) {
         customerName: name,
         customerEmail: email,
         customerPhone: phone,
+        smsConsent: (body.smsConsent === true ? 'yes' : 'no'),
         studio: studio,
         studioName: studioInfo.name,
         bookingDate: date,

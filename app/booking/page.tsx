@@ -19,6 +19,7 @@ import { ROOM_ENGINEERS, ROOM_COLORS, Booking } from "@/lib/booking-config"
 import { STUDIO_PRICING, calculateBookingTotal, calculateDeposit } from "@/lib/stripe"
 import { format } from "date-fns"
 import "../calendar-styles.css"
+import { Checkbox } from "@/components/ui/checkbox"
 
 type BookingStep = 'studio-selection' | 'calendar' | 'contact-info' | 'checkout' | 'confirmation'
 
@@ -39,6 +40,7 @@ export default function BookingPage() {
     engineer: "",
     projectType: "",
     message: "",
+    smsConsent: false,
   })
 
   // Calendar selection state
@@ -143,6 +145,10 @@ export default function BookingPage() {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const handleBooleanChange = (field: string, value: boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
   const resetBooking = () => {
     setCurrentStep('studio-selection')
     setFormData({
@@ -156,6 +162,7 @@ export default function BookingPage() {
       engineer: "",
       projectType: "",
       message: "",
+      smsConsent: false,
     })
     setSelectedTimeSlot(null)
     setShowCheckout(false)
@@ -477,6 +484,29 @@ export default function BookingPage() {
                       />
                     </div>
 
+                    {/* SMS Consent */}
+                    <div className="space-y-2">
+                      <div className="flex items-start space-x-3">
+                        <Checkbox
+                          id="sms-consent"
+                          checked={formData.smsConsent}
+                          onCheckedChange={(checked) => {
+                            const isChecked = checked === true
+                            handleBooleanChange('smsConsent', isChecked)
+                          }}
+                          className="mt-1 border-white/40 data-[state=checked]:bg-white data-[state=checked]:text-black"
+                        />
+                        <label htmlFor="sms-consent" className="text-xs text-white/80 leading-relaxed">
+                          Consent to Receive SMS Notifications, Alerts & Occasional Marketing Communication from 1st Class Studios. Message frequency varies. Message & data rates may apply. Text HELP to (475) 229-9564 for assistance. You can reply STOP to unsubscribe at any time.
+                        </label>
+                      </div>
+                      <p className="text-[11px] text-white/60 pl-7">
+                        <Link href="/terms" className="underline">Terms & conditions</Link>
+                        <span className="px-1">|</span>
+                        <Link href="/privacy" className="underline">Privacy Policy</Link>
+                      </p>
+                    </div>
+
                     <div className="flex space-x-4">
                       <Button
                         type="button"
@@ -488,6 +518,12 @@ export default function BookingPage() {
                       <Button
                         type="submit"
                         className="flex-1 bg-white text-black hover:bg-gray-100"
+                        onClick={(e) => {
+                          if (!formData.smsConsent) {
+                            e.preventDefault()
+                            alert('Please check the SMS consent box to continue')
+                          }
+                        }}
                       >
                         Continue to Payment
                         <ArrowRight className="w-4 h-4 ml-2" />

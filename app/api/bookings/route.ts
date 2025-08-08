@@ -23,6 +23,7 @@ const createBookingSchema = z.object({
   stripePaymentIntentId: z.string(),
   projectType: z.string().optional(),
   message: z.string().optional(),
+  smsConsent: z.boolean().optional(),
 })
 
 export async function GET(request: NextRequest) {
