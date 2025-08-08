@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { Booking } from '@/lib/booking-config'
+import { getServerStripe } from '@/lib/stripe'
 
 // In a production app, you'd use a proper database (e.g., Supabase, PostgreSQL, MongoDB)
 // For now, we'll use in-memory storage or you can integrate with Supabase
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
 
+    // 1) Start with any in-memory bookings (dev convenience)
     let filteredBookings = bookings
 
     // Filter by studio if provided
@@ -54,9 +56,74 @@ export async function GET(request: NextRequest) {
     // Only return confirmed bookings for calendar display
     filteredBookings = filteredBookings.filter(booking => booking.status === 'confirmed')
 
+    // 2) Augment with Stripe-derived bookings for persistence across deploys
+    const stripe = getServerStripe(false)
+
+    // Build time filter for Stripe 'created' if provided
+    let created: { gte?: number; lte?: number } | undefined
+    if (startDate || endDate) {
+      created = {}
+      if (startDate) created.gte = Math.floor(new Date(startDate).getTime() / 1000)
+      if (endDate) created.lte = Math.floor(new Date(endDate).getTime() / 1000)
+    }
+
+    const stripeBookings: Booking[] = []
+    let hasMore = true
+    let startingAfter: string | undefined
+
+    while (hasMore) {
+      const list = await stripe.paymentIntents.list({
+        limit: 100,
+        created,
+        starting_after: startingAfter,
+      })
+      for (const pi of list.data) {
+        const md = (pi.metadata || {}) as Record<string, string>
+        if (pi.status === 'succeeded' && md.type === 'studio_booking_deposit' && md.bookingDate && md.bookingTime && md.durationHours && md.studio) {
+          // Compose Date from metadata
+          const startIso = new Date(`${md.bookingDate} ${md.bookingTime}`).toISOString()
+          const endIso = new Date(new Date(`${md.bookingDate} ${md.bookingTime}`).getTime() + parseInt(md.durationHours) * 60 * 60 * 1000).toISOString()
+          const withEngineer = md.withEngineer === 'yes'
+
+          // Optional studio filter
+          if (studio && md.studio !== studio) continue
+
+          const booking: Booking = {
+            id: pi.id,
+            clientName: md.customerName || 'Client',
+            clientEmail: md.customerEmail || 'unknown@example.com',
+            clientPhone: md.customerPhone || '',
+            studio: md.studio as Booking['studio'],
+            engineerName: withEngineer ? (md.engineerName || 'TBD') : 'No Engineer',
+            engineerId: md.engineerId || '',
+            withEngineer,
+            startTime: new Date(startIso),
+            endTime: new Date(endIso),
+            duration: parseInt(md.durationHours),
+            totalPrice: parseInt(md.totalAmount || '0') || 0,
+            depositPaid: parseInt(md.depositAmount || '0') || 0,
+            status: 'confirmed',
+            stripePaymentIntentId: pi.id,
+            createdAt: new Date(pi.created * 1000),
+            projectType: md.projectType || undefined,
+            message: md.message || undefined,
+            smsConsent: md.smsConsent === 'yes',
+          }
+          stripeBookings.push(booking)
+        }
+      }
+      hasMore = list.has_more
+      startingAfter = hasMore ? list.data[list.data.length - 1]?.id : undefined
+    }
+
+    // Merge and de-duplicate by payment intent id / booking id
+    const combined = [...filteredBookings, ...stripeBookings]
+    const uniqueById = new Map(combined.map(b => [b.id, b]))
+    const result = Array.from(uniqueById.values())
+
     return NextResponse.json({
-      bookings: filteredBookings,
-      total: filteredBookings.length,
+      bookings: result,
+      total: result.length,
     })
   } catch (error) {
     console.error('Error fetching bookings:', error)
