@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerStripe } from '@/lib/stripe'
 import { z } from 'zod'
+import { renderBookingEmail, sendBookingEmail } from '@/lib/email'
 
 const confirmBookingSchema = z.object({
   paymentIntentId: z.string(),
@@ -80,6 +81,32 @@ export async function POST(request: NextRequest) {
       })
     } catch (error) {
       console.error('Failed to create booking record:', error)
+    }
+
+    // Send emails (client + management) if configured
+    try {
+      const to: string[] = []
+      if (metadata.customerEmail) to.push(metadata.customerEmail)
+      const managementList = (process.env.BOOKING_NOTIFICATIONS_TO || '').split(',').map(s => s.trim()).filter(Boolean)
+      to.push(...managementList)
+
+      if (to.length > 0) {
+        const { subject, html } = renderBookingEmail({
+          clientName: metadata.customerName,
+          clientEmail: metadata.customerEmail,
+          clientPhone: metadata.customerPhone,
+          studioName: metadata.studioName,
+          date: metadata.bookingDate,
+          time: metadata.bookingTime,
+          durationHours: parseInt(metadata.durationHours),
+          engineerName: metadata.withEngineer === 'yes' ? (metadata.engineerName || 'TBD') : 'No Engineer',
+          depositAmount: parseInt(metadata.depositAmount),
+          remainingAmount: parseInt(metadata.totalAmount) - parseInt(metadata.depositAmount),
+        })
+        await sendBookingEmail({ to, subject, html })
+      }
+    } catch (emailError) {
+      console.error('Failed to send booking emails:', emailError)
     }
     
     return NextResponse.json({
