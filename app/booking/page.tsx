@@ -377,7 +377,7 @@ export default function BookingPage() {
                     </div>
                     <div>
                       <p className="text-white/60">Engineer</p>
-                      <p className="text-white font-medium">{selectedTimeSlot.engineerName}</p>
+                      <p className="text-white font-medium">{withEngineer ? 'Included' : 'Not included'}</p>
                     </div>
                     <div>
                       <p className="text-white/60">Date</p>
