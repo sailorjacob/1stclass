@@ -2,36 +2,50 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Mock booking data - matches your GHL field mappings exactly
+    // Mock booking data - comprehensive realistic customer booking
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 7) // Book for next week
+    const bookingDate = tomorrow.toISOString().split('T')[0]
+    const startTime = '2:00 PM'
+    const endTime = '5:00 PM'
+    
     const mockWebhookData = {
-      // Fields to match your GHL automation mappings (no prefixes)
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com',
-      phone: '+1-555-123-4567',
-      booking_date: '2024-01-15',
-      booking_time: '2:00 PM',
+      // Core contact fields (matching your GHL automation exactly)
+      first_name: 'Sarah',
+      last_name: 'Johnson',
+      email: 'sarah.johnson@email.com',
+      phone: '+1-203-555-0199',
+      
+      // Booking details (exactly as your automation expects)
+      booking_date: bookingDate,
+      booking_time: startTime,
       engineer_assigned: 'Murda',
       room_booked: 'terminal-a',
       session_duration: '3 hours',
-      stripe_payment_id: 'pi_test_1234567890',
+      stripe_payment_id: `pi_live_${Date.now()}`,
       
-      // Additional fields for completeness
-      appointment_start: '2024-01-15T14:00:00',
-      booking_datetime: '2024-01-15T14:00:00',
-      session_start_time: '2024-01-15T14:00:00',
-      session_end_time: '2024-01-15T17:00:00',
+      // Additional comprehensive booking data
+      appointment_start: `${bookingDate}T14:00:00`,
+      booking_datetime: `${bookingDate}T14:00:00`,
+      session_start_time: `${bookingDate}T14:00:00`,
+      session_end_time: `${bookingDate}T17:00:00`,
       total_session_cost: 240,
       deposit_amount: 120,
       remaining_balance: 120,
       deposit_date: new Date().toISOString().split('T')[0],
       project_type: 'Recording Session',
-      customer_message: 'Test booking for workflow trigger',
+      customer_message: 'Looking forward to recording my new album. Need help with mixing too.',
       booking_status: 'confirmed',
       with_engineer: true,
       studio_display_name: 'TERMINAL A',
       sms_consent: 'Yes',
-      payment_confirmation_id: 'pi_test_1234567890',
+      payment_confirmation_id: `pi_live_${Date.now()}`,
+      
+      // Extra fields that might be useful
+      booking_source: 'Website',
+      client_type: 'new_customer',
+      marketing_source: 'google_ads'
     }
 
     console.log('🧪 TEST: Sending mock data to GHL webhook')
