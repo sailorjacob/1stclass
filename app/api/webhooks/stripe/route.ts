@@ -78,11 +78,16 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // Fields to match your GHL automation mappings (no prefixes)
-              first_name: metadata.customerName.split(' ')[0],
-              last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              // Core contact fields - try multiple formats for GHL compatibility
               email: metadata.customerEmail,
               phone: metadata.customerPhone,
+              firstName: metadata.customerName.split(' ')[0],
+              lastName: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              first_name: metadata.customerName.split(' ')[0],
+              last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              name: metadata.customerName,
+              
+              // Custom booking fields (matching your automation mappings)
               booking_date: metadata.bookingDate,
               booking_time: metadata.bookingTime,
               engineer_assigned: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
@@ -90,7 +95,7 @@ export async function POST(request: NextRequest) {
               session_duration: `${metadata.durationHours} hours`,
               stripe_payment_id: paymentIntent.id,
               
-              // Additional fields for completeness
+              // Additional comprehensive fields
               appointment_start: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               session_start_time: `${metadata.bookingDate}T${metadata.bookingTime}:00`,

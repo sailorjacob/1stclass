@@ -11,11 +11,14 @@ export async function POST(request: NextRequest) {
     const endTime = '5:00 PM'
     
     const mockWebhookData = {
-      // Core contact fields (matching your GHL automation exactly)
-      first_name: 'Sarah',
-      last_name: 'Johnson',
+      // Core contact fields - multiple formats for GHL compatibility
       email: 'sarah.johnson@email.com',
       phone: '+1-203-555-0199',
+      firstName: 'Sarah',
+      lastName: 'Johnson',
+      first_name: 'Sarah',
+      last_name: 'Johnson',
+      name: 'Sarah Johnson',
       
       // Booking details (exactly as your automation expects)
       booking_date: bookingDate,
