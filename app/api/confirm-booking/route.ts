@@ -83,6 +83,50 @@ export async function POST(request: NextRequest) {
       console.error('Failed to create booking record:', error)
     }
 
+    // Create/Update contact in GoHighLevel via API integration (reliable path)
+    try {
+      const nameParts = (metadata.customerName || '').split(' ')
+      const firstName = nameParts[0] || ''
+      const lastName = nameParts.slice(1).join(' ')
+
+      const totalAmount = parseInt(metadata.totalAmount)
+      const depositAmount = parseInt(metadata.depositAmount)
+      const remainingBalance = totalAmount - depositAmount
+
+      const payload = {
+        firstName,
+        lastName,
+        email: metadata.customerEmail,
+        phone: metadata.customerPhone,
+        roomBooked: metadata.studio,
+        engineerAssigned: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
+        bookingDate: metadata.bookingDate,
+        bookingTime: metadata.bookingTime,
+        totalPrice: totalAmount,
+        paymentConfirmationId: paymentIntent.id,
+        duration: parseInt(metadata.durationHours),
+        depositAmount,
+        remainingBalance,
+        projectType: metadata.projectType || 'Not specified',
+        message: metadata.message || 'No message',
+      }
+
+      console.log('🚀 Sending to GHL API integration (confirm-booking):', JSON.stringify(payload, null, 2))
+      const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/integrations/gohighlevel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!apiResponse.ok) {
+        console.error('❌ GHL API integration error:', apiResponse.status, await apiResponse.text())
+      } else {
+        console.log('✅ GHL API integration succeeded')
+      }
+    } catch (error) {
+      console.error('❌ Failed to send to GoHighLevel API integration:', error)
+    }
+
     // Send emails (client + management) if configured
     try {
       const to: string[] = []
