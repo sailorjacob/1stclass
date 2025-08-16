@@ -2,44 +2,34 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Mock booking data - similar to what would come from Stripe metadata
+    // Mock booking data - ALL fields with contact. prefix to match GHL automation
     const mockWebhookData = {
-      // Standard contact fields (no prefix needed)
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com',
-      phone: '+1-555-123-4567',
-      
-      // Custom fields - both with and without contact. prefix for compatibility
-      room_booked: 'terminal-a',
-      engineer_assigned: 'Murda',
-      booking_date: '2024-01-15',
-      booking_time: '2:00 PM',
-      session_duration: '3 hours',
-      appointment_start: '2024-01-15T14:00:00',
-      stripe_payment_id: 'pi_test_1234567890',
-      booking_datetime: '2024-01-15T14:00:00',
-      session_start_time: '2024-01-15T14:00:00',
-      session_end_time: '2024-01-15T17:00:00',
-      total_session_cost: 240,
-      deposit_amount: 120,
-      remaining_balance: 120,
-      deposit_date: new Date().toISOString().split('T')[0],
-      project_type: 'Recording Session',
-      customer_message: 'Test booking for workflow trigger',
-      booking_status: 'confirmed',
-      with_engineer: true,
-      studio_display_name: 'TERMINAL A',
-      sms_consent: 'Yes',
-      payment_confirmation_id: 'pi_test_1234567890',
-      
-      // Also include with contact. prefix for compatibility
+      // All fields with contact. prefix to match GHL automation expectations
+      'contact.first_name': 'John',
+      'contact.last_name': 'Doe',
+      'contact.email': 'john.doe@example.com',
+      'contact.phone': '+1-555-123-4567',
       'contact.room_booked': 'terminal-a',
       'contact.engineer_assigned': 'Murda',
       'contact.booking_date': '2024-01-15',
       'contact.booking_time': '2:00 PM',
       'contact.session_duration': '3 hours',
       'contact.appointment_start': '2024-01-15T14:00:00',
+      'contact.stripe_payment_id': 'pi_test_1234567890',
+      'contact.booking_datetime': '2024-01-15T14:00:00',
+      'contact.session_start_time': '2024-01-15T14:00:00',
+      'contact.session_end_time': '2024-01-15T17:00:00',
+      'contact.total_session_cost': 240,
+      'contact.deposit_amount': 120,
+      'contact.remaining_balance': 120,
+      'contact.deposit_date': new Date().toISOString().split('T')[0],
+      'contact.project_type': 'Recording Session',
+      'contact.customer_message': 'Test booking for workflow trigger',
+      'contact.booking_status': 'confirmed',
+      'contact.with_engineer': true,
+      'contact.studio_display_name': 'TERMINAL A',
+      'contact.sms_consent': 'Yes',
+      'contact.payment_confirmation_id': 'pi_test_1234567890',
     }
 
     console.log('🧪 TEST: Sending mock data to GHL webhook')

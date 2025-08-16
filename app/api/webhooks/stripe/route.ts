@@ -78,42 +78,32 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // Standard contact fields (no prefix needed)
-              first_name: metadata.customerName.split(' ')[0],
-              last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
-              email: metadata.customerEmail,
-              phone: metadata.customerPhone,
-              
-              // Custom fields - try both with and without contact. prefix for compatibility
-              room_booked: metadata.studio,
-              engineer_assigned: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
-              booking_date: metadata.bookingDate,
-              booking_time: metadata.bookingTime,
-              session_duration: `${metadata.durationHours} hours`,
-              appointment_start: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              stripe_payment_id: paymentIntent.id,
-              booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              session_start_time: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              session_end_time: new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
-              total_session_cost: totalAmount,
-              deposit_amount: depositAmount,
-              remaining_balance: remainingBalance,
-              deposit_date: depositDate,
-              project_type: metadata.projectType || 'Not specified',
-              customer_message: metadata.message || 'No message',
-              booking_status: 'confirmed',
-              with_engineer: metadata.withEngineer === 'yes',
-              studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
-              sms_consent: metadata.smsConsent === 'yes' ? 'Yes' : 'No',
-              payment_confirmation_id: paymentIntent.id,
-              
-              // Also include with contact. prefix for compatibility
+              // All fields with contact. prefix to match GHL automation expectations
+              'contact.first_name': metadata.customerName.split(' ')[0],
+              'contact.last_name': metadata.customerName.split(' ').slice(1).join(' ') || '',
+              'contact.email': metadata.customerEmail,
+              'contact.phone': metadata.customerPhone,
               'contact.room_booked': metadata.studio,
               'contact.engineer_assigned': metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
               'contact.booking_date': metadata.bookingDate,
               'contact.booking_time': metadata.bookingTime,
               'contact.session_duration': `${metadata.durationHours} hours`,
               'contact.appointment_start': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              'contact.stripe_payment_id': paymentIntent.id,
+              'contact.booking_datetime': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              'contact.session_start_time': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              'contact.session_end_time': new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
+              'contact.total_session_cost': totalAmount,
+              'contact.deposit_amount': depositAmount,
+              'contact.remaining_balance': remainingBalance,
+              'contact.deposit_date': depositDate,
+              'contact.project_type': metadata.projectType || 'Not specified',
+              'contact.customer_message': metadata.message || 'No message',
+              'contact.booking_status': 'confirmed',
+              'contact.with_engineer': metadata.withEngineer === 'yes',
+              'contact.studio_display_name': metadata.studio.replace('-', ' ').toUpperCase(),
+              'contact.sms_consent': metadata.smsConsent === 'yes' ? 'Yes' : 'No',
+              'contact.payment_confirmation_id': paymentIntent.id,
             }
             
             console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))
