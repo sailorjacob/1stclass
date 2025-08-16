@@ -10,18 +10,12 @@ export async function POST(request: NextRequest) {
     const startTime = '2:00 PM'
     const endTime = '5:00 PM'
     
+    // Try the EXACT format that GHL Form submissions use
     const mockWebhookData = {
-      // Core contact fields - ALL possible formats for GHL compatibility
       email: 'sarah.johnson@email.com',
       phone: '+1-203-555-0199',
-      'contact.email': 'sarah.johnson@email.com',
-      'contact.phone': '+1-203-555-0199',
       firstName: 'Sarah',
       lastName: 'Johnson',
-      first_name: 'Sarah',
-      last_name: 'Johnson',
-      'contact.first_name': 'Sarah',
-      'contact.last_name': 'Johnson',
       name: 'Sarah Johnson',
       
       // Booking details (exactly as your automation expects)
@@ -55,8 +49,10 @@ export async function POST(request: NextRequest) {
       marketing_source: 'google_ads'
     }
 
-    console.log('🧪 TEST: Sending mock data to GHL webhook')
-    console.log('📋 Mock webhook data:', JSON.stringify(mockWebhookData, null, 2))
+    console.log('🧪 TEST: Sending SIMPLIFIED mock data to GHL webhook')
+    console.log('📧 Email being sent:', mockWebhookData.email)
+    console.log('📱 Phone being sent:', mockWebhookData.phone)
+    console.log('📋 Full payload:', JSON.stringify(mockWebhookData, null, 2))
     console.log('🔗 Target webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
 
     if (!process.env.GOHIGHLEVEL_WEBHOOK_URL) {
