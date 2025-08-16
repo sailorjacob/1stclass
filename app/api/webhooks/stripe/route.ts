@@ -110,6 +110,11 @@ export async function POST(request: NextRequest) {
             
             console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))
             console.log('🔗 Webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
+            console.log('📋 Key fields being sent:')
+            console.log('  - booking_time:', webhookData['contact.booking_time'])
+            console.log('  - engineer_assigned:', webhookData['contact.engineer_assigned'])
+            console.log('  - appointment_start:', webhookData['contact.appointment_start'])
+            console.log('  - room_booked:', webhookData['contact.room_booked'])
             
             const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
               method: 'POST',

@@ -150,42 +150,8 @@ export async function POST(request: NextRequest) {
     // Add to bookings array (in production, save to database)
     bookings.push(newBooking)
 
-    // Send data to GoHighLevel
-    try {
-      const nameParts = validatedData.clientName.split(' ')
-      const firstName = nameParts[0]
-      const lastName = nameParts.slice(1).join(' ')
-
-      const depositAmount = Math.floor(validatedData.totalPrice * 0.5) // 50% deposit
-      const remainingBalance = validatedData.totalPrice - depositAmount
-
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/integrations/gohighlevel`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email: validatedData.clientEmail,
-          phone: validatedData.clientPhone,
-          roomBooked: validatedData.studio,
-          engineerAssigned: validatedData.engineerName,
-          bookingDate: validatedData.startTime.toDateString(),
-          bookingTime: validatedData.startTime.toLocaleTimeString(),
-          totalPrice: validatedData.totalPrice,
-          paymentConfirmationId: validatedData.stripePaymentIntentId,
-          duration: validatedData.duration,
-          depositAmount,
-          remainingBalance,
-          projectType: validatedData.projectType || 'Not specified',
-          message: validatedData.message || 'No message',
-        }),
-      })
-    } catch (error) {
-      console.error('Failed to sync with GoHighLevel:', error)
-      // Don't fail the booking creation if CRM sync fails
-    }
+    // GHL integration now handled via Stripe webhook only to avoid duplicates and race conditions
+    console.log('Booking saved to internal system. GHL notification will be sent via Stripe webhook.')
 
     return NextResponse.json({
       success: true,
