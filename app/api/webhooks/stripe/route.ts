@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
               'contact.booking_date': metadata.bookingDate,
               'contact.booking_time': metadata.bookingTime,
               'contact.session_duration': `${metadata.durationHours} hours`,
+              'contact.appointment_start': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               'contact.stripe_payment_id': paymentIntent.id,
               'contact.booking_datetime': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               'contact.session_start_time': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
@@ -103,6 +104,8 @@ export async function POST(request: NextRequest) {
               'contact.booking_status': 'confirmed',
               'contact.with_engineer': metadata.withEngineer === 'yes',
               'contact.studio_display_name': metadata.studio.replace('-', ' ').toUpperCase(),
+              'contact.sms_consent': metadata.smsConsent === 'yes' ? 'Yes' : 'No',
+              'contact.payment_confirmation_id': paymentIntent.id,
             }
             
             console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))

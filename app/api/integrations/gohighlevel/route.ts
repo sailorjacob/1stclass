@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
         with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No',
         studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
         session_start_time: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
+        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
         booking_source: 'Studio Website',
         project_type: validatedData.projectType || 'Not specified',
         customer_message: validatedData.message || 'No message provided',

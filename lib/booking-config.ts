@@ -84,6 +84,7 @@ export interface GoHighLevelContact {
     with_engineer?: string
     studio_display_name?: string
     session_start_time?: string
+    appointment_start?: string
     booking_source?: string
     project_type?: string
     customer_message?: string
