@@ -40,8 +40,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Prepare contact data for GoHighLevel
-    const contactData: GoHighLevelContact = {
+    // Build custom fields payload using official array format when IDs are provided
+    const cf = (id?: string, value?: string | number | boolean) =>
+      id && value !== undefined && value !== null && value !== '' ? [{ id, value }] : []
+
+    const customFieldsArray = [
+      ...cf(process.env.GHL_CF_ROOM_BOOKED_ID, validatedData.roomBooked),
+      ...cf(process.env.GHL_CF_ENGINEER_ASSIGNED_ID, validatedData.engineerAssigned),
+      ...cf(process.env.GHL_CF_BOOKING_DATE_ID, validatedData.bookingDate),
+      ...cf(process.env.GHL_CF_BOOKING_TIME_ID, validatedData.bookingTime),
+      ...cf(process.env.GHL_CF_SESSION_DURATION_ID, validatedData.duration ? `${validatedData.duration} hours` : 'Not specified'),
+      ...cf(process.env.GHL_CF_TOTAL_SESSION_COST_ID, validatedData.totalPrice),
+      ...cf(process.env.GHL_CF_DEPOSIT_PAID_ID, validatedData.depositAmount ?? Math.floor(validatedData.totalPrice * 0.5)),
+      ...cf(process.env.GHL_CF_REMAINING_BALANCE_ID, validatedData.remainingBalance ?? Math.floor(validatedData.totalPrice * 0.5)),
+      ...cf(process.env.GHL_CF_DEPOSIT_DATE_ID, new Date().toISOString().split('T')[0]),
+      ...cf(process.env.GHL_CF_PAYMENT_CONFIRMATION_ID, validatedData.paymentConfirmationId),
+      ...cf(process.env.GHL_CF_BOOKING_STATUS_ID, 'confirmed'),
+      ...cf(process.env.GHL_CF_WITH_ENGINEER_ID, validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No'),
+      ...cf(process.env.GHL_CF_STUDIO_DISPLAY_NAME_ID, validatedData.roomBooked.replace('-', ' ').toUpperCase()),
+      ...cf(process.env.GHL_CF_SESSION_START_TIME_ID, `${validatedData.bookingDate} ${validatedData.bookingTime}`),
+      ...cf(process.env.GHL_CF_APPOINTMENT_START_ID, `${validatedData.bookingDate}T${validatedData.bookingTime}:00`),
+      ...cf(process.env.GHL_CF_BOOKING_SOURCE_ID, 'Studio Website'),
+      ...cf(process.env.GHL_CF_PROJECT_TYPE_ID, validatedData.projectType || 'Not specified'),
+      ...cf(process.env.GHL_CF_CUSTOMER_MESSAGE_ID, validatedData.message || 'No message provided'),
+    ]
+
+    const contactPayload = {
+      locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
@@ -53,36 +78,37 @@ export async function POST(request: NextRequest) {
         `${validatedData.roomBooked}-session`,
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
-      customFields: {
-        room_booked: validatedData.roomBooked,
-        engineer_assigned: validatedData.engineerAssigned,
-        booking_date: validatedData.bookingDate,
-        booking_time: validatedData.bookingTime,
-        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
-        total_session_cost: validatedData.totalPrice,
-        deposit_paid: validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5),
-        remaining_balance: validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5),
-        deposit_date: new Date().toISOString().split('T')[0],
-        payment_confirmation_id: validatedData.paymentConfirmationId,
-        booking_status: 'confirmed',
-        with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No',
-        studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
-        session_start_time: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
-        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
-        booking_source: 'Studio Website',
-        project_type: validatedData.projectType || 'Not specified',
-        customer_message: validatedData.message || 'No message provided',
-      },
+      source: 'Studio Booking System',
+      ...(customFieldsArray.length > 0
+        ? { customFields: customFieldsArray }
+        : {
+            customFields: {
+              room_booked: validatedData.roomBooked,
+              engineer_assigned: validatedData.engineerAssigned,
+              booking_date: validatedData.bookingDate,
+              booking_time: validatedData.bookingTime,
+              session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
+              total_session_cost: validatedData.totalPrice,
+              deposit_paid: validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5),
+              remaining_balance: validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5),
+              deposit_date: new Date().toISOString().split('T')[0],
+              payment_confirmation_id: validatedData.paymentConfirmationId,
+              booking_status: 'confirmed',
+              with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No',
+              studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
+              session_start_time: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
+              appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+              booking_source: 'Studio Website',
+              project_type: validatedData.projectType || 'Not specified',
+              customer_message: validatedData.message || 'No message provided',
+            },
+          }),
     }
 
     // Create or update contact in GoHighLevel
     const response = await axios.post(
       `https://rest.gohighlevel.com/v1/contacts/`,
-      {
-        locationId,
-        ...contactData,
-        source: 'Studio Booking System',
-      },
+      contactPayload,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
