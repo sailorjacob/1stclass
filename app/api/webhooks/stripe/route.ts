@@ -78,51 +78,43 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // Basic contact creation fields (no prefix for contact creation)
-              firstName: metadata.customerName.split(' ')[0],
-              lastName: metadata.customerName.split(' ').slice(1).join(' ') || '',
-              email: metadata.customerEmail,
-              phone: metadata.customerPhone,
-              
-              // Also send with underscores for compatibility
+              // Fields to match your GHL automation mappings (no prefixes)
               first_name: metadata.customerName.split(' ')[0],
               last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              email: metadata.customerEmail,
+              phone: metadata.customerPhone,
+              booking_date: metadata.bookingDate,
+              booking_time: metadata.bookingTime,
+              engineer_assigned: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
+              room_booked: metadata.studio,
+              session_duration: `${metadata.durationHours} hours`,
+              stripe_payment_id: paymentIntent.id,
               
-              // Custom fields with contact. prefix for field mapping
-              'contact.first_name': metadata.customerName.split(' ')[0],
-              'contact.last_name': metadata.customerName.split(' ').slice(1).join(' ') || '',
-              'contact.email': metadata.customerEmail,
-              'contact.phone': metadata.customerPhone,
-              'contact.room_booked': metadata.studio,
-              'contact.engineer_assigned': metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
-              'contact.booking_date': metadata.bookingDate,
-              'contact.booking_time': metadata.bookingTime,
-              'contact.session_duration': `${metadata.durationHours} hours`,
-              'contact.appointment_start': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              'contact.stripe_payment_id': paymentIntent.id,
-              'contact.booking_datetime': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              'contact.session_start_time': `${metadata.bookingDate}T${metadata.bookingTime}:00`,
-              'contact.session_end_time': new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
-              'contact.total_session_cost': totalAmount,
-              'contact.deposit_amount': depositAmount,
-              'contact.remaining_balance': remainingBalance,
-              'contact.deposit_date': depositDate,
-              'contact.project_type': metadata.projectType || 'Not specified',
-              'contact.customer_message': metadata.message || 'No message',
-              'contact.booking_status': 'confirmed',
-              'contact.with_engineer': metadata.withEngineer === 'yes',
-              'contact.studio_display_name': metadata.studio.replace('-', ' ').toUpperCase(),
-              'contact.sms_consent': metadata.smsConsent === 'yes' ? 'Yes' : 'No',
-              'contact.payment_confirmation_id': paymentIntent.id,
+              // Additional fields for completeness
+              appointment_start: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              session_start_time: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
+              session_end_time: new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
+              total_session_cost: totalAmount,
+              deposit_amount: depositAmount,
+              remaining_balance: remainingBalance,
+              deposit_date: depositDate,
+              project_type: metadata.projectType || 'Not specified',
+              customer_message: metadata.message || 'No message',
+              booking_status: 'confirmed',
+              with_engineer: metadata.withEngineer === 'yes',
+              studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
+              sms_consent: metadata.smsConsent === 'yes' ? 'Yes' : 'No',
+              payment_confirmation_id: paymentIntent.id,
             }
             
             console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))
             console.log('🔗 Webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
             console.log('📋 Key fields being sent:')
-            console.log('  - booking_time:', webhookData['contact.booking_time'])
-            console.log('  - engineer_assigned:', webhookData['contact.engineer_assigned'])
-            console.log('  - appointment_start:', webhookData['contact.appointment_start'])
-            console.log('  - room_booked:', webhookData['contact.room_booked'])
+            console.log('  - booking_time:', webhookData.booking_time)
+            console.log('  - engineer_assigned:', webhookData.engineer_assigned)
+            console.log('  - room_booked:', webhookData.room_booked)
+            console.log('  - first_name:', webhookData.first_name)
             
             const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
               method: 'POST',
