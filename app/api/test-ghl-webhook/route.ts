@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Mock booking data - ALL fields with contact. prefix to match GHL automation
+    // Mock booking data - mixed format for GHL compatibility
     const mockWebhookData = {
-      // All fields with contact. prefix to match GHL automation expectations
+      // Basic contact creation fields (no prefix for contact creation)
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      phone: '+1-555-123-4567',
+      
+      // Also send with underscores for compatibility
+      first_name: 'John',
+      last_name: 'Doe',
+      
+      // Custom fields with contact. prefix for field mapping
       'contact.first_name': 'John',
       'contact.last_name': 'Doe',
       'contact.email': 'john.doe@example.com',

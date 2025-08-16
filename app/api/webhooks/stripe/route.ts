@@ -78,7 +78,17 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // All fields with contact. prefix to match GHL automation expectations
+              // Basic contact creation fields (no prefix for contact creation)
+              firstName: metadata.customerName.split(' ')[0],
+              lastName: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              email: metadata.customerEmail,
+              phone: metadata.customerPhone,
+              
+              // Also send with underscores for compatibility
+              first_name: metadata.customerName.split(' ')[0],
+              last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              
+              // Custom fields with contact. prefix for field mapping
               'contact.first_name': metadata.customerName.split(' ')[0],
               'contact.last_name': metadata.customerName.split(' ').slice(1).join(' ') || '',
               'contact.email': metadata.customerEmail,
