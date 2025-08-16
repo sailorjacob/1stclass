@@ -14,7 +14,7 @@ export const getServerStripe = (isTestMode: boolean = false): Stripe => {
         throw new Error('No Stripe key available for test mode')
       }
       testStripeInstance = new Stripe(testKey, {
-        apiVersion: '2023-10-16',
+        apiVersion: '2025-05-28.basil',
         typescript: true,
       })
     }
@@ -25,7 +25,7 @@ export const getServerStripe = (isTestMode: boolean = false): Stripe => {
         throw new Error('STRIPE_SECRET_KEY is not set')
       }
       stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
-        apiVersion: '2023-10-16',
+        apiVersion: '2025-05-28.basil',
         typescript: true,
       })
     }
@@ -56,8 +56,8 @@ export const STUDIO_PRICING = {
     capacity: 5
   },
   'terminal-c': {
-    withEngineer: 50,
-    withoutEngineer: 25,
+    withEngineer: 1, // TEMP: $0.50/hr effective for 2h when deposit is 50%
+    withoutEngineer: 1, // TEMP
     name: 'Terminal C',
     capacity: 3
   }
