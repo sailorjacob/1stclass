@@ -78,13 +78,17 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // Core contact fields - try multiple formats for GHL compatibility
+              // Core contact fields - try ALL possible formats for GHL compatibility
               email: metadata.customerEmail,
               phone: metadata.customerPhone,
+              'contact.email': metadata.customerEmail,
+              'contact.phone': metadata.customerPhone,
               firstName: metadata.customerName.split(' ')[0],
               lastName: metadata.customerName.split(' ').slice(1).join(' ') || '',
               first_name: metadata.customerName.split(' ')[0],
               last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
+              'contact.first_name': metadata.customerName.split(' ')[0],
+              'contact.last_name': metadata.customerName.split(' ').slice(1).join(' ') || '',
               name: metadata.customerName,
               
               // Custom booking fields (matching your automation mappings)
