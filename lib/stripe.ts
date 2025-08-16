@@ -56,8 +56,8 @@ export const STUDIO_PRICING = {
     capacity: 5
   },
   'terminal-c': {
-    withEngineer: 1, // TEMP: $0.50/hr effective for 2h when deposit is 50%
-    withoutEngineer: 1, // TEMP
+    withEngineer: 50,
+    withoutEngineer: 25,
     name: 'Terminal C',
     capacity: 3
   }
