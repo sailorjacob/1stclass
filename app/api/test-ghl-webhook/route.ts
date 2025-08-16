@@ -62,11 +62,15 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Send to your GHL webhook
+    // Send as application/x-www-form-urlencoded to match Website to CRM Webhook
+    const formBody = new URLSearchParams()
+    Object.entries(mockWebhookData).forEach(([key, value]) => {
+      formBody.append(key, String(value))
+    })
     const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(mockWebhookData),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody.toString(),
     })
 
     const responseText = await response.text()

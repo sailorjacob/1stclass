@@ -125,10 +125,15 @@ export async function POST(request: NextRequest) {
             console.log('  - room_booked:', webhookData.room_booked)
             console.log('  - first_name:', webhookData.first_name)
             
+            // Send as application/x-www-form-urlencoded for Website to CRM Webhook compatibility
+            const formBody = new URLSearchParams()
+            Object.entries(webhookData).forEach(([key, value]) => {
+              formBody.append(key, String(value))
+            })
             const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(webhookData),
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: formBody.toString(),
             })
             
             if (response.ok) {
