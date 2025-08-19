@@ -44,6 +44,16 @@ export async function POST(request: NextRequest) {
     const cf = (id?: string, value?: string | number | boolean) =>
       id && value !== undefined && value !== null && value !== '' ? [{ id, value }] : []
 
+    // Debug: Log environment variables
+    console.log('Environment variables check:', {
+      GHL_CF_BOOKING_TIME_ID: process.env.GHL_CF_BOOKING_TIME_ID,
+      GHL_CF_ROOM_BOOKED_ID: process.env.GHL_CF_ROOM_BOOKED_ID,
+      GHL_CF_ENGINEER_ASSIGNED_ID: process.env.GHL_CF_ENGINEER_ASSIGNED_ID,
+      GHL_CF_SESSION_DURATION_ID: process.env.GHL_CF_SESSION_DURATION_ID,
+      GHL_CF_BOOKING_DATE_ID: process.env.GHL_CF_BOOKING_DATE_ID,
+      GHL_CF_APPOINTMENT_START_ID: process.env.GHL_CF_APPOINTMENT_START_ID,
+    })
+
     const customFieldsArray = [
       ...cf(process.env.GHL_CF_ROOM_BOOKED_ID, validatedData.roomBooked),
       ...cf(process.env.GHL_CF_ENGINEER_ASSIGNED_ID, validatedData.engineerAssigned),
