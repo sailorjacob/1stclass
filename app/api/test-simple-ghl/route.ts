@@ -10,33 +10,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing API credentials' }, { status: 500 })
     }
 
-    // Try different fields that might accept text
+    // Use v2 API format from documentation
     const simplePayload = {
       locationId,
-      firstName: "FieldTest",
-      lastName: "Various",
-      email: "fieldtest@example.com",
-      phone: "+15555551235",
-      // Try multiple text fields
+      firstName: "V2Test",
+      lastName: "Proper",
+      email: "v2test@example.com",
+      phone: "+15555551236",
       address1: "BOOKING INFO: Terminal A at 2:00 PM",
-      city: "Test City Info",
+      city: "Test City Info", 
       website: "https://booking-info.com",
       companyName: "Studio Booking Details",
-      tags: ["field-test"]
+      source: "public api",
+      country: "US",
+      tags: ["v2-api-test"],
+      customFields: [
+        {
+          id: "contact.booking_time",
+          value: "2:00 PM"
+        },
+        {
+          id: "contact.room_booked",
+          value: "Terminal A"
+        }
+      ]
     }
 
     console.log('=== PAYLOAD WE ARE SENDING ===')
     console.log(JSON.stringify(simplePayload, null, 2))
     console.log('=== PAYLOAD END ===')
 
-    // Try v1 API with minimal payload
+    // Try v2 API with proper format from documentation
     const response = await axios.post(
-      `https://rest.gohighlevel.com/v1/contacts/`,
+      `https://services.leadconnectorhq.com/contacts/`,
       simplePayload,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
+          'Version': '2021-07-28',
         },
       }
     )
@@ -82,9 +94,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      contactId: response.data.contact.id,
-      message: 'Simple test completed',
-      payload: simplePayload
+      contactId: response.data.contact?.id || response.data.id,
+      message: 'V2 API test completed',
+      payload: simplePayload,
+      apiUsed: 'v2'
     })
 
   } catch (error) {
