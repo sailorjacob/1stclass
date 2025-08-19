@@ -125,63 +125,34 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // PERFECT COMBO: Use both standard fields AND comprehensive tags!
-    const perfectPayload = {
+    // EXACT WORKING FORMAT that populated fields before!
+    const workingPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
-      
-      // Store key booking info in standard fields (confirmed working!)
+      // Store booking info in fields that work
       address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
       city: `Engineer: ${validatedData.engineerAssigned}`,
       website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount}`,
       companyName: `Payment: ${validatedData.paymentConfirmationId}`,
-      
-      // PLUS comprehensive tags for automation logic
       tags: [
-        // Core booking tags
         'studio-booking', 
-        'deposit-paid',
-        'confirmed',
-        
-        // Studio and session details
+        'deposit-paid', 
         validatedData.roomBooked,
         `${validatedData.roomBooked}-session`,
-        
-        // Engineer info
-        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service',
-        `engineer-${validatedData.engineerAssigned.toLowerCase().replace(/\s+/g, '-')}`,
-        
-        // Date and time info
-        `date-${validatedData.bookingDate}`,
-        `time-${validatedData.bookingTime.replace(':', '')}`,
-        `duration-${validatedData.duration}h`,
-        
-        // Financial info
-        `total-${validatedData.totalPrice}`,
-        `deposit-${validatedData.depositAmount}`,
-        
-        // Payment tracking
-        `payment-${validatedData.paymentConfirmationId}`,
-        
-        // Project info
-        validatedData.projectType ? `project-${validatedData.projectType.toLowerCase().replace(/\s+/g, '-')}` : 'project-unspecified',
-        
-        // Source tracking
-        'booking-source-website'
-      ].filter(Boolean), // Remove any undefined values
-      
+        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
+      ],
       source: 'Studio Booking System'
     }
 
-    console.log('Using PERFECT COMBO payload:', JSON.stringify(perfectPayload, null, 2))
+    console.log('Using EXACT WORKING payload:', JSON.stringify(workingPayload, null, 2))
 
-    // Use v1 API with the perfect combination of fields + tags
+    // Use v1 API with exact format that worked before
     const response = await axios.post(
       `https://rest.gohighlevel.com/v1/contacts/`,
-      perfectPayload,
+      workingPayload,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
