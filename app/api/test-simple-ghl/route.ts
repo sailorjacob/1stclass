@@ -10,15 +10,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing API credentials' }, { status: 500 })
     }
 
-    // Ultra simple payload - just try to get notes to work
+    // Try different fields that might accept text
     const simplePayload = {
       locationId,
-      firstName: "SimpleTest",
-      lastName: "Debug",
-      email: "simpletest@example.com",
-      phone: "+15555551234",
-      notes: "This is a test note from the API",
-      tags: ["api-test"]
+      firstName: "FieldTest",
+      lastName: "Various",
+      email: "fieldtest@example.com",
+      phone: "+15555551235",
+      // Try multiple text fields
+      address1: "BOOKING INFO: Terminal A at 2:00 PM",
+      city: "Test City Info",
+      website: "https://booking-info.com",
+      companyName: "Studio Booking Details",
+      tags: ["field-test"]
     }
 
     console.log('Simple payload:', JSON.stringify(simplePayload, null, 2))
