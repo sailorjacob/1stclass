@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     console.log('GHL Payload:', JSON.stringify(contactPayload, null, 2))
     console.log('Custom Fields Array:', customFieldsArray)
 
-    // Create or update contact in GoHighLevel
+    // Create or update contact in GoHighLevel using v1 API
     const response = await axios.post(
       `https://rest.gohighlevel.com/v1/contacts/`,
       contactPayload,
@@ -117,6 +117,32 @@ export async function POST(request: NextRequest) {
     )
 
     const contactId = response.data.contact.id
+
+    // Update custom fields separately using v1 API with explicit field mapping
+    const customFieldUpdate = {
+      customFields: [
+        { key: 'contact.booking_time', field_value: validatedData.bookingTime },
+        { key: 'contact.room_booked', field_value: validatedData.roomBooked },
+        { key: 'contact.engineer_assigned', field_value: validatedData.engineerAssigned },
+        { key: 'contact.session_duration', field_value: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified' },
+        { key: 'contact.booking_date', field_value: validatedData.bookingDate },
+        { key: 'contact.appointment_start', field_value: `${validatedData.bookingDate}T${validatedData.bookingTime}:00` },
+      ]
+    }
+
+    console.log('Updating custom fields separately:', customFieldUpdate)
+
+    // Update the contact with custom fields
+    await axios.put(
+      `https://rest.gohighlevel.com/v1/contacts/${contactId}`,
+      customFieldUpdate,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
 
     // Trigger booking confirmation workflow
     if (process.env.GOHIGHLEVEL_BOOKING_WORKFLOW_ID) {
