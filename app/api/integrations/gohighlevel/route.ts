@@ -104,13 +104,35 @@ export async function POST(request: NextRequest) {
     console.log('GHL Payload:', JSON.stringify(contactPayload, null, 2))
     console.log('Custom Fields Array:', customFieldsArray)
 
-    // Try GHL v2 API with proper custom field format
+    // Create comprehensive booking notes for automation use
+    const bookingNotes = `
+STUDIO BOOKING DETAILS
+======================
+📅 Date: ${validatedData.bookingDate}
+⏰ Time: ${validatedData.bookingTime}
+🏢 Studio: ${validatedData.roomBooked.replace('-', ' ').toUpperCase()}
+👨‍💼 Engineer: ${validatedData.engineerAssigned}
+⏱️ Duration: ${validatedData.duration ? `${validatedData.duration} hours` : 'Not specified'}
+💰 Total Cost: $${validatedData.totalPrice}
+💳 Deposit Paid: $${validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5)}
+💵 Remaining Balance: $${validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)}
+🔗 Payment ID: ${validatedData.paymentConfirmationId}
+📍 Booking Source: Studio Website
+📝 Project Type: ${validatedData.projectType || 'Not specified'}
+💬 Customer Message: ${validatedData.message || 'No message provided'}
+
+Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
+Status: Confirmed & Deposit Paid
+    `.trim()
+
+    // Try GHL v2 API with proper custom field format + notes
     const v2ContactPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
+      notes: bookingNotes,
       tags: [
         'studio-booking', 
         'deposit-paid', 
@@ -119,6 +141,7 @@ export async function POST(request: NextRequest) {
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
       source: 'Studio Booking System',
+      // Try multiple custom field formats
       customField: {
         'contact.booking_time': validatedData.bookingTime,
         'contact.room_booked': validatedData.roomBooked,
@@ -126,6 +149,15 @@ export async function POST(request: NextRequest) {
         'contact.session_duration': validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
         'contact.booking_date': validatedData.bookingDate,
         'contact.appointment_start': `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+      },
+      // Also try without contact prefix
+      customFields: {
+        booking_time: validatedData.bookingTime,
+        room_booked: validatedData.roomBooked,
+        engineer_assigned: validatedData.engineerAssigned,
+        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
+        booking_date: validatedData.bookingDate,
+        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
       }
     }
 
@@ -151,10 +183,15 @@ export async function POST(request: NextRequest) {
     } catch (v2Error) {
       console.log('v2 API failed, trying v1:', v2Error.response?.data || v2Error.message)
       
-      // Fallback to v1 API
+      // Fallback to v1 API with notes
+      const v1PayloadWithNotes = {
+        ...contactPayload,
+        notes: bookingNotes
+      }
+      
       const response = await axios.post(
         `https://rest.gohighlevel.com/v1/contacts/`,
-        contactPayload,
+        v1PayloadWithNotes,
         {
           headers: {
             'Authorization': `Bearer ${apiKey}`,
