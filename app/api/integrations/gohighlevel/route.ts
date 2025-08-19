@@ -89,15 +89,15 @@ export async function POST(request: NextRequest) {
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
       source: 'Studio Booking System',
-      // Always try ID-based format first, with fallback to name-based
-      customFields: customFieldsArray.length > 0 ? customFieldsArray : [
-        { id: 'contact.booking_time', value: validatedData.bookingTime },
-        { id: 'contact.room_booked', value: validatedData.roomBooked },
-        { id: 'contact.engineer_assigned', value: validatedData.engineerAssigned },
-        { id: 'contact.session_duration', value: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified' },
-        { id: 'contact.booking_date', value: validatedData.bookingDate },
-        { id: 'contact.appointment_start', value: `${validatedData.bookingDate}T${validatedData.bookingTime}:00` },
-      ],
+      // Use object format with field names that match GHL exactly
+      customFields: {
+        booking_time: validatedData.bookingTime,
+        room_booked: validatedData.roomBooked,
+        engineer_assigned: validatedData.engineerAssigned,
+        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
+        booking_date: validatedData.bookingDate,
+        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+      },
     }
 
     // Debug: Log the exact payload being sent
