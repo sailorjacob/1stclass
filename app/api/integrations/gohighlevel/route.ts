@@ -125,6 +125,20 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
+    // Format date and time in user-friendly format first
+    const sessionDate = new Date(validatedData.bookingDate)
+    const formattedDate = sessionDate.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    })
+    
+    // Convert 24-hour time to 12-hour format
+    const [hours, minutes] = validatedData.bookingTime.split(':')
+    const hour12 = parseInt(hours) % 12 || 12
+    const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM'
+    const formattedTime = `${hour12}:${minutes} ${ampm}`
+
     // OPTIMIZED WORKING FORMAT - pack maximum info into fields that work!
     const workingPayload = {
       locationId,
@@ -135,14 +149,14 @@ Status: Confirmed & Deposit Paid
       
       // PROVEN WORKING FIELDS - optimize for automation value:
       
-      // Address1: Session date, time, and studio (for quick reference)
-      address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
+      // Address1: Session date, time, and studio (readable format)
+      address1: `📅 ${formattedDate} ⏰ ${formattedTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
       
       // City: Engineer assignment (for routing logic)
       city: `Engineer: ${validatedData.engineerAssigned}`,
       
-      // Website: Comprehensive session details including date/time for guest & manager communications
-      website: `Date: ${validatedData.bookingDate} | Time: ${validatedData.bookingTime} | Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount} | Remaining: $${validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)} | Project: ${validatedData.projectType || 'Unspecified'}`,
+      // Website: Comprehensive session details with readable date/time for communications
+      website: `Date of Booking: ${formattedDate} | Session Start Time: ${formattedTime} | Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount} | Remaining: $${validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)} | Project: ${validatedData.projectType || 'Unspecified'}`,
       
       // Company Name: Payment tracking + booking source
       companyName: `Payment: ${validatedData.paymentConfirmationId} | Source: Website | Status: Confirmed`,
