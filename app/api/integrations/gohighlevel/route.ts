@@ -125,25 +125,40 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // EXACT WORKING FORMAT that populated fields before!
+    // OPTIMIZED WORKING FORMAT - pack maximum info into fields that work!
     const workingPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
-      // Store booking info in fields that work
+      
+      // PROVEN WORKING FIELDS - optimize for automation value:
+      
+      // Address1: Session date, time, and studio (for quick reference)
       address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
+      
+      // City: Engineer assignment (for routing logic)
       city: `Engineer: ${validatedData.engineerAssigned}`,
-      website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount}`,
-      companyName: `Payment: ${validatedData.paymentConfirmationId}`,
+      
+      // Website: Comprehensive session & financial details (for email/SMS templates)
+      website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount} | Remaining: $${validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)} | Project: ${validatedData.projectType || 'Unspecified'}`,
+      
+      // Company Name: Payment tracking + booking source
+      companyName: `Payment: ${validatedData.paymentConfirmationId} | Source: Website | Status: Confirmed`,
+      
+      // Tags for automation triggers and logic
       tags: [
         'studio-booking', 
         'deposit-paid', 
+        'confirmed',
         validatedData.roomBooked,
         `${validatedData.roomBooked}-session`,
-        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
+        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service',
+        `duration-${validatedData.duration}h`,
+        validatedData.projectType ? `project-${validatedData.projectType.toLowerCase().replace(/\s+/g, '-')}` : 'project-unspecified'
       ],
+      
       source: 'Studio Booking System'
     }
 
