@@ -125,22 +125,18 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // Try GHL v2 API with multiple field names for notes
-    const v2ContactPayload = {
+    // Use v1 API with fields that actually work
+    const workingPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
-      // Try multiple field names for notes
-      notes: bookingNotes,
-      description: bookingNotes,
-      note: bookingNotes,
-      comments: bookingNotes,
-      // Also try storing key info in other fields as backup
-      website: `Booking: ${validatedData.roomBooked} on ${validatedData.bookingDate} at ${validatedData.bookingTime}`,
-      address1: `Studio: ${validatedData.roomBooked.toUpperCase()} | Engineer: ${validatedData.engineerAssigned}`,
-      city: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
+      // Store booking info in fields that work
+      address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
+      city: `Engineer: ${validatedData.engineerAssigned}`,
+      website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount}`,
+      companyName: `Payment: ${validatedData.paymentConfirmationId}`,
       tags: [
         'studio-booking', 
         'deposit-paid', 
@@ -148,81 +144,25 @@ Status: Confirmed & Deposit Paid
         `${validatedData.roomBooked}-session`,
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
-      source: 'Studio Booking System',
-      // Try array format for custom fields
-      customFields: [
-        {
-          "id": "contact.booking_time",
-          "value": validatedData.bookingTime
-        },
-        {
-          "id": "contact.room_booked", 
-          "value": validatedData.roomBooked
-        },
-        {
-          "id": "contact.engineer_assigned",
-          "value": validatedData.engineerAssigned
-        },
-        {
-          "id": "contact.session_duration",
-          "value": validatedData.duration ? `${validatedData.duration} hours` : 'Not specified'
-        },
-        {
-          "id": "contact.booking_date",
-          "value": validatedData.bookingDate
-        },
-        {
-          "id": "contact.appointment_start",
-          "value": `${validatedData.bookingDate}T${validatedData.bookingTime}:00`
-        }
-      ]
+      source: 'Studio Booking System'
     }
 
-    console.log('Trying v2 API with customField format:', JSON.stringify(v2ContactPayload, null, 2))
+    console.log('Using v1 API with working fields:', JSON.stringify(workingPayload, null, 2))
 
-    try {
-      // Try v2 API first
-      const response = await axios.post(
-        `https://services.leadconnectorhq.com/contacts/`,
-        v2ContactPayload,
-        {
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-            'Version': '2021-07-28',
-          },
-        }
-      )
-      
-      console.log('v2 API success:', response.data)
-      var contactId = response.data.contact?.id || response.data.id
-      
-    } catch (v2Error) {
-      console.log('v2 API failed, trying v1:', v2Error.response?.data || v2Error.message)
-      
-      // Fallback to v1 API with multiple note field attempts
-      const v1PayloadWithNotes = {
-        ...contactPayload,
-        notes: bookingNotes,
-        description: bookingNotes,
-        note: bookingNotes,
-        comments: bookingNotes
+    // Use v1 API (only one that works with your token)
+    const response = await axios.post(
+      `https://rest.gohighlevel.com/v1/contacts/`,
+      workingPayload,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
       }
-      
-      const response = await axios.post(
-        `https://rest.gohighlevel.com/v1/contacts/`,
-        v1PayloadWithNotes,
-        {
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      
-      var contactId = response.data.contact.id
-      console.log('v1 API response:', response.data)
-    }
+    )
+    
+    const contactId = response.data.contact.id
+    console.log('v1 API response:', response.data)
 
     // Trigger booking confirmation workflow
     if (process.env.GOHIGHLEVEL_BOOKING_WORKFLOW_ID) {
