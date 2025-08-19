@@ -125,13 +125,21 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // Use only fields that work: basic contact info + comprehensive tags
-    const workingPayload = {
+    // PERFECT COMBO: Use both standard fields AND comprehensive tags!
+    const perfectPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
+      
+      // Store key booking info in standard fields (confirmed working!)
+      address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
+      city: `Engineer: ${validatedData.engineerAssigned}`,
+      website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount}`,
+      companyName: `Payment: ${validatedData.paymentConfirmationId}`,
+      
+      // PLUS comprehensive tags for automation logic
       tags: [
         // Core booking tags
         'studio-booking', 
@@ -164,15 +172,16 @@ Status: Confirmed & Deposit Paid
         // Source tracking
         'booking-source-website'
       ].filter(Boolean), // Remove any undefined values
+      
       source: 'Studio Booking System'
     }
 
-    console.log('Using v1 API with working fields:', JSON.stringify(workingPayload, null, 2))
+    console.log('Using PERFECT COMBO payload:', JSON.stringify(perfectPayload, null, 2))
 
-    // Use v1 API (only one that works with your token)
+    // Use v1 API with the perfect combination of fields + tags
     const response = await axios.post(
       `https://rest.gohighlevel.com/v1/contacts/`,
-      workingPayload,
+      perfectPayload,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
