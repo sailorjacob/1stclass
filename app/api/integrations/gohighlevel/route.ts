@@ -105,6 +105,10 @@ export async function POST(request: NextRequest) {
           }),
     }
 
+    // Debug: Log the exact payload being sent
+    console.log('GHL Payload:', JSON.stringify(contactPayload, null, 2))
+    console.log('Custom Fields Array:', customFieldsArray)
+
     // Create or update contact in GoHighLevel
     const response = await axios.post(
       `https://rest.gohighlevel.com/v1/contacts/`,
