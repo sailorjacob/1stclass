@@ -10,15 +10,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing API credentials' }, { status: 500 })
     }
 
-    // Test individual fields with v1 API to see what works
+    // Test EXACT format that worked before
     const simplePayload = {
       locationId,
-      firstName: "OneField",
-      lastName: "Test",
-      email: "onefield@example.com",
-      phone: "+15555551237",
-      address1: "TEST ADDRESS FIELD",
-      tags: ["one-field-test"]
+      firstName: "ExactTest",
+      lastName: "Replication",
+      email: "exacttest@example.com",
+      phone: "+15555551238",
+      address1: "📅 2025-02-05 ⏰ 17:30 🏢 TERMINAL-B",
+      city: "Engineer: Test Engineer",
+      website: "Duration: 8h | Total: $400 | Deposit: $200",
+      companyName: "Payment: pi_exacttest999",
+      tags: ["exact-replication-test"],
+      source: "Studio Booking System"
     }
 
     console.log('=== PAYLOAD WE ARE SENDING ===')
