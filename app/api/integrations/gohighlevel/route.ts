@@ -125,14 +125,22 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // Try GHL v2 API with proper custom field format + notes
+    // Try GHL v2 API with multiple field names for notes
     const v2ContactPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
+      // Try multiple field names for notes
       notes: bookingNotes,
+      description: bookingNotes,
+      note: bookingNotes,
+      comments: bookingNotes,
+      // Also try storing key info in other fields as backup
+      website: `Booking: ${validatedData.roomBooked} on ${validatedData.bookingDate} at ${validatedData.bookingTime}`,
+      address1: `Studio: ${validatedData.roomBooked.toUpperCase()} | Engineer: ${validatedData.engineerAssigned}`,
+      city: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
       tags: [
         'studio-booking', 
         'deposit-paid', 
@@ -141,24 +149,33 @@ Status: Confirmed & Deposit Paid
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
       source: 'Studio Booking System',
-      // Try multiple custom field formats
-      customField: {
-        'contact.booking_time': validatedData.bookingTime,
-        'contact.room_booked': validatedData.roomBooked,
-        'contact.engineer_assigned': validatedData.engineerAssigned,
-        'contact.session_duration': validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
-        'contact.booking_date': validatedData.bookingDate,
-        'contact.appointment_start': `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
-      },
-      // Also try without contact prefix
-      customFields: {
-        booking_time: validatedData.bookingTime,
-        room_booked: validatedData.roomBooked,
-        engineer_assigned: validatedData.engineerAssigned,
-        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
-        booking_date: validatedData.bookingDate,
-        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
-      }
+      // Try array format for custom fields
+      customFields: [
+        {
+          "id": "contact.booking_time",
+          "value": validatedData.bookingTime
+        },
+        {
+          "id": "contact.room_booked", 
+          "value": validatedData.roomBooked
+        },
+        {
+          "id": "contact.engineer_assigned",
+          "value": validatedData.engineerAssigned
+        },
+        {
+          "id": "contact.session_duration",
+          "value": validatedData.duration ? `${validatedData.duration} hours` : 'Not specified'
+        },
+        {
+          "id": "contact.booking_date",
+          "value": validatedData.bookingDate
+        },
+        {
+          "id": "contact.appointment_start",
+          "value": `${validatedData.bookingDate}T${validatedData.bookingTime}:00`
+        }
+      ]
     }
 
     console.log('Trying v2 API with customField format:', JSON.stringify(v2ContactPayload, null, 2))
@@ -183,10 +200,13 @@ Status: Confirmed & Deposit Paid
     } catch (v2Error) {
       console.log('v2 API failed, trying v1:', v2Error.response?.data || v2Error.message)
       
-      // Fallback to v1 API with notes
+      // Fallback to v1 API with multiple note field attempts
       const v1PayloadWithNotes = {
         ...contactPayload,
-        notes: bookingNotes
+        notes: bookingNotes,
+        description: bookingNotes,
+        note: bookingNotes,
+        comments: bookingNotes
       }
       
       const response = await axios.post(
