@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { formatBookingDateTime } from './date-utils'
 
 const resendApiKey = process.env.RESEND_API_KEY
 const resend = resendApiKey ? new Resend(resendApiKey) : null
@@ -49,7 +50,9 @@ export function renderBookingEmail(params: {
     remainingAmount,
   } = params
 
-  const title = `Booking Confirmed: ${studioName} on ${date} at ${time}`
+  // Use consistent date/time formatting
+  const formattedDateTime = formatBookingDateTime(date, time)
+  const title = `Booking Confirmed: ${studioName} on ${formattedDateTime}`
   const html = `
   <div style="font-family:Inter,system-ui,Arial,sans-serif;max-width:640px;margin:0 auto;padding:24px;background:#0a0a0a;color:#fff">
     <h1 style="font-weight:400;letter-spacing:.06em">${title}</h1>

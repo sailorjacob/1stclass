@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import axios from 'axios'
 import { z } from 'zod'
 import { GoHighLevelContact } from '@/lib/booking-config'
+import { createBookingSummary } from '@/lib/date-utils'
 
 // Validation schema for GoHighLevel integration
 const goHighLevelSchema = z.object({
@@ -125,19 +126,16 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // Format date and time in user-friendly format first
-    const sessionDate = new Date(validatedData.bookingDate)
-    const formattedDate = sessionDate.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+    // Use shared date/time formatting utility for consistency
+    const bookingSummary = createBookingSummary({
+      bookingDate: validatedData.bookingDate,
+      bookingTime: validatedData.bookingTime,
+      duration: validatedData.duration || 1,
+      totalPrice: validatedData.totalPrice,
+      depositAmount: validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5),
+      remainingBalance: validatedData.remainingBalance,
+      projectType: validatedData.projectType
     })
-    
-    // Convert 24-hour time to 12-hour format
-    const [hours, minutes] = validatedData.bookingTime.split(':')
-    const hour12 = parseInt(hours) % 12 || 12
-    const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM'
-    const formattedTime = `${hour12}:${minutes} ${ampm}`
 
     // OPTIMIZED WORKING FORMAT - pack maximum info into fields that work!
     const workingPayload = {
@@ -147,16 +145,16 @@ Status: Confirmed & Deposit Paid
       email: validatedData.email,
       phone: validatedData.phone,
       
-      // PROVEN WORKING FIELDS - optimize for automation value:
+      // PROVEN WORKING FIELDS - using shared formatting utility
       
       // Address1: Session date, time, and studio (readable format)
-      address1: `📅 ${formattedDate} ⏰ ${formattedTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
+      address1: `${bookingSummary.addressFieldContent} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
       
       // City: Engineer assignment (for routing logic)
       city: `Engineer: ${validatedData.engineerAssigned}`,
       
       // Website: Comprehensive session details with readable date/time for communications
-      website: `Date of Booking: ${formattedDate} | Session Start Time: ${formattedTime} | Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount} | Remaining: $${validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)} | Project: ${validatedData.projectType || 'Unspecified'}`,
+      website: bookingSummary.websiteFieldContent,
       
       // Company Name: Payment tracking + booking source
       companyName: `Payment: ${validatedData.paymentConfirmationId} | Source: Website | Status: Confirmed`,
