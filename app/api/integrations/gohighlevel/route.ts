@@ -89,30 +89,15 @@ export async function POST(request: NextRequest) {
         validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
       ],
       source: 'Studio Booking System',
-      ...(customFieldsArray.length > 0
-        ? { customFields: customFieldsArray }
-        : {
-            customFields: {
-              room_booked: validatedData.roomBooked,
-              engineer_assigned: validatedData.engineerAssigned,
-              booking_date: validatedData.bookingDate,
-              booking_time: validatedData.bookingTime,
-              session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
-              total_session_cost: validatedData.totalPrice,
-              deposit_paid: validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5),
-              remaining_balance: validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5),
-              deposit_date: new Date().toISOString().split('T')[0],
-              payment_confirmation_id: validatedData.paymentConfirmationId,
-              booking_status: 'confirmed',
-              with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'Yes' : 'No',
-              studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
-              session_start_time: `${validatedData.bookingDate} ${validatedData.bookingTime}`,
-              appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
-              booking_source: 'Studio Website',
-              project_type: validatedData.projectType || 'Not specified',
-              customer_message: validatedData.message || 'No message provided',
-            },
-          }),
+      // Always try ID-based format first, with fallback to name-based
+      customFields: customFieldsArray.length > 0 ? customFieldsArray : [
+        { id: 'contact.booking_time', value: validatedData.bookingTime },
+        { id: 'contact.room_booked', value: validatedData.roomBooked },
+        { id: 'contact.engineer_assigned', value: validatedData.engineerAssigned },
+        { id: 'contact.session_duration', value: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified' },
+        { id: 'contact.booking_date', value: validatedData.bookingDate },
+        { id: 'contact.appointment_start', value: `${validatedData.bookingDate}T${validatedData.bookingTime}:00` },
+      ],
     }
 
     // Debug: Log the exact payload being sent
