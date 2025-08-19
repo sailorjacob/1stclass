@@ -125,25 +125,45 @@ Appointment Start: ${validatedData.bookingDate}T${validatedData.bookingTime}:00
 Status: Confirmed & Deposit Paid
     `.trim()
 
-    // Use v1 API with fields that actually work
+    // Use only fields that work: basic contact info + comprehensive tags
     const workingPayload = {
       locationId,
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
       phone: validatedData.phone,
-      // Store booking info in fields that work
-      address1: `📅 ${validatedData.bookingDate} ⏰ ${validatedData.bookingTime} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
-      city: `Engineer: ${validatedData.engineerAssigned}`,
-      website: `Duration: ${validatedData.duration}h | Total: $${validatedData.totalPrice} | Deposit: $${validatedData.depositAmount}`,
-      companyName: `Payment: ${validatedData.paymentConfirmationId}`,
       tags: [
+        // Core booking tags
         'studio-booking', 
-        'deposit-paid', 
+        'deposit-paid',
+        'confirmed',
+        
+        // Studio and session details
         validatedData.roomBooked,
         `${validatedData.roomBooked}-session`,
-        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service'
-      ],
+        
+        // Engineer info
+        validatedData.engineerAssigned !== 'No Engineer' ? 'with-engineer' : 'self-service',
+        `engineer-${validatedData.engineerAssigned.toLowerCase().replace(/\s+/g, '-')}`,
+        
+        // Date and time info
+        `date-${validatedData.bookingDate}`,
+        `time-${validatedData.bookingTime.replace(':', '')}`,
+        `duration-${validatedData.duration}h`,
+        
+        // Financial info
+        `total-${validatedData.totalPrice}`,
+        `deposit-${validatedData.depositAmount}`,
+        
+        // Payment tracking
+        `payment-${validatedData.paymentConfirmationId}`,
+        
+        // Project info
+        validatedData.projectType ? `project-${validatedData.projectType.toLowerCase().replace(/\s+/g, '-')}` : 'project-unspecified',
+        
+        // Source tracking
+        'booking-source-website'
+      ].filter(Boolean), // Remove any undefined values
       source: 'Studio Booking System'
     }
 
