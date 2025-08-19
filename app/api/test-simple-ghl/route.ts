@@ -1,0 +1,63 @@
+import { NextRequest, NextResponse } from 'next/server'
+import axios from 'axios'
+
+export async function POST(request: NextRequest) {
+  try {
+    const apiKey = process.env.GOHIGHLEVEL_API_KEY
+    const locationId = process.env.GOHIGHLEVEL_LOCATION_ID
+
+    if (!apiKey || !locationId) {
+      return NextResponse.json({ error: 'Missing API credentials' }, { status: 500 })
+    }
+
+    // Ultra simple payload - just try to get notes to work
+    const simplePayload = {
+      locationId,
+      firstName: "SimpleTest",
+      lastName: "Debug",
+      email: "simpletest@example.com",
+      phone: "+15555551234",
+      notes: "This is a test note from the API",
+      tags: ["api-test"]
+    }
+
+    console.log('Simple payload:', JSON.stringify(simplePayload, null, 2))
+
+    // Try v1 API with minimal payload
+    const response = await axios.post(
+      `https://rest.gohighlevel.com/v1/contacts/`,
+      simplePayload,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    console.log('Simple response:', response.data)
+
+    return NextResponse.json({
+      success: true,
+      contactId: response.data.contact.id,
+      message: 'Simple test completed',
+      payload: simplePayload
+    })
+
+  } catch (error) {
+    console.error('Simple test error:', error)
+    
+    if (axios.isAxiosError(error)) {
+      console.error('Error response:', error.response?.data)
+      return NextResponse.json(
+        { error: 'API error', details: error.response?.data },
+        { status: error.response?.status || 500 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: 'Failed simple test' },
+      { status: 500 }
+    )
+  }
+}
