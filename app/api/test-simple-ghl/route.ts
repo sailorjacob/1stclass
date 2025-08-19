@@ -10,45 +10,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing API credentials' }, { status: 500 })
     }
 
-    // Use v2 API format from documentation
+    // Test individual fields with v1 API to see what works
     const simplePayload = {
       locationId,
-      firstName: "V2Test",
-      lastName: "Proper",
-      email: "v2test@example.com",
-      phone: "+15555551236",
-      address1: "BOOKING INFO: Terminal A at 2:00 PM",
-      city: "Test City Info", 
-      website: "https://booking-info.com",
-      companyName: "Studio Booking Details",
-      source: "public api",
-      country: "US",
-      tags: ["v2-api-test"],
-      customFields: [
-        {
-          id: "contact.booking_time",
-          value: "2:00 PM"
-        },
-        {
-          id: "contact.room_booked",
-          value: "Terminal A"
-        }
-      ]
+      firstName: "OneField",
+      lastName: "Test",
+      email: "onefield@example.com",
+      phone: "+15555551237",
+      address1: "TEST ADDRESS FIELD",
+      tags: ["one-field-test"]
     }
 
     console.log('=== PAYLOAD WE ARE SENDING ===')
     console.log(JSON.stringify(simplePayload, null, 2))
     console.log('=== PAYLOAD END ===')
 
-    // Try v2 API with proper format from documentation
+    // Use v1 API to test individual fields
     const response = await axios.post(
-      `https://services.leadconnectorhq.com/contacts/`,
+      `https://rest.gohighlevel.com/v1/contacts/`,
       simplePayload,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-          'Version': '2021-07-28',
         },
       }
     )
