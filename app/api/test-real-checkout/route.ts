@@ -30,18 +30,18 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        customerName: `${firstName} ${lastName}`,
-        customerEmail: email,
-        customerPhone: phone,
+        name: `${firstName} ${lastName}`,
+        email: email,
+        phone: phone,
         studio,
-        bookingDate: date,
-        bookingTime: time,
-        durationHours: duration,
-        engineerName: engineer,
-        withEngineer: true,
+        date: date,
+        time: time,
+        duration: duration.toString(),
+        engineer: 'yes',
         projectType,
         message,
-        smsConsent: true
+        smsConsent: true,
+        promotionalConsent: true
       })
     })
 
