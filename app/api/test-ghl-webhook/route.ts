@@ -2,54 +2,54 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Mock booking data - comprehensive realistic customer booking
+    // Mock booking data - EXACT format from GHL webhook reference
     const today = new Date()
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 7) // Book for next week
     const bookingDate = tomorrow.toISOString().split('T')[0]
-    const startTime = '2:00 PM'
-    const endTime = '5:00 PM'
     
-    // Try the EXACT format that GHL Form submissions use
+    // EXACT MAPPING FORMAT from your GHL webhook reference
     const mockWebhookData = {
-      email: 'sarah.johnson@email.com',
-      phone: '+1-203-555-0199',
-      firstName: 'Sarah',
-      lastName: 'Johnson',
-      name: 'Sarah Johnson',
+      email: 'test.mapping@example.com',
+      phone: '+1-555-123-4567',
+      firstName: 'Test',
+      lastName: 'Mapping',
+      name: 'Test Mapping',
       
-      // Booking details (exactly as your automation expects)
+      // Booking details (EXACT keys from your reference)
       booking_date: bookingDate,
-      booking_time: startTime,
-      engineer_assigned: 'Murda',
-      room_booked: 'terminal-a',
-      session_duration: '3 hours',
-      stripe_payment_id: `pi_live_${Date.now()}`,
+      booking_time: '3:30 PM',
+      engineer_assigned: 'Test Engineer',
+      room_booked: 'terminal-b',
+      session_duration: '4 hours',
+      stripe_payment_id: `pi_test_mapping_${Date.now()}`,
       
-      // Additional comprehensive booking data
-      appointment_start: `${bookingDate}T14:00:00`,
-      booking_datetime: `${bookingDate}T14:00:00`,
-      session_start_time: `${bookingDate}T14:00:00`,
-      session_end_time: `${bookingDate}T17:00:00`,
-      total_session_cost: 240,
-      deposit_amount: 120,
-      remaining_balance: 120,
+      // DateTime fields (EXACT format from reference)
+      appointment_start: `${bookingDate}T15:30:00`,
+      booking_datetime: `${bookingDate}T15:30:00`,
+      session_start_time: `${bookingDate}T15:30:00`,
+      session_end_time: `${bookingDate}T19:30:00`,
+      
+      // Financial fields (EXACT keys from reference)
+      total_session_cost: '320',
+      deposit_amount: '160',
+      remaining_balance: '160',
       deposit_date: new Date().toISOString().split('T')[0],
-      project_type: 'Recording Session',
-      customer_message: 'Looking forward to recording my new album. Need help with mixing too.',
-      booking_status: 'confirmed',
-      with_engineer: true,
-      studio_display_name: 'TERMINAL A',
-      sms_consent: 'Yes',
-      payment_confirmation_id: `pi_live_${Date.now()}`,
       
-      // Extra fields that might be useful
+      // Additional fields (EXACT keys from reference)
+      project_type: 'Mapping Test Session',
+      customer_message: 'Testing exact webhook mapping format from reference',
+      booking_status: 'confirmed',
+      with_engineer: 'true',
+      studio_display_name: 'TERMINAL B',
+      sms_consent: 'Yes',
+      payment_confirmation_id: `pi_test_mapping_${Date.now()}`,
       booking_source: 'Website',
       client_type: 'new_customer',
-      marketing_source: 'google_ads'
+      marketing_source: 'mapping_test'
     }
 
-    console.log('🧪 TEST: Sending SIMPLIFIED mock data to GHL webhook')
+    console.log('🧪 TEST: Sending EXACT MAPPING FORMAT to GHL webhook')
     console.log('📧 Email being sent:', mockWebhookData.email)
     console.log('📱 Phone being sent:', mockWebhookData.phone)
     console.log('📋 Full payload:', JSON.stringify(mockWebhookData, null, 2))
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     if (response.ok) {
       return NextResponse.json({
         success: true,
-        message: 'Mock webhook sent successfully to GHL',
+        message: 'EXACT MAPPING webhook sent successfully to GHL',
         ghlResponse: {
           status: response.status,
           body: responseText
