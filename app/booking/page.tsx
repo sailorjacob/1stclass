@@ -21,6 +21,43 @@ import { format } from "date-fns"
 import "../calendar-styles.css"
 import { Checkbox } from "@/components/ui/checkbox"
 
+// Add Formspree form submission function
+const submitToFormspree = async (data: any) => {
+  try {
+    const formData = new FormData()
+    
+    // Add all the booking session data
+    formData.append('Studio', data.studio)
+    formData.append('Date', data.date)
+    formData.append('Time', data.time)
+    formData.append('Duration', data.duration)
+    formData.append('Engineer', data.engineer === 'yes' ? 'Included' : 'Not included')
+    formData.append('Project Type', data.projectType || 'Not specified')
+    formData.append('Message', data.message || 'No message')
+    formData.append('Customer Name', data.name)
+    formData.append('Customer Email', data.email)
+    formData.append('Customer Phone', data.phone)
+    formData.append('SMS Consent', data.smsConsent ? 'Yes' : 'No')
+    formData.append('Promotional Consent', data.promotionalConsent ? 'Yes' : 'No')
+    formData.append('Booking Source', 'Website')
+    formData.append('Form Type', 'Studio Booking')
+    
+    // Submit to Formspree
+    await fetch('https://formspree.io/f/xjkebeea', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    
+    console.log('✅ Booking data sent to Formspree successfully')
+  } catch (error) {
+    console.error('❌ Failed to send to Formspree:', error)
+    // Don't block the flow if Formspree fails
+  }
+}
+
 type BookingStep = 'studio-selection' | 'calendar' | 'contact-info' | 'checkout' | 'confirmation'
 
 export default function BookingPage() {
@@ -132,6 +169,20 @@ export default function BookingPage() {
       })
 
       if (response.ok) {
+        // Backup Formspree submission after successful payment
+        try {
+          await submitToFormspree({
+            ...formData,
+            paymentIntentId,
+            totalAmount,
+            depositAmount,
+            status: 'Payment Confirmed'
+          })
+        } catch (formspreeError) {
+          console.error('Formspree backup submission failed:', formspreeError)
+          // Don't block the success flow
+        }
+        
         setPaymentIntentId(paymentIntentId)
         setBookingConfirmed(true)
         setCurrentStep('confirmation')
@@ -510,11 +561,19 @@ export default function BookingPage() {
                       <Button
                         type="submit"
                         className="flex-1 bg-white text-black hover:bg-gray-100"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           if (!formData.smsConsent) {
                             e.preventDefault()
                             alert('Please check the SMS consent box to continue')
+                            return
                           }
+                          
+                          // Submit to Formspree before proceeding to payment
+                          await submitToFormspree(formData)
+                          
+                          // Continue with normal flow
+                          setCurrentStep('checkout')
+                          setShowCheckout(true)
                         }}
                       >
                         Continue to Payment
