@@ -41,6 +41,7 @@ export default function BookingPage() {
     projectType: "",
     message: "",
     smsConsent: false,
+    promotionalConsent: false,
   })
 
   // Calendar selection state
@@ -163,6 +164,7 @@ export default function BookingPage() {
       projectType: "",
       message: "",
       smsConsent: false,
+      promotionalConsent: false,
     })
     setSelectedTimeSlot(null)
     setShowCheckout(false)
@@ -452,37 +454,9 @@ export default function BookingPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-3">
-                      <Label className="text-white/80 font-light tracking-wider">PROJECT TYPE</Label>
-                      <Select
-                        value={formData.projectType}
-                        onValueChange={(value) => handleInputChange("projectType", value)}
-                      >
-                        <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                          <SelectValue placeholder="Select project type (optional)" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-neutral-800/95 border-white/20">
-                          <SelectItem value="recording" className="text-white">Recording Session</SelectItem>
-                          <SelectItem value="mixing" className="text-white">Mixing</SelectItem>
-                          <SelectItem value="mastering" className="text-white">Mastering</SelectItem>
-                          <SelectItem value="podcast" className="text-white">Podcast</SelectItem>
-                          <SelectItem value="other" className="text-white">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
 
-                    <div className="space-y-3">
-                      <Label htmlFor="message" className="text-white/80 font-light tracking-wider">
-                        ADDITIONAL NOTES
-                      </Label>
-                      <Textarea
-                        id="message"
-                        value={formData.message}
-                        onChange={(e) => handleInputChange("message", e.target.value)}
-                        placeholder="Any special requirements or questions..."
-                        className="bg-white/5 border-white/20 text-white min-h-[100px]"
-                      />
-                    </div>
+
+
 
                     {/* SMS Consent */}
                     <div className="space-y-2">
@@ -497,7 +471,25 @@ export default function BookingPage() {
                           className="mt-1 border-white/40 data-[state=checked]:bg-white data-[state=checked]:text-black"
                         />
                         <label htmlFor="sms-consent" className="text-xs text-white/80 leading-relaxed">
-                          Consent to Receive SMS Notifications, Alerts & Occasional Marketing Communication from 1st Class Studios. Message frequency varies. Message & data rates may apply. Text HELP to (475) 229-9564 for assistance. You can reply STOP to unsubscribe at any time.
+                          By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested. These messages may include appointment reminders, order confirmations, and account notifications among others. Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Promotional Consent */}
+                    <div className="space-y-2">
+                      <div className="flex items-start space-x-3">
+                        <Checkbox
+                          id="promotional-consent"
+                          checked={formData.promotionalConsent}
+                          onCheckedChange={(checked) => {
+                            const isChecked = checked === true
+                            handleBooleanChange('promotionalConsent', isChecked)
+                          }}
+                          className="mt-1 border-white/40 data-[state=checked]:bg-white data-[state=checked]:text-black"
+                        />
+                        <label htmlFor="promotional-consent" className="text-xs text-white/80 leading-relaxed">
+                          By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, new product updates among others. Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
                         </label>
                       </div>
                       <p className="text-[11px] text-white/60 pl-7">

@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       projectType: metadata.projectType || undefined,
       message: metadata.message || undefined,
       smsConsent: metadata.smsConsent === 'yes',
+      promotionalConsent: metadata.promotionalConsent === 'yes',
     }
 
     // Create booking record

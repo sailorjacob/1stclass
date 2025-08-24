@@ -25,6 +25,7 @@ const createBookingSchema = z.object({
   projectType: z.string().optional(),
   message: z.string().optional(),
   smsConsent: z.boolean().optional(),
+  promotionalConsent: z.boolean().optional(),
 })
 
 export async function GET(request: NextRequest) {

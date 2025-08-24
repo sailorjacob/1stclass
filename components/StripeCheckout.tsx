@@ -69,6 +69,7 @@ interface BookingData {
   projectType?: string
   message?: string
   smsConsent?: boolean
+  promotionalConsent?: boolean
 }
 
 interface StripeCheckoutProps {
