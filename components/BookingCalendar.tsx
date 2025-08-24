@@ -56,6 +56,12 @@ const MobileTimeSlotPicker: React.FC<{
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedTime, setSelectedTime] = useState<string>('')
 
+  // Check if selected date is today
+  const isToday = useMemo(() => {
+    const today = new Date()
+    return isSameDay(selectedDate, today)
+  }, [selectedDate])
+
   // Generate time slots for the selected date
   const timeSlots = useMemo(() => {
     const slots = []
@@ -148,16 +154,18 @@ const MobileTimeSlotPicker: React.FC<{
         </Button>
       </div>
 
-      {/* Quick Date Navigation */}
-      <div className="today-button">
-        <Button
-          size="sm"
-          onClick={() => handleDateChange(new Date())}
-          className="text-white border-white/20 hover:bg-white/10 border bg-transparent text-xs px-3 py-1"
-        >
-          Today
-        </Button>
-      </div>
+      {/* Quick Date Navigation - Only show if not on today */}
+      {!isToday && (
+        <div className="today-button">
+          <Button
+            size="sm"
+            onClick={() => handleDateChange(new Date())}
+            className="text-white border-white/20 hover:bg-white/10 border bg-transparent text-xs px-3 py-1"
+          >
+            Today
+          </Button>
+        </div>
+      )}
 
       {/* Time Slots Grid */}
       <div className="time-slot-grid">
@@ -584,6 +592,9 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
 
 // Custom toolbar component with mobile optimization
 const CustomToolbar = ({ date, onNavigate, view, onView, label, isMobile }: any) => {
+  // Check if current date is today
+  const isToday = isSameDay(date, new Date())
+
   if (isMobile) {
     return (
       <div className="rbc-toolbar bg-black/20 p-3 border-b border-white/10">
@@ -611,16 +622,18 @@ const CustomToolbar = ({ date, onNavigate, view, onView, label, isMobile }: any)
             </Button>
           </div>
 
-          {/* Quick Actions */}
-          <div className="flex justify-center space-x-2">
-            <Button
-              size="sm"
-              onClick={() => onNavigate('TODAY')}
-              className="text-white border-white/20 hover:bg-white/10 border bg-transparent text-xs px-3 py-1"
-            >
-              Today
-            </Button>
-          </div>
+          {/* Quick Actions - Only show Today button if not on today */}
+          {!isToday && (
+            <div className="flex justify-center space-x-2">
+              <Button
+                size="sm"
+                onClick={() => onNavigate('TODAY')}
+                className="text-white border-white/20 hover:bg-white/10 border bg-transparent text-xs px-3 py-1"
+              >
+                Today
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -638,13 +651,15 @@ const CustomToolbar = ({ date, onNavigate, view, onView, label, isMobile }: any)
           >
             Previous
           </Button>
-          <Button
-            size="sm"
-            onClick={() => onNavigate('TODAY')}
-            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
-          >
-            Today
-          </Button>
+          {!isToday && (
+            <Button
+              size="sm"
+              onClick={() => onNavigate('TODAY')}
+              className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
+            >
+              Today
+            </Button>
+          )}
           <Button
             size="sm"
             onClick={() => onNavigate('NEXT')}
