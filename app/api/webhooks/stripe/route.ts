@@ -108,10 +108,16 @@ export async function POST(request: NextRequest) {
               with_engineer: metadata.withEngineer === 'yes' ? 'true' : 'false',
               studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
               sms_consent: metadata.smsConsent === 'yes' ? 'Yes' : 'No',
+              promotional_consent: metadata.promotionalConsent === 'yes' ? 'Yes' : 'No',
               payment_confirmation_id: paymentIntent.id,
               booking_source: 'Website',
               client_type: 'new_customer',
-              marketing_source: 'studio_website'
+              marketing_source: 'studio_website',
+              // Additional fields for automation triggers
+              automation_trigger: 'payment_successful',
+              booking_complete: 'true',
+              payment_status: 'deposit_paid',
+              consent_status: `${metadata.smsConsent === 'yes' ? 'SMS_Consented' : 'SMS_Not_Consented'}_${metadata.promotionalConsent === 'yes' ? 'Promo_Consented' : 'Promo_Not_Consented'}`
             }
             
             console.log('🚀 Sending to GHL webhook with EXACT MAPPING FORMAT:')
@@ -122,6 +128,10 @@ export async function POST(request: NextRequest) {
             console.log('  - engineer_assigned:', webhookData.engineer_assigned)
             console.log('  - room_booked:', webhookData.room_booked)
             console.log('  - firstName:', webhookData.firstName)
+            console.log('  - sms_consent:', webhookData.sms_consent)
+            console.log('  - promotional_consent:', webhookData.promotional_consent)
+            console.log('  - automation_trigger:', webhookData.automation_trigger)
+            console.log('  - consent_status:', webhookData.consent_status)
             
             // Send as application/x-www-form-urlencoded for Website to CRM Webhook compatibility
             const formBody = new URLSearchParams()

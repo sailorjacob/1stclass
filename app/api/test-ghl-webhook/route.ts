@@ -43,10 +43,16 @@ export async function POST(request: NextRequest) {
       with_engineer: 'true',
       studio_display_name: 'TERMINAL B',
       sms_consent: 'Yes',
+      promotional_consent: 'Yes',
       payment_confirmation_id: `pi_test_mapping_${Date.now()}`,
       booking_source: 'Website',
       client_type: 'new_customer',
-      marketing_source: 'mapping_test'
+      marketing_source: 'mapping_test',
+      // Additional fields for automation triggers
+      automation_trigger: 'payment_successful',
+      booking_complete: 'true',
+      payment_status: 'deposit_paid',
+      consent_status: 'SMS_Consented_Promo_Consented'
     }
 
     console.log('🧪 TEST: Sending EXACT MAPPING FORMAT to GHL webhook')
