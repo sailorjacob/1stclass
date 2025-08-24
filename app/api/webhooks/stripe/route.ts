@@ -78,20 +78,14 @@ export async function POST(request: NextRequest) {
             const remainingBalance = totalAmount - depositAmount
             
             const webhookData = {
-              // Core contact fields - try ALL possible formats for GHL compatibility
+              // EXACT MAPPING FORMAT that just worked perfectly in our test
               email: metadata.customerEmail,
               phone: metadata.customerPhone,
-              'contact.email': metadata.customerEmail,
-              'contact.phone': metadata.customerPhone,
               firstName: metadata.customerName.split(' ')[0],
               lastName: metadata.customerName.split(' ').slice(1).join(' ') || '',
-              first_name: metadata.customerName.split(' ')[0],
-              last_name: metadata.customerName.split(' ').slice(1).join(' ') || '',
-              'contact.first_name': metadata.customerName.split(' ')[0],
-              'contact.last_name': metadata.customerName.split(' ').slice(1).join(' ') || '',
               name: metadata.customerName,
               
-              // Custom booking fields (matching your automation mappings)
+              // EXACT keys from your working webhook test
               booking_date: metadata.bookingDate,
               booking_time: metadata.bookingTime,
               engineer_assigned: metadata.withEngineer === 'yes' ? metadata.engineerName || 'TBD' : 'No Engineer',
@@ -99,31 +93,35 @@ export async function POST(request: NextRequest) {
               session_duration: `${metadata.durationHours} hours`,
               stripe_payment_id: paymentIntent.id,
               
-              // Additional comprehensive fields
+              // EXACT format from your working test
               appointment_start: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               booking_datetime: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               session_start_time: `${metadata.bookingDate}T${metadata.bookingTime}:00`,
               session_end_time: new Date(new Date(`${metadata.bookingDate}T${metadata.bookingTime}:00`).getTime() + parseInt(metadata.durationHours) * 60 * 60 * 1000).toISOString(),
-              total_session_cost: totalAmount,
-              deposit_amount: depositAmount,
-              remaining_balance: remainingBalance,
+              total_session_cost: totalAmount.toString(),
+              deposit_amount: depositAmount.toString(),
+              remaining_balance: remainingBalance.toString(),
               deposit_date: depositDate,
               project_type: metadata.projectType || 'Not specified',
               customer_message: metadata.message || 'No message',
               booking_status: 'confirmed',
-              with_engineer: metadata.withEngineer === 'yes',
+              with_engineer: metadata.withEngineer === 'yes' ? 'true' : 'false',
               studio_display_name: metadata.studio.replace('-', ' ').toUpperCase(),
               sms_consent: metadata.smsConsent === 'yes' ? 'Yes' : 'No',
               payment_confirmation_id: paymentIntent.id,
+              booking_source: 'Website',
+              client_type: 'new_customer',
+              marketing_source: 'studio_website'
             }
             
-            console.log('🚀 Sending to GHL webhook:', JSON.stringify(webhookData, null, 2))
+            console.log('🚀 Sending to GHL webhook with EXACT MAPPING FORMAT:')
+            console.log('📋 Full webhook payload:', JSON.stringify(webhookData, null, 2))
             console.log('🔗 Webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
             console.log('📋 Key fields being sent:')
             console.log('  - booking_time:', webhookData.booking_time)
             console.log('  - engineer_assigned:', webhookData.engineer_assigned)
             console.log('  - room_booked:', webhookData.room_booked)
-            console.log('  - first_name:', webhookData.first_name)
+            console.log('  - firstName:', webhookData.firstName)
             
             // Send as application/x-www-form-urlencoded for Website to CRM Webhook compatibility
             const formBody = new URLSearchParams()
