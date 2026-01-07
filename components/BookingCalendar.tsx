@@ -545,8 +545,8 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
                 selectable
                 step={60}
                 timeslots={1}
-                min={setHours(setMinutes(new Date(), 0), BUSINESS_HOURS.start)}
-                max={setHours(setMinutes(new Date(), 59), BUSINESS_HOURS.end === 24 ? 23 : BUSINESS_HOURS.end)}
+                min={new Date(new Date().setHours(BUSINESS_HOURS.start, 0, 0, 0))}
+                max={new Date(new Date().setHours(23, 59, 59, 999))}
                 dayLayoutAlgorithm="no-overlap"
                 slotPropGetter={slotStyleGetter}
                 eventPropGetter={eventStyleGetter}
