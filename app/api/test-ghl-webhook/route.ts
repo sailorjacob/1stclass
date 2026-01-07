@@ -2,63 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Mock booking data - EXACT format from GHL webhook reference
-    const today = new Date()
-    const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 7) // Book for next week
-    const bookingDate = tomorrow.toISOString().split('T')[0]
+    // Get the actual data sent to us instead of using hardcoded test data
+    const requestData = await request.json()
     
-    // EXACT MAPPING FORMAT from your GHL webhook reference
-    const mockWebhookData = {
-      email: 'test.mapping@example.com',
-      phone: '+1-555-123-4567',
-      firstName: 'Test',
-      lastName: 'Mapping',
-      name: 'Test Mapping',
-      
-      // Booking details (EXACT keys from your reference)
-      booking_date: bookingDate,
-      booking_time: '3:30 PM',
-      engineer_assigned: 'Test Engineer',
-      room_booked: 'terminal-b',
-      session_duration: '4 hours',
-      stripe_payment_id: `pi_test_mapping_${Date.now()}`,
-      
-      // DateTime fields (EXACT format from reference)
-      appointment_start: `${bookingDate}T15:30:00`,
-      booking_datetime: `${bookingDate}T15:30:00`,
-      session_start_time: `${bookingDate}T15:30:00`,
-      session_end_time: `${bookingDate}T19:30:00`,
-      
-      // Financial fields (EXACT keys from reference)
-      total_session_cost: '320',
-      deposit_amount: '160',
-      remaining_balance: '160',
-      deposit_date: new Date().toISOString().split('T')[0],
-      
-      // Additional fields (EXACT keys from reference)
-      project_type: 'Mapping Test Session',
-      customer_message: 'Testing exact webhook mapping format from reference',
-      booking_status: 'confirmed',
-      with_engineer: 'true',
-      studio_display_name: 'TERMINAL B',
-      sms_consent: 'Yes',
-      promotional_consent: 'Yes',
-      payment_confirmation_id: `pi_test_mapping_${Date.now()}`,
-      booking_source: 'Website',
-      client_type: 'new_customer',
-      marketing_source: 'mapping_test',
-      // Additional fields for automation triggers
-      automation_trigger: 'payment_successful',
-      booking_complete: 'true',
-      payment_status: 'deposit_paid',
-      consent_status: 'SMS_Consented_Promo_Consented'
-    }
-
-    console.log('🧪 TEST: Sending EXACT MAPPING FORMAT to GHL webhook')
-    console.log('📧 Email being sent:', mockWebhookData.email)
-    console.log('📱 Phone being sent:', mockWebhookData.phone)
-    console.log('📋 Full payload:', JSON.stringify(mockWebhookData, null, 2))
+    console.log('🧪 TEST: Using ACTUAL DATA sent to webhook instead of hardcoded test data')
+    console.log('📧 Email being sent:', requestData.email)
+    console.log('📱 Phone being sent:', requestData.phone)
+    console.log('📋 Full payload:', JSON.stringify(requestData, null, 2))
     console.log('🔗 Target webhook URL:', process.env.GOHIGHLEVEL_WEBHOOK_URL)
 
     if (!process.env.GOHIGHLEVEL_WEBHOOK_URL) {
@@ -70,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Send as application/x-www-form-urlencoded to match Website to CRM Webhook
     const formBody = new URLSearchParams()
-    Object.entries(mockWebhookData).forEach(([key, value]) => {
+    Object.entries(requestData).forEach(([key, value]) => {
       formBody.append(key, String(value))
     })
     const response = await fetch(process.env.GOHIGHLEVEL_WEBHOOK_URL, {
@@ -92,14 +42,14 @@ export async function POST(request: NextRequest) {
           status: response.status,
           body: responseText
         },
-        mockData: mockWebhookData
+        mockData: requestData
       })
     } else {
       return NextResponse.json({
         error: 'GHL webhook failed',
         status: response.status,
         response: responseText,
-        mockData: mockWebhookData
+        mockData: requestData
       }, { status: 500 })
     }
 

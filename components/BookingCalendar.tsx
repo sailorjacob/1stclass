@@ -404,13 +404,16 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
       return
     }
 
-    // Check business hours
-    const startHour = start.getHours()
-    const endHour = end.getHours()
-    if (startHour < BUSINESS_HOURS.start || endHour > BUSINESS_HOURS.end) {
-      const message = 'Please select a time within business hours (9 AM - 9 PM)'
-      alert(message)
-      return
+    // Check business hours (only if not 24/7 operation)
+    const is24HourOperation = BUSINESS_HOURS.start === 0 && BUSINESS_HOURS.end === 24
+    if (!is24HourOperation) {
+      const startHour = start.getHours()
+      const endHour = end.getHours()
+      if (startHour < BUSINESS_HOURS.start || endHour > BUSINESS_HOURS.end) {
+        const message = `Please select a time within business hours (${BUSINESS_HOURS.start}:00 - ${BUSINESS_HOURS.end}:00)`
+        alert(message)
+        return
+      }
     }
 
     // Check availability
@@ -543,7 +546,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
                 step={60}
                 timeslots={1}
                 min={setHours(setMinutes(new Date(), 0), BUSINESS_HOURS.start)}
-                max={setHours(setMinutes(new Date(), 0), BUSINESS_HOURS.end)}
+                max={setHours(setMinutes(new Date(), 59), BUSINESS_HOURS.end === 24 ? 23 : BUSINESS_HOURS.end)}
                 dayLayoutAlgorithm="no-overlap"
                 slotPropGetter={slotStyleGetter}
                 eventPropGetter={eventStyleGetter}

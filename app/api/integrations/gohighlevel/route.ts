@@ -137,7 +137,7 @@ Status: Confirmed & Deposit Paid
       projectType: validatedData.projectType
     })
 
-    // OPTIMIZED WORKING FORMAT - pack maximum info into fields that work!
+    // EXACT MAPPING FORMAT - Same format that just worked perfectly in webhook test!
     const workingPayload = {
       locationId,
       firstName: validatedData.firstName,
@@ -145,19 +145,47 @@ Status: Confirmed & Deposit Paid
       email: validatedData.email,
       phone: validatedData.phone,
       
-      // PROVEN WORKING FIELDS - using shared formatting utility
-      
-      // Address1: Session date, time, and studio (readable format)
-      address1: `${bookingSummary.addressFieldContent} 🏢 ${validatedData.roomBooked.toUpperCase()}`,
-      
-      // City: Engineer assignment (for routing logic)
-      city: `Engineer: ${validatedData.engineerAssigned}`,
-      
-      // Website: Comprehensive session details with readable date/time for communications
-      website: bookingSummary.websiteFieldContent,
-      
-      // Company Name: Payment tracking + booking source
-      companyName: `Payment: ${validatedData.paymentConfirmationId} | Source: Website | Status: Confirmed`,
+      // EXACT MAPPING FORMAT - Same fields that work in webhook
+      customFields: {
+        // EXACT keys from your working webhook test
+        booking_date: validatedData.bookingDate,
+        booking_time: validatedData.bookingTime,
+        engineer_assigned: validatedData.engineerAssigned,
+        room_booked: validatedData.roomBooked,
+        session_duration: validatedData.duration ? `${validatedData.duration} hours` : 'Not specified',
+        stripe_payment_id: validatedData.paymentConfirmationId,
+        
+        // EXACT format from your working test
+        appointment_start: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+        booking_datetime: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+        session_start_time: `${validatedData.bookingDate}T${validatedData.bookingTime}:00`,
+        session_end_time: new Date(new Date(`${validatedData.bookingDate}T${validatedData.bookingTime}:00`).getTime() + (validatedData.duration || 1) * 60 * 60 * 1000).toISOString(),
+        
+        // Financial fields - EXACT keys from reference
+        total_session_cost: validatedData.totalPrice.toString(),
+        deposit_amount: (validatedData.depositAmount || Math.floor(validatedData.totalPrice * 0.5)).toString(),
+        remaining_balance: (validatedData.remainingBalance || Math.floor(validatedData.totalPrice * 0.5)).toString(),
+        deposit_date: new Date().toISOString().split('T')[0],
+        
+        // Additional fields - EXACT keys from reference
+        project_type: validatedData.projectType || 'Not specified',
+        customer_message: validatedData.message || 'No message',
+        booking_status: 'confirmed',
+        with_engineer: validatedData.engineerAssigned !== 'No Engineer' ? 'true' : 'false',
+        studio_display_name: validatedData.roomBooked.replace('-', ' ').toUpperCase(),
+        sms_consent: 'Yes', // Default since we don't have this in API path
+        promotional_consent: 'No', // Default since we don't have this in API path
+        payment_confirmation_id: validatedData.paymentConfirmationId,
+        booking_source: 'Website',
+        client_type: 'new_customer',
+        marketing_source: 'studio_website',
+        
+        // Automation trigger fields - EXACT keys from reference
+        automation_trigger: 'payment_successful',
+        booking_complete: 'true',
+        payment_status: 'deposit_paid',
+        consent_status: 'SMS_Consented_Promo_Not_Consented'
+      },
       
       // Tags for automation triggers and logic
       tags: [
@@ -174,7 +202,7 @@ Status: Confirmed & Deposit Paid
       source: 'Studio Booking System'
     }
 
-    console.log('Using EXACT WORKING payload:', JSON.stringify(workingPayload, null, 2))
+    console.log('Using EXACT MAPPING FORMAT payload:', JSON.stringify(workingPayload, null, 2))
 
     // Use v1 API with exact format that worked before
     const response = await axios.post(

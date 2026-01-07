@@ -16,8 +16,8 @@ export const ROOM_ENGINEERS = {
 
 // Business hours configuration
 export const BUSINESS_HOURS = {
-  start: 9, // 9 AM
-  end: 21, // 9 PM
+  start: 0, // 12 AM (midnight)
+  end: 24, // 12 AM next day (24 hours)
   daysOpen: [1, 2, 3, 4, 5, 6, 0], // Mon-Sun (0 = Sunday)
 }
 
