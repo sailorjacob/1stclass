@@ -200,9 +200,17 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
 }) => {
   const isMobile = useIsMobile()
   
-  // Mobile-optimized view: default to day view on mobile, week view on desktop
-  const [view, setView] = useState(isMobile ? Views.DAY : Views.WEEK)
+  // Default to DAY view for cleaner experience (no wasted space on past dates)
+  const [view, setView] = useState(Views.DAY)
   const [date, setDate] = useState(new Date())
+  
+  // Scroll to current time on load
+  const scrollToTime = useMemo(() => {
+    const now = new Date()
+    // Show 1 hour before current time for context
+    now.setHours(now.getHours() - 1)
+    return now
+  }, [])
   const [selectedSlot, setSelectedSlot] = useState<{
     start: Date
     end: Date
@@ -484,7 +492,8 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
                 dayLayoutAlgorithm="no-overlap"
                 slotPropGetter={slotStyleGetter}
                 eventPropGetter={eventStyleGetter}
-                views={isMobile ? [Views.DAY] : [Views.WEEK, Views.DAY]}
+                views={isMobile ? [Views.DAY] : [Views.DAY, Views.WEEK]}
+                scrollToTime={scrollToTime}
                 formats={{
                   timeGutterFormat: 'h:mm A',
                   // Cast to any to avoid type issues from react-big-calendar typings in this project setup
@@ -519,104 +528,73 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   )
 }
 
-// Custom toolbar component with mobile optimization
-const CustomToolbar = ({ date, onNavigate, view, onView, label, isMobile }: any) => {
-  // Check if current date is today
+// Custom toolbar component - clean minimal design
+const CustomToolbar = ({ date, onNavigate, view, onView, isMobile }: any) => {
   const isToday = isSameDay(date, new Date())
+  
+  // Format date based on view
+  const dateLabel = view === Views.DAY 
+    ? format(date, 'EEEE, MMMM d')
+    : `${format(date, 'MMM d')} - ${format(addDays(date, 6), 'MMM d')}`
 
-  if (isMobile) {
-    return (
-      <div className="rbc-toolbar bg-black/20 p-3 border-b border-white/10">
-        <div className="flex flex-col space-y-3">
-          {/* Date Navigation */}
-          <div className="flex justify-between items-center">
-            <Button
-              size="sm"
-              onClick={() => onNavigate('PREV')}
-              className="text-white border-white/20 hover:bg-white/10 border bg-transparent p-2"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            
-            <span className="text-white text-base font-light tracking-wider text-center flex-1">
-              {format(date, 'EEEE, MMMM d')}
-            </span>
-            
-            <Button
-              size="sm"
-              onClick={() => onNavigate('NEXT')}
-              className="text-white border-white/20 hover:bg-white/10 border bg-transparent p-2"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
-
-          {/* Quick Actions - Only show Today button if not on today */}
-          {!isToday && (
-            <div className="flex justify-center space-x-2">
-              <Button
-                size="sm"
-                onClick={() => onNavigate('TODAY')}
-                className="text-white border-white/20 hover:bg-white/10 border bg-transparent text-xs px-3 py-1"
-              >
-                Today
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  // Desktop toolbar
   return (
-    <div className="rbc-toolbar bg-black/20 p-4 border-b border-white/10">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <Button
-            size="sm"
-            onClick={() => onNavigate('PREV')}
-            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
+    <div className="flex items-center justify-between gap-4 mb-4">
+      {/* Left: Navigation */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onNavigate('PREV')}
+          className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        
+        {!isToday && (
+          <button
+            onClick={() => onNavigate('TODAY')}
+            className="px-3 py-1.5 text-sm rounded-lg bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 transition-colors"
           >
-            Previous
-          </Button>
-          {!isToday && (
-            <Button
-              size="sm"
-              onClick={() => onNavigate('TODAY')}
-              className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
-            >
-              Today
-            </Button>
-          )}
-          <Button
-            size="sm"
-            onClick={() => onNavigate('NEXT')}
-            className="text-white border-white/20 hover:bg-white/10 border bg-transparent"
-          >
-            Next
-          </Button>
-        </div>
+            Today
+          </button>
+        )}
+        
+        <button
+          onClick={() => onNavigate('NEXT')}
+          className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
 
-        <span className="text-white text-lg font-light tracking-wider">{label}</span>
+      {/* Center: Date Label */}
+      <span className="text-white font-medium text-lg">
+        {dateLabel}
+      </span>
 
-        <div className="flex space-x-2">
-          <Button
-            size="sm"
-            onClick={() => onView(Views.WEEK)}
-            className={view === Views.WEEK ? 'bg-white/20 text-white border-white/50 border' : 'text-white border-white/20 hover:bg-white/10 border bg-transparent'}
-          >
-            Week
-          </Button>
-          <Button
-            size="sm"
+      {/* Right: View Switcher (desktop only) */}
+      {!isMobile && (
+        <div className="flex bg-white/5 rounded-lg p-1">
+          <button
             onClick={() => onView(Views.DAY)}
-            className={view === Views.DAY ? 'bg-white/20 text-white border-white/50 border' : 'text-white border-white/20 hover:bg-white/10 border bg-transparent'}
+            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
+              view === Views.DAY 
+                ? 'bg-orange-500 text-white' 
+                : 'text-white/60 hover:text-white'
+            }`}
           >
             Day
-          </Button>
+          </button>
+          <button
+            onClick={() => onView(Views.WEEK)}
+            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
+              view === Views.WEEK 
+                ? 'bg-orange-500 text-white' 
+                : 'text-white/60 hover:text-white'
+            }`}
+          >
+            Week
+          </button>
         </div>
-      </div>
+      )}
     </div>
   )
 } 
