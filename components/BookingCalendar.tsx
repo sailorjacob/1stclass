@@ -200,8 +200,8 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
 }) => {
   const isMobile = useIsMobile()
   
-  // Default to DAY view for cleaner experience (no wasted space on past dates)
-  const [view, setView] = useState(Views.DAY)
+  // Default to WEEK view for better overview
+  const [view, setView] = useState(Views.WEEK)
   const [date, setDate] = useState(new Date())
   
   // Scroll to current time on load
@@ -317,18 +317,36 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     })
   }
 
-  // Custom slot style based on availability
+  // Check if a slot is within the selected range
+  const isSlotSelected = (slotDate: Date) => {
+    if (!selectedSlot) return false
+    const slotTime = slotDate.getTime()
+    return slotTime >= selectedSlot.start.getTime() && slotTime < selectedSlot.end.getTime()
+  }
+
+  // Custom slot style based on availability and selection
   const slotStyleGetter = (date: Date) => {
     const hour = date.getHours()
     const isBusinessHour = hour >= BUSINESS_HOURS.start && hour < BUSINESS_HOURS.end
     const now = new Date()
     const isPast = date < now
+    const isSelected = isSlotSelected(date)
+
+    // Selected slots get special treatment
+    if (isSelected) {
+      return {
+        className: 'rbc-selected-slot',
+        style: {
+          backgroundColor: '#F97316',
+        },
+      }
+    }
 
     if (!isBusinessHour || isPast) {
       return {
         className: 'rbc-unavailable-slot',
         style: {
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
           cursor: 'not-allowed',
         },
       }
@@ -343,7 +361,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         return {
           className: 'rbc-booked-slot',
           style: {
-            backgroundColor: 'rgba(75, 85, 99, 0.5)',
+            backgroundColor: 'rgba(80, 80, 80, 0.4)',
           },
         }
       }
@@ -352,7 +370,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     return {
       className: 'rbc-available-slot',
       style: {
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+        backgroundColor: 'transparent',
       },
     }
   }
