@@ -13,7 +13,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { StripeCheckout } from "@/components/StripeCheckout"
-import { BookingCalendar } from "@/components/BookingCalendar"
+import { SimpleTimeSlotPicker } from "@/components/SimpleTimeSlotPicker"
 import { ROOM_ENGINEERS, ROOM_COLORS, Booking } from "@/lib/booking-config"
 import { STUDIO_PRICING, calculateBookingTotal, calculateDeposit } from "@/lib/stripe"
 import { format } from "date-fns"
@@ -351,84 +351,76 @@ export default function BookingPage() {
                 </CardContent>
               </Card>
 
-              {/* Calendar Section */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-white font-medium text-lg">Select Your Start Time</h3>
-                  {selectedTimeSlot && (
-                    <button
-                      onClick={() => setSelectedTimeSlot(null)}
-                      className="text-sm text-white/50 hover:text-white"
-                    >
-                      Clear selection
-                    </button>
-                  )}
-                </div>
-                
-                <BookingCalendar
-                  onSlotSelect={(slot) => {
-                    // Don't auto-navigate, just set the selection
-                    setSelectedTimeSlot({
-                      date: slot.date,
-                      startTime: slot.startTime,
-                      endTime: slot.endTime,
-                      engineerName: slot.engineerName,
-                    })
-                    setFormData(prev => ({
-                      ...prev,
-                      date: format(slot.date, 'yyyy-MM-dd'),
-                      time: slot.startTime,
-                      duration: slot.duration.toString(),
-                    }))
-                  }}
-                  existingBookings={existingBookings}
-                  selectedStudio={formData.studio}
-                  selectedDuration={formData.duration}
-                  withEngineer={withEngineer}
-                />
-
-                {/* Selection Confirmation Card */}
-                {selectedTimeSlot && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl"
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                      <div className="flex-1">
-                        <p className="text-orange-400 font-medium mb-1">Your Selection</p>
-                        <p className="text-white">
-                          {format(selectedTimeSlot.date, 'EEEE, MMMM d')} at {selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}
-                        </p>
-                        <p className="text-white/60 text-sm">{currentStudio?.name} • ${totalAmount} total</p>
-                      </div>
-                      <Button
-                        onClick={() => setCurrentStep('contact-info')}
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-8"
+              {/* Time Slot Selection */}
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-4 md:p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-white font-medium text-lg">Select Your Start Time</h3>
+                    {selectedTimeSlot && (
+                      <button
+                        onClick={() => setSelectedTimeSlot(null)}
+                        className="text-sm text-orange-400 hover:text-orange-300"
                       >
-                        Continue
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  
+                  <SimpleTimeSlotPicker
+                    onSlotSelect={(slot) => {
+                      setSelectedTimeSlot({
+                        date: slot.date,
+                        startTime: slot.startTime,
+                        endTime: slot.endTime,
+                        engineerName: slot.engineerName,
+                      })
+                      setFormData(prev => ({
+                        ...prev,
+                        date: format(slot.date, 'yyyy-MM-dd'),
+                        time: slot.startTime,
+                        duration: slot.duration.toString(),
+                      }))
+                    }}
+                    existingBookings={existingBookings}
+                    selectedStudio={formData.studio}
+                    selectedDuration={formData.duration}
+                    withEngineer={withEngineer}
+                  />
+                </CardContent>
+              </Card>
 
-              {/* Quick Info */}
-              <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/50">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded bg-white/10" />
-                  <span>Available</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded bg-gray-600" />
-                  <span>Booked</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4" />
-                  <span>Click a time to book</span>
-                </div>
-              </div>
+              {/* Selection Confirmation - Continue Button */}
+              {selectedTimeSlot && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <Card className="bg-orange-500/10 border-orange-500/40">
+                    <CardContent className="p-4 md:p-6">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div className="flex-1">
+                          <p className="text-white font-medium">
+                            {format(selectedTimeSlot.date, 'EEEE, MMMM d')} 
+                          </p>
+                          <p className="text-white/70">
+                            {selectedTimeSlot.startTime} - {selectedTimeSlot.endTime} • {currentStudio?.name}
+                          </p>
+                          <p className="text-orange-400 font-semibold text-lg mt-1">${totalAmount} total</p>
+                        </div>
+                        <Button
+                          onClick={() => setCurrentStep('contact-info')}
+                          size="lg"
+                          className="bg-orange-500 hover:bg-orange-600 text-white px-10 text-base"
+                        >
+                          Continue to Checkout
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
             </motion.div>
           )}
 
