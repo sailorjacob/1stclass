@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, Clock, Users, Phone, MessageSquare, CheckCircle, ArrowRight, Music } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Calendar, Clock, Users, CheckCircle, ArrowRight, Music, Mic2 } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
@@ -58,11 +57,11 @@ const submitToFormspree = async (data: any) => {
   }
 }
 
-type BookingStep = 'studio-selection' | 'calendar' | 'contact-info' | 'checkout' | 'confirmation'
+type BookingStep = 'booking' | 'contact-info' | 'checkout' | 'confirmation'
 
 export default function BookingPage() {
   // Multi-step form state
-  const [currentStep, setCurrentStep] = useState<BookingStep>('studio-selection')
+  const [currentStep, setCurrentStep] = useState<BookingStep>('booking')
   const [existingBookings, setExistingBookings] = useState<Booking[]>([])
   
   // Form data
@@ -70,11 +69,11 @@ export default function BookingPage() {
     name: "",
     email: "",
     phone: "",
-    studio: "",
+    studio: "terminal-a",
     date: "",
     time: "",
-    duration: "",
-    engineer: "",
+    duration: "2",
+    engineer: "yes",
     projectType: "",
     message: "",
     smsConsent: false,
@@ -109,15 +108,6 @@ export default function BookingPage() {
     }
   }
 
-  const handleStudioSelect = (studio: string, engineer: string, withEngineer: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      studio,
-      engineer: withEngineer ? 'yes' : 'no',
-    }))
-    setCurrentStep('calendar')
-  }
-
   const handleTimeSlotSelect = (slotInfo: {
     studio: string
     date: Date
@@ -141,6 +131,7 @@ export default function BookingPage() {
       duration: slotInfo.duration.toString(),
     }))
     
+    // Auto-advance to contact info
     setCurrentStep('contact-info')
   }
 
@@ -202,16 +193,16 @@ export default function BookingPage() {
   }
 
   const resetBooking = () => {
-    setCurrentStep('studio-selection')
+    setCurrentStep('booking')
     setFormData({
       name: "",
       email: "",
       phone: "",
-      studio: "",
+      studio: "terminal-a",
       date: "",
       time: "",
-      duration: "",
-      engineer: "",
+      duration: "2",
+      engineer: "yes",
       projectType: "",
       message: "",
       smsConsent: false,
@@ -228,27 +219,31 @@ export default function BookingPage() {
   const totalAmount = formData.studio ? calculateBookingTotal(formData.studio as any, duration, withEngineer) : 0
   const depositAmount = calculateDeposit(totalAmount)
 
+  // Get current studio info
+  const currentStudio = STUDIO_PRICING[formData.studio as keyof typeof STUDIO_PRICING]
+  const hourlyRate = withEngineer ? currentStudio?.withEngineer : currentStudio?.withoutEngineer
+
   return (
     <div className="min-h-screen bg-neutral-900">
       <Navigation />
 
-      {/* Progress Bar */}
+      {/* Progress Bar - Simplified */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-sm">
         <div className="container mx-auto px-8 py-4">
           <div className="flex items-center justify-center space-x-2">
-            {['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].map((step, index) => (
+            {['booking', 'contact-info', 'checkout', 'confirmation'].map((step, index) => (
               <React.Fragment key={step}>
                 <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all ${
                   currentStep === step ? 'bg-white text-black' : 
-                  index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
+                  index < ['booking', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
                     ? 'bg-orange-500 text-white' : 'bg-white/20 text-white/60'
                 }`}>
-                  {index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
+                  {index < ['booking', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
                     ? <CheckCircle className="w-4 h-4" /> : index + 1}
                 </div>
-                {index < 4 && (
-                  <div className={`w-16 h-0.5 transition-all ${
-                    index < ['studio-selection', 'calendar', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
+                {index < 3 && (
+                  <div className={`w-12 md:w-16 h-0.5 transition-all ${
+                    index < ['booking', 'contact-info', 'checkout', 'confirmation'].indexOf(currentStep) 
                       ? 'bg-orange-500' : 'bg-white/20'
                   }`} />
                 )}
@@ -259,89 +254,11 @@ export default function BookingPage() {
       </div>
 
       {/* Main Content */}
-      <div className="pt-32 pb-16 px-8">
+      <div className="pt-28 pb-16 px-4 md:px-8">
         <div className="container mx-auto">
-          {/* Step 1: Studio Selection */}
-          {currentStep === 'studio-selection' && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-6xl mx-auto"
-            >
-              <div className="text-center mb-12">
-                <h1 className="text-4xl font-light text-white mb-4 tracking-wider">SELECT YOUR STUDIO</h1>
-                <p className="text-white/70 text-lg">Choose the perfect space for your session</p>
-              </div>
-
-              <div className="grid lg:grid-cols-3 gap-8">
-                {Object.entries(STUDIO_PRICING).map(([studioId, studio]) => {
-                  const roomConfig = ROOM_ENGINEERS[studioId as keyof typeof ROOM_ENGINEERS]
-                  return (
-                    <Card 
-                      key={studioId} 
-                      className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
-                    >
-                      <CardHeader>
-                        <div className="flex items-center justify-between mb-4">
-                          <CardTitle className="text-2xl text-white font-light tracking-wider">
-                            {studio.name}
-                          </CardTitle>
-                          <Badge 
-                            className="text-white"
-                            style={{ backgroundColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS] }}
-                          >
-                            {studio.capacity} people
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-2 text-white/60">
-                          <Music className="w-4 h-4" />
-                          <span>Professional Engineer Included</span>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center py-3 border-b border-white/10">
-                            <span className="text-white/80">With Engineer</span>
-                            <span className="text-xl font-medium text-white">${studio.withEngineer}/hr</span>
-                          </div>
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-white/80">Without Engineer</span>
-                            <span className="text-xl font-medium text-white">${studio.withoutEngineer}/hr</span>
-                          </div>
-                        </div>
-
-                                                 <div className="space-y-3">
-                           <Button
-                             onClick={() => handleStudioSelect(studioId, 'yes', true)}
-                             className="w-full py-6 text-white font-medium"
-                             style={{ backgroundColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS] }}
-                           >
-                             Book with Engineer
-                             <ArrowRight className="w-4 h-4 ml-2" />
-                           </Button>
-                           <Button
-                             onClick={() => handleStudioSelect(studioId, 'no', false)}
-                             className="w-full border-2 bg-transparent text-white hover:bg-white/10 py-6 font-medium"
-                             style={{ 
-                               borderColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS],
-                               color: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS]
-                             }}
-                           >
-                             Book without Engineer
-                             <ArrowRight className="w-4 h-4 ml-2" />
-                           </Button>
-                         </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Step 2: Calendar Selection */}
-          {currentStep === 'calendar' && (
+          
+          {/* Step 1: All-in-One Booking */}
+          {currentStep === 'booking' && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -349,35 +266,87 @@ export default function BookingPage() {
               className="max-w-7xl mx-auto"
             >
               <div className="text-center mb-8">
-                <h1 className="text-4xl font-light text-white mb-4 tracking-wider">CHOOSE YOUR TIME</h1>
-                <p className="text-white/70 text-lg">Select duration and pick an available slot</p>
+                <h1 className="text-3xl md:text-4xl font-light text-white mb-2 tracking-wider">BOOK YOUR SESSION</h1>
+                <p className="text-white/60">Select your studio, options, and time</p>
               </div>
 
-              {/* Duration Selection */}
-              <Card className="bg-white/5 border-white/10 mb-8">
-                <CardHeader>
-                  <CardTitle className="text-white font-light tracking-wider">SESSION DURATION</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {['2', '3', '4', '6'].map(hours => (
-                      <Button
-                        key={hours}
-                        onClick={() => handleInputChange('duration', hours)}
-                        className={formData.duration === hours 
-                          ? 'bg-white/20 text-white border-white/50 border' 
-                          : 'border-white/30 text-white hover:bg-white/10 border bg-transparent'}
-                      >
-                        {hours} Hours
-                        <span className="ml-2 text-sm opacity-70">
-                          ${formData.studio && calculateBookingTotal(
-                            formData.studio as any, 
-                            parseInt(hours), 
-                            withEngineer
-                          )}
+              {/* Booking Controls - All in one row on desktop */}
+              <Card className="bg-white/5 border-white/10 mb-6">
+                <CardContent className="p-4 md:p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+                    
+                    {/* Studio Selection */}
+                    <div>
+                      <Label className="text-white/60 text-xs uppercase tracking-wider mb-3 block">Studio</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(STUDIO_PRICING).map(([studioId, studio]) => (
+                          <button
+                            key={studioId}
+                            onClick={() => handleInputChange('studio', studioId)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                              formData.studio === studioId
+                                ? 'text-white'
+                                : 'bg-white/5 text-white/60 hover:bg-white/10 border border-white/10'
+                            }`}
+                            style={formData.studio === studioId ? { 
+                              backgroundColor: ROOM_COLORS[studioId as keyof typeof ROOM_COLORS] 
+                            } : {}}
+                          >
+                            {studio.name.replace('Terminal ', '')}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Engineer Toggle */}
+                    <div>
+                      <Label className="text-white/60 text-xs uppercase tracking-wider mb-3 block">Engineer</Label>
+                      <div className="flex items-center space-x-3 bg-white/5 rounded-lg p-3 border border-white/10">
+                        <Mic2 className={`w-5 h-5 ${withEngineer ? 'text-orange-500' : 'text-white/40'}`} />
+                        <Switch
+                          checked={withEngineer}
+                          onCheckedChange={(checked) => handleInputChange('engineer', checked ? 'yes' : 'no')}
+                          className="data-[state=checked]:bg-orange-500"
+                        />
+                        <span className="text-white text-sm">
+                          {withEngineer ? 'Included' : 'Not included'}
                         </span>
-                      </Button>
-                    ))}
+                      </div>
+                    </div>
+
+                    {/* Duration Selection */}
+                    <div>
+                      <Label className="text-white/60 text-xs uppercase tracking-wider mb-3 block">Duration</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {['2', '3', '4', '6'].map(hours => (
+                          <button
+                            key={hours}
+                            onClick={() => handleInputChange('duration', hours)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                              formData.duration === hours
+                                ? 'bg-white text-black'
+                                : 'bg-white/5 text-white/60 hover:bg-white/10 border border-white/10'
+                            }`}
+                          >
+                            {hours}hr
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price Display */}
+                    <div>
+                      <Label className="text-white/60 text-xs uppercase tracking-wider mb-3 block">Session Total</Label>
+                      <div className="bg-gradient-to-r from-orange-500/20 to-orange-600/10 rounded-lg p-3 border border-orange-500/30">
+                        <div className="flex items-baseline space-x-2">
+                          <span className="text-2xl md:text-3xl font-bold text-white">${totalAmount}</span>
+                          <span className="text-white/60 text-sm">({duration}hr × ${hourlyRate})</span>
+                        </div>
+                        <div className="text-orange-400 text-sm mt-1">
+                          ${depositAmount} deposit due today
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -391,18 +360,25 @@ export default function BookingPage() {
                 withEngineer={withEngineer}
               />
 
-              <div className="mt-8 text-center">
-                <Button
-                  onClick={() => setCurrentStep('studio-selection')}
-                  className="border-white/30 text-white hover:bg-white/10 border bg-transparent"
-                >
-                  Back to Studio Selection
-                </Button>
+              {/* Quick Info */}
+              <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/50">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded bg-white/10" />
+                  <span>Available</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded bg-gray-600" />
+                  <span>Booked</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4" />
+                  <span>Click a time to book</span>
+                </div>
               </div>
             </motion.div>
           )}
 
-          {/* Step 3: Contact Information */}
+          {/* Step 2: Contact Information */}
           {currentStep === 'contact-info' && selectedTimeSlot && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -411,167 +387,129 @@ export default function BookingPage() {
               className="max-w-2xl mx-auto"
             >
               <div className="text-center mb-8">
-                <h1 className="text-4xl font-light text-white mb-4 tracking-wider">YOUR INFORMATION</h1>
-                <p className="text-white/70 text-lg">We'll need this to confirm your booking</p>
+                <h1 className="text-3xl md:text-4xl font-light text-white mb-2 tracking-wider">YOUR INFORMATION</h1>
+                <p className="text-white/60">Almost there! Just need your contact details</p>
               </div>
 
               {/* Booking Summary */}
-              <Card className="bg-white/5 border-white/10 mb-8">
-                <CardHeader>
-                  <CardTitle className="text-white font-light tracking-wider">BOOKING SUMMARY</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+              <Card className="bg-gradient-to-r from-orange-500/10 to-transparent border-orange-500/30 mb-6">
+                <CardContent className="p-4 md:p-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <p className="text-white/60">Studio</p>
+                      <p className="text-white/50 text-xs uppercase">Studio</p>
+                      <p className="text-white font-medium">{currentStudio?.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-white/50 text-xs uppercase">Date</p>
                       <p className="text-white font-medium">
-                        {STUDIO_PRICING[formData.studio as keyof typeof STUDIO_PRICING]?.name}
+                        {format(selectedTimeSlot.date, 'MMM d, yyyy')}
                       </p>
                     </div>
                     <div>
-                      <p className="text-white/60">Engineer</p>
-                      <p className="text-white font-medium">{withEngineer ? 'Included' : 'Not included'}</p>
-                    </div>
-                    <div>
-                      <p className="text-white/60">Date</p>
-                      <p className="text-white font-medium">
-                        {format(selectedTimeSlot.date, 'MMMM d, yyyy')}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-white/60">Time</p>
+                      <p className="text-white/50 text-xs uppercase">Time</p>
                       <p className="text-white font-medium">
                         {selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}
                       </p>
                     </div>
-                  </div>
-                  <Separator className="my-4 bg-white/20" />
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/60">Total ({duration} hours)</span>
-                    <span className="text-xl font-medium text-white">${totalAmount}</span>
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-white/60">Deposit Due (50%)</span>
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                      ${depositAmount}
-                    </Badge>
+                    <div>
+                      <p className="text-white/50 text-xs uppercase">Total</p>
+                      <p className="text-white font-medium">${totalAmount}</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Contact Form */}
               <Card className="bg-white/5 border-white/10">
-                <CardContent className="pt-6">
-                  <form onSubmit={handleContactSubmit} className="space-y-6">
-                    <div className="space-y-3">
-                      <Label htmlFor="name" className="text-white/80 font-light tracking-wider">
-                        FULL NAME *
-                      </Label>
+                <CardContent className="p-4 md:p-6">
+                  <form onSubmit={handleContactSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name" className="text-white/70 text-sm">Full Name *</Label>
                       <Input
                         id="name"
                         value={formData.name}
                         onChange={(e) => handleInputChange("name", e.target.value)}
-                        className="bg-neutral-800/50 border-white/20 text-white"
+                        className="bg-neutral-800/50 border-white/20 text-white mt-1"
+                        placeholder="Your name"
                         required
                       />
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <Label htmlFor="email" className="text-white/80 font-light tracking-wider">
-                          EMAIL *
-                        </Label>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="email" className="text-white/70 text-sm">Email *</Label>
                         <Input
                           id="email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
-                          className="bg-neutral-800/50 border-white/20 text-white"
+                          className="bg-neutral-800/50 border-white/20 text-white mt-1"
+                          placeholder="your@email.com"
                           required
                         />
                       </div>
-                      <div className="space-y-3">
-                        <Label htmlFor="phone" className="text-white/80 font-light tracking-wider">
-                          PHONE *
-                        </Label>
+                      <div>
+                        <Label htmlFor="phone" className="text-white/70 text-sm">Phone *</Label>
                         <Input
                           id="phone"
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => handleInputChange("phone", e.target.value)}
-                          className="bg-neutral-800/50 border-white/20 text-white"
+                          className="bg-neutral-800/50 border-white/20 text-white mt-1"
+                          placeholder="(555) 000-0000"
                           required
                         />
                       </div>
                     </div>
 
-
-
-
-
                     {/* SMS Consent */}
-                    <div className="space-y-2">
+                    <div className="pt-2 space-y-3">
                       <div className="flex items-start space-x-3">
                         <Checkbox
                           id="sms-consent"
                           checked={formData.smsConsent}
-                          onCheckedChange={(checked) => {
-                            const isChecked = checked === true
-                            handleBooleanChange('smsConsent', isChecked)
-                          }}
+                          onCheckedChange={(checked) => handleBooleanChange('smsConsent', checked === true)}
                           className="mt-1 border-white/40 data-[state=checked]:bg-white data-[state=checked]:text-black"
                         />
-                        <label htmlFor="sms-consent" className="text-xs text-white/80 leading-relaxed">
-                          By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested. These messages may include appointment reminders, order confirmations, and account notifications among others. Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
+                        <label htmlFor="sms-consent" className="text-xs text-white/70 leading-relaxed">
+                          I consent to receive booking confirmations and reminders via SMS. Message & data rates may apply.
                         </label>
                       </div>
-                    </div>
 
-                    {/* Promotional Consent */}
-                    <div className="space-y-2">
                       <div className="flex items-start space-x-3">
                         <Checkbox
                           id="promotional-consent"
                           checked={formData.promotionalConsent}
-                          onCheckedChange={(checked) => {
-                            const isChecked = checked === true
-                            handleBooleanChange('promotionalConsent', isChecked)
-                          }}
+                          onCheckedChange={(checked) => handleBooleanChange('promotionalConsent', checked === true)}
                           className="mt-1 border-white/40 data-[state=checked]:bg-white data-[state=checked]:text-black"
                         />
-                        <label htmlFor="promotional-consent" className="text-xs text-white/80 leading-relaxed">
-                          By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, new product updates among others. Message frequency may vary. Message & Data rates may apply. Reply HELP for help or STOP to opt-out.
+                        <label htmlFor="promotional-consent" className="text-xs text-white/70 leading-relaxed">
+                          I'd like to receive promotional offers and updates.
                         </label>
                       </div>
-                      <p className="text-[11px] text-white/60 pl-7">
-                        <Link href="/terms" className="underline">Terms & conditions</Link>
-                        <span className="px-1">|</span>
-                        <Link href="/privacy" className="underline">Privacy Policy</Link>
-                      </p>
                     </div>
 
-                    <div className="flex space-x-4">
+                    <div className="flex gap-3 pt-4">
                       <Button
                         type="button"
-                        onClick={() => setCurrentStep('calendar')}
-                        className="flex-1 border-white/30 text-white hover:bg-white/10 border bg-transparent"
+                        onClick={() => {
+                          setSelectedTimeSlot(null)
+                          setCurrentStep('booking')
+                        }}
+                        className="flex-1 border-white/20 text-white hover:bg-white/10 border bg-transparent"
                       >
                         Back
                       </Button>
                       <Button
                         type="submit"
-                        className="flex-1 bg-white text-black hover:bg-gray-100"
+                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
                         onClick={async (e) => {
                           if (!formData.smsConsent) {
                             e.preventDefault()
-                            alert('Please check the SMS consent box to continue')
+                            alert('Please accept SMS consent to continue')
                             return
                           }
-                          
-                          // Submit to Formspree before proceeding to payment
                           await submitToFormspree(formData)
-                          
-                          // Continue with normal flow
                           setCurrentStep('checkout')
                           setShowCheckout(true)
                         }}
@@ -583,10 +521,16 @@ export default function BookingPage() {
                   </form>
                 </CardContent>
               </Card>
+
+              <p className="text-center text-xs text-white/40 mt-4">
+                <Link href="/terms" className="underline">Terms</Link>
+                {' · '}
+                <Link href="/privacy" className="underline">Privacy</Link>
+              </p>
             </motion.div>
           )}
 
-          {/* Step 4: Checkout */}
+          {/* Step 3: Checkout */}
           {currentStep === 'checkout' && showCheckout && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -605,7 +549,7 @@ export default function BookingPage() {
             </motion.div>
           )}
 
-          {/* Step 5: Confirmation */}
+          {/* Step 4: Confirmation */}
           {currentStep === 'confirmation' && bookingConfirmed && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -614,27 +558,43 @@ export default function BookingPage() {
               className="max-w-2xl mx-auto text-center"
             >
               <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-                <CardContent className="p-12">
-                  <CheckCircle className="w-20 h-20 text-green-400 mx-auto mb-6" />
-                  <h2 className="text-4xl font-light text-white mb-4 tracking-wider">BOOKING CONFIRMED!</h2>
-                  <p className="text-white/70 text-lg mb-8">
-                    Thank you for your deposit! We'll send a confirmation email shortly.
+                <CardContent className="p-8 md:p-12">
+                  <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-green-400" />
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-light text-white mb-4 tracking-wider">BOOKING CONFIRMED!</h2>
+                  <p className="text-white/60 text-lg mb-8">
+                    Thank you! We'll send a confirmation to {formData.email}
                   </p>
                   
-                  <div className="bg-black/20 rounded-lg p-6 mb-8">
-                    <p className="text-white/60 mb-2">Booking Reference</p>
-                    <p className="text-white font-mono text-sm">{paymentIntentId}</p>
+                  <div className="bg-black/20 rounded-lg p-4 mb-6 text-left">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-white/50">Studio</p>
+                        <p className="text-white">{currentStudio?.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-white/50">Date & Time</p>
+                        <p className="text-white">{selectedTimeSlot && format(selectedTimeSlot.date, 'MMM d')} at {selectedTimeSlot?.startTime}</p>
+                      </div>
+                      <div>
+                        <p className="text-white/50">Deposit Paid</p>
+                        <p className="text-green-400">${depositAmount}</p>
+                      </div>
+                      <div>
+                        <p className="text-white/50">Balance Due</p>
+                        <p className="text-white">${totalAmount - depositAmount}</p>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="text-sm text-white/60 space-y-2 mb-8">
-                    <p>Confirmation sent to: <span className="text-white">{formData.email}</span></p>
-                    <p>Deposit paid: <span className="text-white">${depositAmount}</span></p>
-                    <p>Balance due at session: <span className="text-white">${totalAmount - depositAmount}</span></p>
-                  </div>
+                  <p className="text-white/40 text-sm mb-6">
+                    Reference: {paymentIntentId}
+                  </p>
 
                   <Button
                     onClick={resetBooking}
-                    className="bg-white text-black hover:bg-gray-100 px-8 py-3"
+                    className="bg-white text-black hover:bg-gray-100 px-8"
                   >
                     Book Another Session
                   </Button>

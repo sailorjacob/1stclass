@@ -407,12 +407,12 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     // Check business hours (only if not 24/7 operation)
     const is24HourOperation = BUSINESS_HOURS.start === 0 && BUSINESS_HOURS.end === 24
     if (!is24HourOperation) {
-      const startHour = start.getHours()
-      const endHour = end.getHours()
-      if (startHour < BUSINESS_HOURS.start || endHour > BUSINESS_HOURS.end) {
+    const startHour = start.getHours()
+    const endHour = end.getHours()
+    if (startHour < BUSINESS_HOURS.start || endHour > BUSINESS_HOURS.end) {
         const message = `Please select a time within business hours (${BUSINESS_HOURS.start}:00 - ${BUSINESS_HOURS.end}:00)`
-        alert(message)
-        return
+      alert(message)
+      return
       }
     }
 
