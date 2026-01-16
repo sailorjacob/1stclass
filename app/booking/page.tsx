@@ -351,14 +351,68 @@ export default function BookingPage() {
                 </CardContent>
               </Card>
 
-              {/* Calendar */}
-              <BookingCalendar
-                onSlotSelect={handleTimeSlotSelect}
-                existingBookings={existingBookings}
-                selectedStudio={formData.studio}
-                selectedDuration={formData.duration}
-                withEngineer={withEngineer}
-              />
+              {/* Calendar Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-white font-medium text-lg">Select Your Start Time</h3>
+                  {selectedTimeSlot && (
+                    <button
+                      onClick={() => setSelectedTimeSlot(null)}
+                      className="text-sm text-white/50 hover:text-white"
+                    >
+                      Clear selection
+                    </button>
+                  )}
+                </div>
+                
+                <BookingCalendar
+                  onSlotSelect={(slot) => {
+                    // Don't auto-navigate, just set the selection
+                    setSelectedTimeSlot({
+                      date: slot.date,
+                      startTime: slot.startTime,
+                      endTime: slot.endTime,
+                      engineerName: slot.engineerName,
+                    })
+                    setFormData(prev => ({
+                      ...prev,
+                      date: format(slot.date, 'yyyy-MM-dd'),
+                      time: slot.startTime,
+                      duration: slot.duration.toString(),
+                    }))
+                  }}
+                  existingBookings={existingBookings}
+                  selectedStudio={formData.studio}
+                  selectedDuration={formData.duration}
+                  withEngineer={withEngineer}
+                />
+
+                {/* Selection Confirmation Card */}
+                {selectedTimeSlot && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="text-orange-400 font-medium mb-1">Your Selection</p>
+                        <p className="text-white">
+                          {format(selectedTimeSlot.date, 'EEEE, MMMM d')} at {selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}
+                        </p>
+                        <p className="text-white/60 text-sm">{currentStudio?.name} • ${totalAmount} total</p>
+                      </div>
+                      <Button
+                        onClick={() => setCurrentStep('contact-info')}
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-8"
+                      >
+                        Continue
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
 
               {/* Quick Info */}
               <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/50">

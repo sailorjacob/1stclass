@@ -530,70 +530,75 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
 
 // Custom toolbar component - clean minimal design
 const CustomToolbar = ({ date, onNavigate, view, onView, isMobile }: any) => {
-  const isToday = isSameDay(date, new Date())
+  const today = new Date()
+  const isToday = isSameDay(date, today)
   
   // Format date based on view
   const dateLabel = view === Views.DAY 
-    ? format(date, 'EEEE, MMMM d')
-    : `${format(date, 'MMM d')} - ${format(addDays(date, 6), 'MMM d')}`
+    ? format(date, 'EEEE, MMM d')
+    : format(date, 'MMMM yyyy')
 
   return (
-    <div className="flex items-center justify-between gap-4 mb-4">
+    <div className="flex items-center justify-between gap-2 mb-6 px-1">
       {/* Left: Navigation */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center">
         <button
           onClick={() => onNavigate('PREV')}
-          className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+          aria-label="Previous"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         
+        <button
+          onClick={() => onNavigate('NEXT')}
+          className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+          aria-label="Next"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
         {!isToday && (
           <button
             onClick={() => onNavigate('TODAY')}
-            className="px-3 py-1.5 text-sm rounded-lg bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 transition-colors"
+            className="ml-2 px-3 py-1.5 text-xs font-medium rounded-full bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 transition-colors"
           >
             Today
           </button>
         )}
-        
-        <button
-          onClick={() => onNavigate('NEXT')}
-          className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
       </div>
 
       {/* Center: Date Label */}
-      <span className="text-white font-medium text-lg">
+      <span className="text-white font-medium">
         {dateLabel}
       </span>
 
       {/* Right: View Switcher (desktop only) */}
-      {!isMobile && (
-        <div className="flex bg-white/5 rounded-lg p-1">
+      {!isMobile ? (
+        <div className="flex bg-white/5 rounded-full p-0.5">
           <button
             onClick={() => onView(Views.DAY)}
-            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
+            className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all ${
               view === Views.DAY 
                 ? 'bg-orange-500 text-white' 
-                : 'text-white/60 hover:text-white'
+                : 'text-white/50 hover:text-white'
             }`}
           >
             Day
           </button>
           <button
             onClick={() => onView(Views.WEEK)}
-            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
+            className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all ${
               view === Views.WEEK 
                 ? 'bg-orange-500 text-white' 
-                : 'text-white/60 hover:text-white'
+                : 'text-white/50 hover:text-white'
             }`}
           >
             Week
           </button>
         </div>
+      ) : (
+        <div className="w-9" /> 
       )}
     </div>
   )

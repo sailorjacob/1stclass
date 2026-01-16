@@ -84,41 +84,42 @@
 
 /* ===== SLOT STATES ===== */
 
-/* Available slots - clean, subtle */
+/* Available slots - clean with subtle hover */
 .booking-calendar .rbc-available-slot {
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   background: transparent !important;
-  position: relative;
+  border-left: 2px solid transparent !important;
 }
 
 .booking-calendar .rbc-available-slot:hover {
-  background: rgba(249, 115, 22, 0.15) !important;
-}
-
-.booking-calendar .rbc-available-slot:hover::after {
-  content: 'Click to book';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.75rem;
-  color: #F97316;
-  white-space: nowrap;
-  pointer-events: none;
+  background: rgba(249, 115, 22, 0.12) !important;
+  border-left: 2px solid #F97316 !important;
 }
 
 /* Booked slots - clearly marked */
 .booking-calendar .rbc-booked-slot {
   cursor: not-allowed;
-  background: rgba(75, 85, 99, 0.4) !important;
+  background: rgba(100, 100, 100, 0.25) !important;
+  position: relative;
+}
+
+.booking-calendar .rbc-booked-slot::before {
+  content: 'Booked';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Unavailable/past slots */
 .booking-calendar .rbc-unavailable-slot {
   cursor: not-allowed;
-  background: rgba(0, 0, 0, 0.3) !important;
-  opacity: 0.4;
+  background: rgba(0, 0, 0, 0.2) !important;
 }
 
 /* ===== EVENTS ===== */

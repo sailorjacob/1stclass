@@ -116,27 +116,6 @@ export default function HomePage() {
           transition={{ type: "spring", stiffness: 20, damping: 20 }}
         />
 
-        {/* Floating Particles */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: i * 0.5,
-            }}
-          />
-        ))}
       </div>
 
       {/* Hero Gallery Section */}
