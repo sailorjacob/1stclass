@@ -392,7 +392,7 @@ export default function BookingPage() {
               </div>
 
               {/* Booking Summary */}
-              <Card className="bg-gradient-to-r from-orange-500/10 to-transparent border-orange-500/30 mb-6">
+              <Card className="bg-neutral-800/80 border-orange-500/30 mb-6">
                 <CardContent className="p-4 md:p-6">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
@@ -413,7 +413,7 @@ export default function BookingPage() {
                     </div>
                     <div>
                       <p className="text-white/50 text-xs uppercase">Total</p>
-                      <p className="text-white font-medium">${totalAmount}</p>
+                      <p className="text-orange-400 font-semibold">${totalAmount}</p>
                     </div>
                   </div>
                 </CardContent>

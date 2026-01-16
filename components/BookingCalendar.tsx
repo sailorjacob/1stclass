@@ -3,13 +3,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import { format, startOfWeek, addHours, isSameDay, isAfter, addDays, setHours, setMinutes } from 'date-fns'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Calendar as CalendarIcon, Clock, Users, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Clock, ChevronLeft, ChevronRight } from 'lucide-react'
 import { ROOM_ENGINEERS, BUSINESS_HOURS, ROOM_COLORS, MIN_BOOKING_HOURS, Booking } from '@/lib/booking-config'
-import { STUDIO_PRICING } from '@/lib/stripe'
 import moment from 'moment'
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -323,7 +320,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
       return {
         className: 'rbc-unavailable-slot',
         style: {
-          backgroundColor: '#1a1a1a',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
           cursor: 'not-allowed',
         },
       }
@@ -338,8 +335,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         return {
           className: 'rbc-booked-slot',
           style: {
-            backgroundColor: '#374151',
-            border: '0px',
+            backgroundColor: 'rgba(75, 85, 99, 0.5)',
           },
         }
       }
@@ -348,7 +344,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     return {
       className: 'rbc-available-slot',
       style: {
-        backgroundColor: '#111827',
+        backgroundColor: 'rgba(255, 255, 255, 0.03)',
       },
     }
   }
@@ -448,73 +444,11 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   const showMobilePicker = isMobile && isVerySmallScreen
 
   return (
-    <div className="space-y-6">
-      {/* Studio and Duration Selection Info */}
-      <Card className="bg-white/5 border-white/10">
-        <CardHeader>
-          <CardTitle className="text-white font-light tracking-wider">SELECT YOUR TIME SLOT</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className={`grid gap-4 mb-4 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'}`}>
-            {/* Selected Studio */}
-            <div>
-              <p className="text-white/60 text-sm mb-2">Selected Studio</p>
-              {selectedStudio ? (
-                <Badge
-                  variant="secondary"
-                  className="text-white"
-                  style={{ backgroundColor: ROOM_COLORS[selectedStudio as keyof typeof ROOM_COLORS] }}
-                >
-                  {STUDIO_PRICING[selectedStudio as keyof typeof STUDIO_PRICING].name}
-                  {withEngineer && ` - Book with Engineer`}
-                </Badge>
-              ) : (
-                <p className="text-white/40 text-sm">No studio selected</p>
-              )}
-            </div>
-
-            {/* Duration */}
-            <div>
-              <p className="text-white/60 text-sm mb-2">Duration</p>
-              {selectedDuration ? (
-                <Badge variant="outline" className="text-white border-white/20">
-                  {selectedDuration} hours
-                </Badge>
-              ) : (
-                <p className="text-white/40 text-sm">No duration selected</p>
-              )}
-            </div>
-
-            {/* Engineer */}
-            <div>
-              <p className="text-white/60 text-sm mb-2">Engineer</p>
-              <Badge variant="outline" className="text-white border-white/20">
-                {withEngineer ? 'With Engineer' : 'Without Engineer'}
-              </Badge>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2 text-sm text-white/60">
-            <AlertCircle className="w-4 h-4" />
-            <span>{isMobile ? 'Tap on an available time slot to book' : 'Click on an available time slot to book'}</span>
-          </div>
-          
-          {/* Mobile swipe hint */}
-          {isMobile && !showMobilePicker && (
-            <div className="flex items-center space-x-2 text-sm text-white/40 mt-2">
-              <div className="flex space-x-1">
-                <span>←</span>
-                <span>Swipe to navigate</span>
-                <span>→</span>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
 
       {/* Calendar or Mobile Time Slot Picker */}
-      <Card className="bg-white/5 border-white/10">
-        <CardContent className="p-4">
+      <Card className="bg-transparent border-white/10">
+        <CardContent className="p-0 md:p-4">
           {showMobilePicker ? (
             <MobileTimeSlotPicker
               selectedStudio={selectedStudio || ''}
@@ -567,27 +501,19 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
       </Card>
 
       {/* Legend */}
-      <div className={`flex flex-wrap gap-4 text-sm ${isMobile ? 'justify-center' : ''}`}>
-        <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-white/10 rounded" />
-          <span className="text-white/60">Available</span>
+      <div className={`flex flex-wrap gap-6 text-sm mt-4 ${isMobile ? 'justify-center' : ''}`}>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-white/5 border border-white/10" />
+          <span className="text-white/50">Available</span>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-gray-700 rounded" />
-          <span className="text-white/60">Booked</span>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-gray-600" />
+          <span className="text-white/50">Booked</span>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 bg-black rounded" />
-          <span className="text-white/60">Unavailable</span>
+        <div className="flex items-center gap-2">
+          <Clock className="w-3 h-3 text-white/40" />
+          <span className="text-white/50">Click a time to book</span>
         </div>
-        {Object.entries(ROOM_COLORS).map(([studio, color]) => (
-          <div key={studio} className="flex items-center space-x-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: color }} />
-            <span className="text-white/60">
-              {STUDIO_PRICING[studio as keyof typeof STUDIO_PRICING].name}
-            </span>
-          </div>
-        ))}
       </div>
     </div>
   )

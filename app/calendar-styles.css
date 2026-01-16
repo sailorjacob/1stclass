@@ -1,8 +1,8 @@
-/* React Big Calendar Custom Styles for Dark Theme */
+/* React Big Calendar - Clean Modern Dark Theme */
 
 .booking-calendar {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
+  background-color: transparent;
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 
@@ -11,588 +11,329 @@
   color: white;
 }
 
-/* Header */
+/* Header - Day names */
 .booking-calendar .rbc-header {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 0;
-  font-weight: 300;
-  letter-spacing: 0.05em;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: none !important;
+  padding: 1rem 0;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
 }
 
 .booking-calendar .rbc-header + .rbc-header {
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: none !important;
 }
 
-/* Time slots */
+/* Time view container */
+.booking-calendar .rbc-time-view {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Time content area */
 .booking-calendar .rbc-time-content {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
 }
 
+/* Time gutter (left side with hours) */
+.booking-calendar .rbc-time-gutter {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.booking-calendar .rbc-time-gutter .rbc-timeslot-group {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Individual time slots */
 .booking-calendar .rbc-time-slot {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  min-height: 48px;
 }
 
 .booking-calendar .rbc-timeslot-group {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 48px;
 }
 
-.booking-calendar .rbc-time-gutter {
-  background-color: rgba(0, 0, 0, 0.3);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.booking-calendar .rbc-time-view {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.booking-calendar .rbc-allday-cell {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.booking-calendar .rbc-day-slot .rbc-time-slot {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Available slots - already handled by slotStyleGetter */
-.booking-calendar .rbc-available-slot {
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.booking-calendar .rbc-available-slot:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Booked slots */
-.booking-calendar .rbc-booked-slot {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Unavailable slots */
-.booking-calendar .rbc-unavailable-slot {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-/* Events */
-.booking-calendar .rbc-event {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 400;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.booking-calendar .rbc-event-label {
-  font-size: 0.75rem;
-}
-
-.booking-calendar .rbc-event-content {
-  font-size: 0.875rem;
-  white-space: normal;
-}
-
-/* Selected slot */
-.booking-calendar .rbc-slot-selecting {
-  background-color: rgba(59, 130, 246, 0.3);
-  border: 2px solid #3B82F6;
-}
-
-/* Today column */
-.booking-calendar .rbc-today {
+/* Day columns */
+.booking-calendar .rbc-day-slot {
   background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* Now indicator */
+.booking-calendar .rbc-day-slot + .rbc-day-slot {
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.booking-calendar .rbc-day-slot .rbc-time-slot {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Available slots */
+.booking-calendar .rbc-available-slot {
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.booking-calendar .rbc-available-slot:hover {
+  background-color: rgba(249, 115, 22, 0.15) !important;
+}
+
+/* Booked slots - clearly marked */
+.booking-calendar .rbc-booked-slot {
+  cursor: not-allowed;
+  background-color: rgba(75, 85, 99, 0.4) !important;
+  position: relative;
+}
+
+.booking-calendar .rbc-booked-slot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.03) 4px,
+    rgba(255, 255, 255, 0.03) 8px
+  );
+}
+
+/* Unavailable/past slots */
+.booking-calendar .rbc-unavailable-slot {
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  opacity: 0.5;
+}
+
+/* Booking events on calendar */
+.booking-calendar .rbc-event {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none !important;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.booking-calendar .rbc-event-label {
+  font-size: 0.625rem;
+  opacity: 0.8;
+}
+
+.booking-calendar .rbc-event-content {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Selected/selecting slot */
+.booking-calendar .rbc-slot-selecting {
+  background-color: rgba(249, 115, 22, 0.3) !important;
+  border: 2px solid #F97316;
+  border-radius: 0.25rem;
+}
+
+/* Today's column - subtle highlight */
+.booking-calendar .rbc-today {
+  background-color: rgba(249, 115, 22, 0.05);
+}
+
+/* Current time indicator */
 .booking-calendar .rbc-current-time-indicator {
-  background-color: #ef4444;
+  background-color: #F97316;
   height: 2px;
 }
 
-/* Agenda view */
-.booking-calendar .rbc-agenda-view {
-  color: white;
+/* Allday cell (hide it for cleaner look) */
+.booking-calendar .rbc-allday-cell {
+  display: none;
 }
 
-.booking-calendar .rbc-agenda-view table {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.booking-calendar .rbc-time-header-content {
+  border-left: none;
 }
 
-.booking-calendar .rbc-agenda-view table tbody > tr > td {
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Remove extra borders */
+.booking-calendar .rbc-time-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.booking-calendar .rbc-agenda-date-cell,
-.booking-calendar .rbc-agenda-time-cell {
-  white-space: nowrap;
+.booking-calendar .rbc-time-header-gutter {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-.booking-calendar .rbc-agenda-event-cell {
-  width: 100%;
+/* ===== CUSTOM TOOLBAR ===== */
+
+.booking-calendar .rbc-toolbar {
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 1rem;
 }
 
-/* Custom toolbar styles */
 .booking-calendar .rbc-toolbar button {
   color: white;
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  font-weight: 400;
-  transition: all 0.2s;
+  font-weight: 500;
+  transition: all 0.15s ease;
 }
 
 .booking-calendar .rbc-toolbar button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .booking-calendar .rbc-toolbar button.rbc-active {
-  background-color: white;
-  color: black;
-  border-color: white;
+  background-color: #F97316;
+  color: white;
+  border-color: #F97316;
 }
 
 .booking-calendar .rbc-toolbar button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
 }
 
-/* Month view */
-.booking-calendar .rbc-month-view {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+/* ===== MOBILE STYLES ===== */
 
-.booking-calendar .rbc-month-row + .rbc-month-row {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.booking-calendar .rbc-date-cell {
-  padding: 0.25rem;
-}
-
-.booking-calendar .rbc-off-range {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .booking-calendar .rbc-toolbar {
     flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .booking-calendar .rbc-toolbar-label {
-    margin: 0.5rem 0;
-  }
-}
-
-/* ===== MOBILE OPTIMIZATIONS ===== */
-
-@media (max-width: 768px) {
-  /* Mobile-specific calendar optimizations */
-  .booking-calendar {
-    border-radius: 0.375rem;
-  }
-
-  /* Mobile toolbar */
-  .booking-calendar .rbc-toolbar {
-    padding: 0.75rem;
     gap: 0.75rem;
   }
 
   .booking-calendar .rbc-toolbar button {
-    min-height: 44px; /* iOS touch target minimum */
+    min-height: 44px;
     min-width: 44px;
     padding: 0.5rem;
     font-size: 0.875rem;
     border-radius: 0.5rem;
   }
 
-  /* Mobile time slots - larger for better touch */
   .booking-calendar .rbc-time-slot {
-    min-height: 44px; /* Minimum touch target height */
+    min-height: 52px;
   }
 
   .booking-calendar .rbc-time-gutter {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.25rem;
-    min-width: 60px;
+    font-size: 0.75rem;
+    min-width: 55px;
   }
 
-  /* Mobile events - better touch targets */
-  .booking-calendar .rbc-event {
-    min-height: 32px;
-    padding: 0.375rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.375rem;
-  }
-
-  /* Mobile day view optimizations */
-  .booking-calendar .rbc-day-slot .rbc-time-slot {
-    min-height: 44px;
-  }
-
-  /* Mobile header optimizations */
   .booking-calendar .rbc-header {
     padding: 0.5rem 0;
-    font-size: 0.875rem;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Mobile time content */
-  .booking-calendar .rbc-time-content {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  /* Mobile slot selection */
-  .booking-calendar .rbc-slot-selecting {
-    border-width: 3px;
-    border-radius: 0.375rem;
-  }
-
-  /* Mobile today indicator */
-  .booking-calendar .rbc-today {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  /* Mobile current time indicator */
-  .booking-calendar .rbc-current-time-indicator {
-    height: 3px;
-    border-radius: 2px;
-  }
-
-  /* Mobile event overlap handling */
-  .booking-calendar .rbc-event.rbc-selected {
-    background-color: rgba(59, 130, 246, 0.8);
-  }
-
-  /* Mobile slot hover states */
-  .booking-calendar .rbc-available-slot:active {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    transform: scale(0.98);
-    transition: all 0.1s ease;
-  }
-
-  /* Mobile toolbar button states */
-  .booking-calendar .rbc-toolbar button:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-  }
-
-  /* Mobile navigation buttons */
-  .booking-calendar .rbc-toolbar .rbc-btn-group {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-  }
-
-  /* Mobile date display */
-  .booking-calendar .rbc-toolbar .rbc-toolbar-label {
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
-    margin: 0.5rem 0;
-  }
-
-  /* Mobile time gutter text */
-  .booking-calendar .rbc-time-gutter .rbc-timeslot-group {
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  /* Mobile slot content */
-  .booking-calendar .rbc-time-content .rbc-timeslot-group {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  /* Mobile event content */
-  .booking-calendar .rbc-event .rbc-event-content {
-    font-size: 0.875rem;
-    line-height: 1.2;
-  }
-
-  /* Mobile legend optimization */
-  .booking-calendar + div {
-    padding: 0 1rem;
-  }
-
-  .booking-calendar + div > div {
-    margin: 0.25rem 0;
-  }
-}
-
-/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
-
-@media (hover: none) and (pointer: coarse) {
-  /* Touch device specific optimizations */
-  .booking-calendar .rbc-available-slot {
-    cursor: pointer;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .booking-calendar .rbc-available-slot:active {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-  }
-
-  .booking-calendar .rbc-toolbar button {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .booking-calendar .rbc-toolbar button:active {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  /* Touch-friendly scroll areas */
-  .booking-calendar .rbc-time-content {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-  }
-
-  /* Touch-friendly event selection */
-  .booking-calendar .rbc-event {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* ===== LARGE MOBILE / TABLET OPTIMIZATIONS ===== */
-
-@media (min-width: 481px) and (max-width: 1024px) {
-  .booking-calendar .rbc-toolbar {
-    padding: 1rem;
-  }
-
-  .booking-calendar .rbc-toolbar button {
-    min-height: 40px;
-    min-width: 40px;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .booking-calendar .rbc-time-slot {
-    min-height: 40px;
+    font-size: 0.75rem;
   }
 
   .booking-calendar .rbc-event {
     min-height: 28px;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
 
-/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+/* ===== TOUCH DEVICE ===== */
 
-@media (prefers-reduced-motion: reduce) {
-  .booking-calendar .rbc-available-slot,
-  .booking-calendar .rbc-toolbar button,
-  .booking-calendar .rbc-event {
-    transition: none;
-    transform: none;
+@media (hover: none) and (pointer: coarse) {
+  .booking-calendar .rbc-available-slot:active {
+    background-color: rgba(249, 115, 22, 0.25) !important;
+  }
+
+  .booking-calendar .rbc-toolbar button:active {
+    transform: scale(0.95);
   }
 }
 
-/* ===== HIGH CONTRAST MODE SUPPORT ===== */
+/* ===== MOBILE TIME SLOT PICKER ===== */
 
-@media (prefers-contrast: high) {
-  .booking-calendar .rbc-time-slot {
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .booking-calendar .rbc-header {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .booking-calendar .rbc-event {
-    border: 2px solid rgba(255, 255, 255, 0.5);
-  }
-}
-
-/* ===== MOBILE TIME SLOT PICKER STYLES ===== */
-
-/* Mobile time slot picker container */
 .mobile-time-slot-picker {
-  background-color: transparent;
-  color: white;
+  padding: 0.5rem;
 }
 
-/* Mobile time slot grid */
-.mobile-time-slot-picker .time-slot-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-
-/* Mobile time slot buttons */
-.mobile-time-slot-picker .time-slot-button {
-  min-height: 48px; /* Minimum touch target */
-  padding: 0.75rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-align: center;
-  transition: all 0.2s ease;
-  border: 1px solid;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Available time slot */
-.mobile-time-slot-picker .time-slot-button.available {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.mobile-time-slot-picker .time-slot-button.available:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.mobile-time-slot-picker .time-slot-button.available:active {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(0.95);
-}
-
-/* Unavailable time slot */
-.mobile-time-slot-picker .time-slot-button.unavailable {
-  background-color: rgba(55, 65, 81, 0.5);
-  color: rgba(156, 163, 175, 1);
-  border-color: rgba(75, 85, 99, 1);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Past time slot */
-.mobile-time-slot-picker .time-slot-button.past {
-  opacity: 0.4;
-}
-
-/* Mobile date navigation */
 .mobile-time-slot-picker .date-navigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
 }
 
-.mobile-time-slot-picker .date-navigation button {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-}
-
-.mobile-time-slot-picker .date-navigation button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.mobile-time-slot-picker .date-navigation button:active {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(0.95);
-}
-
-/* Mobile date display */
 .mobile-time-slot-picker .date-display {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
-  text-align: center;
   color: white;
-  flex: 1;
-  margin: 0 1rem;
+  text-align: center;
 }
 
-/* Mobile today button */
 .mobile-time-slot-picker .today-button {
   display: flex;
   justify-content: center;
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 }
 
-.mobile-time-slot-picker .today-button button {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+.mobile-time-slot-picker .time-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.mobile-time-slot-picker .time-slot-button {
+  min-height: 52px;
+  padding: 0.75rem;
   border-radius: 0.5rem;
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.15s ease;
+  border: 1px solid;
+}
+
+.mobile-time-slot-picker .time-slot-button.available {
+  background-color: rgba(255, 255, 255, 0.05);
   color: white;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.mobile-time-slot-picker .today-button button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+.mobile-time-slot-picker .time-slot-button.available:hover {
+  background-color: rgba(249, 115, 22, 0.15);
+  border-color: rgba(249, 115, 22, 0.3);
 }
 
-.mobile-time-slot-picker .today-button button:active {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(0.95);
+.mobile-time-slot-picker .time-slot-button.available:active {
+  background-color: rgba(249, 115, 22, 0.25);
 }
 
-/* Mobile legend */
+.mobile-time-slot-picker .time-slot-button.unavailable {
+  background-color: rgba(75, 85, 99, 0.3);
+  color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(75, 85, 99, 0.5);
+  cursor: not-allowed;
+}
+
+.mobile-time-slot-picker .time-slot-button.past {
+  opacity: 0.3;
+}
+
 .mobile-time-slot-picker .legend {
   text-align: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.75rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.mobile-time-slot-picker .legend > div {
-  margin: 0.25rem 0;
-}
-
-/* Very small screen optimizations */
 @media (max-width: 480px) {
   .mobile-time-slot-picker .time-slot-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.375rem;
-  }
-
-  .mobile-time-slot-picker .time-slot-button {
-    min-height: 44px;
-    padding: 0.625rem 0.375rem;
-    font-size: 0.8125rem;
-  }
-
-  .mobile-time-slot-picker .date-navigation button {
-    min-height: 40px;
-    min-width: 40px;
-    padding: 0.375rem;
-  }
-
-  .mobile-time-slot-picker .date-display {
-    font-size: 0.9375rem;
-    margin: 0 0.75rem;
   }
 }
-
-/* Touch device specific optimizations for mobile picker */
-@media (hover: none) and (pointer: coarse) {
-  .mobile-time-slot-picker .time-slot-button {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .mobile-time-slot-picker .time-slot-button.available:active {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-
-  .mobile-time-slot-picker .date-navigation button:active {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-
-  .mobile-time-slot-picker .today-button button:active {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-} 
